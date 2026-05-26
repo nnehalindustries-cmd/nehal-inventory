@@ -957,8 +957,6 @@ function openLog() {
   document.getElementById("modalBody").innerHTML = `
     <button class="btn-secondary refresh-btn" onclick="fetchLog()">Refresh Entries</button>
     <div class="empty-state">
-      <span class="spinner" style="border-color:rgba(0,0,0,0.15);border-top-color:#185FA5;"></span>
-      <br><br>
       Loading recent entries...
     </div>
   `;
@@ -974,11 +972,7 @@ async function fetchLog() {
 
   modalBody.innerHTML = `
     <button class="btn-secondary refresh-btn" onclick="fetchLog()">Refresh Entries</button>
-    <div class="empty-state">
-      <span class="spinner" style="border-color:rgba(0,0,0,0.15);border-top-color:#185FA5;"></span>
-      <br><br>
-      Loading recent entries...
-    </div>
+    <div class="empty-state">Loading recent entries...</div>
   `;
 
   try {
@@ -1018,7 +1012,6 @@ function renderLog(entries) {
 
   const html = entries.map(function(entry, index) {
     const label = entry.label || entry.entryType || "Entry";
-
     const factoryLine = getFactoryLine(entry);
     const itemLine = getItemLine(entry);
     const qty = entry.quantity ? entry.quantity : "-";
@@ -1053,7 +1046,7 @@ function renderLog(entries) {
   modalBody.innerHTML = `
     <button class="btn-secondary refresh-btn" onclick="fetchLog()">Refresh Entries</button>
     <div class="warning-box">
-      Delete clears the row in the source sheet. Stock formulas update automatically.
+      Delete clears the selected row. Stock and dashboard update automatically.
     </div>
     <div class="log-list">${html}</div>
   `;
@@ -1069,7 +1062,11 @@ function getFactoryLine(entry) {
 
 function getItemLine(entry) {
   if (entry.materialCode) {
-    return `Material: ${escapeHtml(entry.materialCode)}`;
+    return `Material: ${escapeHtml(entry.materialCode)}${entry.materialName ? " — " + escapeHtml(entry.materialName) : ""}`;
+  }
+
+  if (entry.finishedItem) {
+    return `Item: ${escapeHtml(entry.finishedItem)}`;
   }
 
   const parts = [
