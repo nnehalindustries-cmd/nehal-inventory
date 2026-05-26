@@ -340,7 +340,7 @@ document.addEventListener('DOMContentLoaded', function(){
   setTodayDates();
   setHomeDate();
   pingApi();
-  loadEntries();
+  loadEntries(true);
 
   syncTimer = setInterval(loadEntries, 30000);
 });
@@ -378,39 +378,47 @@ function apiCall(action, payload){
   return new Promise(function(resolve, reject){
     var callbackName = 'jsonp_' + Date.now() + '_' + Math.random().toString(36).slice(2);
     var script = document.createElement('script');
+    var finished = false;
 
     window[callbackName] = function(response){
+      if (finished) return;
+      finished = true;
       cleanup();
       resolve(response);
     };
 
     function cleanup(){
-      delete window[callbackName];
-      if (script.parentNode) script.parentNode.removeChild(script);
+      try { delete window[callbackName]; } catch(e) { window[callbackName] = undefined; }
+      if (script && script.parentNode) script.parentNode.removeChild(script);
     }
 
     script.onerror = function(){
+      if (finished) return;
+      finished = true;
       cleanup();
       reject(new Error('Network/API request failed'));
     };
 
     var url = API_URL
       + '?action=' + encodeURIComponent(action)
-      + '&callback=' + encodeURIComponent(callbackName);
+      + '&callback=' + encodeURIComponent(callbackName)
+      + '&_=' + encodeURIComponent(Date.now());
 
     if (payload) {
       url += '&data=' + encodeURIComponent(JSON.stringify(payload));
     }
 
     script.src = url;
+    script.async = true;
     document.body.appendChild(script);
 
     setTimeout(function(){
-      if (window[callbackName]) {
+      if (!finished) {
+        finished = true;
         cleanup();
-        reject(new Error('API timeout'));
+        reject(new Error('API timeout. Check Apps Script deployment/version.'));
       }
-    }, 20000);
+    }, 25000);
   });
 }
 
@@ -522,21 +530,37 @@ function savePayload(payload, btnId, resetAction){
 
     if(!res || !res.success){
       showToast('❌ ' + (res && res.message ? res.message : 'Save failed'), 'error');
+      console.error('Save failed response:', res);
       return;
     }
 
-    showToast(editingId ? '✅ Entry updated' : '✅ Entry saved', 'success');
+    // Update the web-app list immediately using the response from Apps Script.
+    // Then reload from Google Sheets to confirm the real synced state.
+    if (res.entry && res.entry.id) {
+      var existingIndex = entries.findIndex(function(x){ return String(x.id) === String(res.entry.id); });
+      if (existingIndex >= 0) entries[existingIndex] = res.entry;
+      else entries.unshift(res.entry);
+      document.getElementById('entryCount').textContent = entries.length;
+      document.getElementById('lastSync').textContent = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+      renderEntries();
+    }
+
+    showToast(editingId ? '✅ Entry updated and synced' : '✅ Entry saved and synced', 'success');
 
     editingId = null;
     editingAction = null;
     resetForm(resetAction);
     updateFormTitles();
-    loadEntries();
     showScreen('home');
+
+    // Force fresh Google Sheet sync after Apps Script writes finish.
+    setTimeout(function(){ loadEntries(true); }, 800);
+    setTimeout(function(){ loadEntries(true); }, 2500);
 
   }).catch(function(err){
     setLoading(btnId, false);
     showToast('❌ Connection failed: ' + err.message, 'error');
+    console.error('Save error:', err);
   });
 }
 
@@ -673,10 +697,11 @@ function submitTransfer(){
 // ============================================================
 // LIST, EDIT, DELETE
 // ============================================================
-function loadEntries(){
-  apiCall('list', {}).then(function(res){
+function loadEntries(force){
+  apiCall('list', { force: !!force }).then(function(res){
     if(!res || !res.success){
       setStatus(false, 'Offline');
+      console.error('List failed response:', res);
       renderEntries();
       return;
     }
@@ -686,8 +711,9 @@ function loadEntries(){
     document.getElementById('entryCount').textContent = entries.length;
     document.getElementById('lastSync').textContent = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
     renderEntries();
-  }).catch(function(){
+  }).catch(function(err){
     setStatus(false, 'Offline');
+    console.error('List error:', err);
     renderEntries();
   });
 }
@@ -768,7 +794,7 @@ function editEntry(id){
 }
 
 function deleteEntry(id){
-  var e = entries.find(function(x){ return x.id === id; });
+  var e = entries.find(function(x){ return String(x.id) === String(id); });
   if(!e) return;
 
   if(!confirm('Delete this entry from the website and Google Sheet?')) return;
@@ -776,14 +802,21 @@ function deleteEntry(id){
   apiCall('delete', addSource({id:id})).then(function(res){
     if(!res || !res.success){
       showToast('❌ ' + (res && res.message ? res.message : 'Delete failed'), 'error');
+      console.error('Delete failed response:', res);
       return;
     }
 
-    showToast('✅ Entry deleted', 'success');
-    loadEntries();
+    entries = entries.filter(function(x){ return String(x.id) !== String(id); });
+    document.getElementById('entryCount').textContent = entries.length;
+    document.getElementById('lastSync').textContent = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+    renderEntries();
+
+    showToast('✅ Entry deleted and synced', 'success');
+    setTimeout(function(){ loadEntries(true); }, 800);
 
   }).catch(function(err){
     showToast('❌ Delete failed: ' + err.message, 'error');
+    console.error('Delete error:', err);
   });
 }
 
