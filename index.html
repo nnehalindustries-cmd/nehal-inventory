@@ -6,6 +6,72 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Nehal Industries — Inventory</title>
 <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+/* CENTERED LOGO HEADER */
+.logo-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  min-height: 96px;
+  padding: 16px 56px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--navy), var(--navy2));
+  box-shadow: 0 2px 20px rgba(15,39,68,.3);
+}
+
+.center-logo-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
+}
+
+.center-logo {
+  height: 58px;
+  width: auto;
+  max-width: 320px;
+  object-fit: contain;
+  display: block;
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 6px 12px;
+}
+
+.status-floating {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+}
+
+/* Hide old top function menu if it still exists */
+.nav-scroll {
+  display: none !important;
+}
+
+/* Hide old text logo if it still exists */
+.header h1 {
+  display: none !important;
+}
+
+@media (max-width: 520px) {
+  .logo-header {
+    min-height: 86px;
+    padding: 14px 46px 12px;
+  }
+
+  .center-logo {
+    height: 48px;
+    max-width: 240px;
+    padding: 5px 9px;
+  }
+
+  .status-floating {
+    right: 10px;
+    top: 10px;
+    font-size: 10px;
+  }
+}
 <style>
 :root {
   --navy:#0f2744;--navy-mid:#1a3a5c;--blue:#1e6abf;--blue-light:#3b8fe8;
@@ -109,20 +175,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
 <body>
 
 <div class="header">
-  <div class="header-top">
-    <div>
-      <h1>NEHAL <span>INDUSTRIES</span></h1>
-      <div class="header-sub">Inventory Control System</div>
-    </div>
-    <div class="status-dot" id="statusDot"></div>
+<div class="header logo-header">
+  <div class="center-logo-wrap">
+    <img src="assets/logo.png" alt="Nehal Industries Ltd" class="center-logo">
+    <div class="header-sub">Synced Inventory Control</div>
   </div>
-  <div class="nav-scroll">
-    <div class="nav-tab active" onclick="showScreen('home')">🏠 Home</div>
-    <div class="nav-tab" onclick="showScreen('production')">⚙️ Production</div>
-    <div class="nav-tab" onclick="showScreen('inward')">📦 Inward</div>
-    <div class="nav-tab" onclick="showScreen('dispatch')">🚚 Dispatch</div>
-    <div class="nav-tab" onclick="showScreen('consumption')">🧪 Consumption</div>
-    <div class="nav-tab" onclick="showScreen('transfer')">🔄 Transfer</div>
+
+  <div class="status status-floating">
+    <div class="status-dot off" id="statusDot"></div>
+    <span id="statusText">Checking</span>
   </div>
 </div>
 
