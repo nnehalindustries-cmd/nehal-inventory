@@ -4,15 +4,103 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>Nehal Industries — Inventory</title>
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-/* CENTERED LOGO HEADER */
+
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --navy:#0f2744;
+  --navy2:#17365d;
+  --blue:#1e6abf;
+  --accent:#f0a500;
+  --green:#2ecc71;
+  --red:#e74c3c;
+  --orange:#e67e22;
+  --bg:#f0f4f9;
+  --card:#ffffff;
+  --text:#1a2a3a;
+  --muted:#7a8fa6;
+  --border:#dce6f0;
+  --input:#f7fafd;
+  --shadow:0 4px 20px rgba(15,39,68,.10);
+  --radius:16px;
+  --radius-sm:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.header{background:linear-gradient(135deg,var(--navy),var(--navy2));padding:18px 18px 0;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(15,39,68,.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px}
+.header h1{font-family:'Rajdhani',sans-serif;font-size:23px;font-weight:700;color:#fff;letter-spacing:.5px}
+.header h1 span{color:var(--accent)}
+.header-sub{font-size:11px;color:rgba(255,255,255,.65);margin-top:2px;letter-spacing:1px;text-transform:uppercase}
+.status{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.75);font-size:11px}
+.status-dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
+.status-dot.off{background:var(--red);box-shadow:0 0 8px var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.nav-scroll{display:flex;gap:8px;padding:0 0 14px;overflow-x:auto;scrollbar-width:none}
+.nav-scroll::-webkit-scrollbar{display:none}
+.nav-tab{flex-shrink:0;padding:7px 13px;border-radius:100px;font-size:13px;font-weight:500;background:rgba(255,255,255,.08);color:rgba(255,255,255,.68);border:1px solid rgba(255,255,255,.12);cursor:pointer;white-space:nowrap}
+.nav-tab.active{background:var(--accent);color:var(--navy);border-color:var(--accent);font-weight:700}
+.main{padding:18px;max-width:520px;margin:0 auto}
+.screen{display:none;animation:fadeUp .25s ease}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:16px;border:1px solid var(--border)}
+.card-title{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--navy);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card-title .icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+.field input,.field select{width:100%;padding:13px 15px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--input);font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);outline:none}
+.field input:focus,.field select:focus{border-color:#3b8fe8;box-shadow:0 0 0 3px rgba(59,143,232,.12)}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.req{color:var(--red);margin-left:2px}
+.btn{width:100%;padding:15px;border-radius:var(--radius-sm);border:none;background:linear-gradient(135deg,var(--blue),#3b8fe8);color:#fff;font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;letter-spacing:.4px;cursor:pointer;box-shadow:0 4px 16px rgba(30,106,191,.3)}
+.btn:disabled{background:#aeb9c5;box-shadow:none;cursor:not-allowed}
+.btn.secondary{background:#fff;color:var(--blue);border:1.5px solid var(--blue);box-shadow:none}
+.btn.danger{background:var(--red)}
+.btn.orange{background:linear-gradient(135deg,var(--orange),#f39c12)}
+.btn-back{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0;margin-bottom:14px;font-family:'DM Sans',sans-serif}
+.home-greeting{font-family:'Rajdhani',sans-serif;font-size:27px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.home-date{font-size:13px;color:var(--muted);margin-bottom:14px}
+.sync-bar{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:15px}
+.sync-pill{background:#fff;border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center;box-shadow:var(--shadow)}
+.sync-pill b{display:block;color:var(--navy);font-family:'Rajdhani';font-size:20px}
+.sync-pill span{font-size:11px;color:var(--muted)}
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.action-card{background:var(--card);border-radius:var(--radius);padding:18px 12px;box-shadow:var(--shadow);border:1.5px solid var(--border);cursor:pointer;text-align:center}
+.action-card:active{transform:scale(.98)}
+.action-icon{font-size:28px;margin-bottom:8px;display:block}
+.action-label{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:var(--navy);line-height:1.15}
+.action-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.entry-row{padding:12px 0;border-bottom:1px solid var(--border)}
+.entry-row:last-child{border-bottom:none}
+.entry-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.entry-title{font-size:14px;font-weight:700;color:var(--text)}
+.entry-detail{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.45}
+.entry-meta{font-size:11px;color:var(--muted);margin-top:6px}
+.entry-actions{display:flex;gap:7px;margin-top:9px}
+.small-btn{padding:6px 12px;border-radius:100px;border:1.5px solid var(--blue);background:#fff;color:var(--blue);font-size:12px;font-weight:700;cursor:pointer}
+.small-btn.delete{border-color:#f2b8b8;color:var(--red)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:#fff;padding:14px 22px;border-radius:100px;font-size:14px;font-weight:600;box-shadow:0 8px 32px rgba(0,0,0,.25);z-index:999;transition:transform .25s;white-space:nowrap;max-width:92vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.success{background:#1a6640}
+.toast.error{background:#8b1a1a}
+.loader{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.notice{background:#fff8e1;border:1px solid #f0c040;border-radius:10px;padding:11px 13px;font-size:12px;color:#7a5c00;margin-bottom:16px;line-height:1.4}
+.hidden{display:none!important}
+
+/* ============================================================
+   CENTERED LOGO HEADER — no top menu bar
+   ============================================================ */
 .logo-header {
   position: sticky;
   top: 0;
   z-index: 100;
-  min-height: 96px;
-  padding: 16px 56px 14px;
+  min-height: 112px;
+  padding: 16px 58px 14px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -24,18 +112,15 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
+  gap: 7px;
 }
 
 .center-logo {
-  height: 58px;
+  height: 72px;
   width: auto;
-  max-width: 320px;
+  max-width: 390px;
   object-fit: contain;
   display: block;
-  background: #ffffff;
-  border-radius: 10px;
-  padding: 6px 12px;
 }
 
 .status-floating {
@@ -44,26 +129,25 @@
   top: 16px;
 }
 
-/* Hide old top function menu if it still exists */
+/* Remove the old top function menu */
 .nav-scroll {
   display: none !important;
 }
 
-/* Hide old text logo if it still exists */
+/* Remove old text logo if any old code remains */
 .header h1 {
   display: none !important;
 }
 
 @media (max-width: 520px) {
   .logo-header {
-    min-height: 86px;
-    padding: 14px 46px 12px;
+    min-height: 94px;
+    padding: 14px 48px 12px;
   }
 
   .center-logo {
-    height: 48px;
-    max-width: 240px;
-    padding: 5px 9px;
+    height: 55px;
+    max-width: 280px;
   }
 
   .status-floating {
@@ -72,112 +156,15 @@
     font-size: 10px;
   }
 }
-<style>
-:root {
-  --navy:#0f2744;--navy-mid:#1a3a5c;--blue:#1e6abf;--blue-light:#3b8fe8;
-  --accent:#f0a500;--green:#2ecc71;--red:#e74c3c;--orange:#e67e22;
-  --bg:#f0f4f9;--card:#fff;--text:#1a2a3a;--muted:#7a8fa6;
-  --border:#dce6f0;--input-bg:#f7fafd;
-  --shadow:0 4px 20px rgba(15,39,68,0.10);--radius:16px;--radius-sm:10px;
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 
-/* HEADER */
-.header{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);padding:20px 20px 0;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(15,39,68,0.3)}
-.header-top{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px}
-.header h1{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:#fff;letter-spacing:.5px}
-.header h1 span{color:var(--accent)}
-.header-sub{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px;letter-spacing:1px;text-transform:uppercase}
-.status-dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite;flex-shrink:0}
-.status-dot.off{background:var(--red);box-shadow:0 0 8px var(--red)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-
-/* NAV */
-.nav-scroll{display:flex;gap:8px;padding:0 20px 14px;overflow-x:auto;scrollbar-width:none}
-.nav-scroll::-webkit-scrollbar{display:none}
-.nav-tab{flex-shrink:0;padding:7px 14px;border-radius:100px;font-size:13px;font-weight:500;background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.12);cursor:pointer;transition:all .2s;white-space:nowrap}
-.nav-tab.active{background:var(--accent);color:var(--navy);border-color:var(--accent);font-weight:600}
-
-/* MAIN */
-.main{padding:20px;max-width:480px;margin:0 auto}
-.screen{display:none;animation:fadeUp .3s ease}
-.screen.active{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-
-/* CARD */
-.card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px;border:1px solid var(--border)}
-.card-title{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:600;color:var(--navy);margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.card-title .icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
-
-/* FORM */
-.field{margin-bottom:14px}
-.field label{display:block;font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
-.field input,.field select{width:100%;padding:13px 16px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--input-bg);font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);appearance:none;-webkit-appearance:none;outline:none;transition:border-color .2s,box-shadow .2s}
-.field input:focus,.field select:focus{border-color:var(--blue-light);box-shadow:0 0 0 3px rgba(59,143,232,.12)}
-.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a8fa6' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.req{color:var(--red);margin-left:2px}
-
-/* BUTTONS */
-.btn-submit{width:100%;padding:16px;border-radius:var(--radius-sm);border:none;background:linear-gradient(135deg,var(--blue) 0%,var(--blue-light) 100%);color:#fff;font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;letter-spacing:.5px;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 16px rgba(30,106,191,.35);margin-top:4px}
-.btn-submit:active{transform:scale(.98)}
-.btn-submit:disabled{background:#b0c0d0;box-shadow:none;cursor:not-allowed}
-.btn-back{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0;margin-bottom:16px;font-family:'DM Sans',sans-serif}
-
-/* TOAST */
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:#fff;padding:14px 24px;border-radius:100px;font-size:14px;font-weight:500;box-shadow:0 8px 32px rgba(0,0,0,.25);z-index:999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;max-width:90vw;text-align:center}
-.toast.show{transform:translateX(-50%) translateY(0)}
-.toast.success{background:#1a6640}
-.toast.error{background:#8b1a1a}
-
-/* LOADER */
-.loader{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px}
-@keyframes spin{to{transform:rotate(360deg)}}
-
-/* HOME */
-.home-greeting{font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:700;color:var(--navy);margin-bottom:4px}
-.home-date{font-size:13px;color:var(--muted);margin-bottom:20px}
-.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-.action-card{background:var(--card);border-radius:var(--radius);padding:18px 14px;box-shadow:var(--shadow);border:1.5px solid var(--border);cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s;text-align:center}
-.action-card:active{transform:scale(.97)}
-.action-card:hover{border-color:var(--blue-light);box-shadow:0 6px 24px rgba(30,106,191,.15)}
-.action-icon{font-size:28px;margin-bottom:8px;display:block}
-.action-label{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;color:var(--navy);line-height:1.2}
-.action-desc{font-size:11px;color:var(--muted);margin-top:2px}
-
-/* RECENT ENTRIES */
-.entry-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
-.entry-row:last-child{border-bottom:none}
-.entry-icon{font-size:22px;flex-shrink:0;margin-top:2px}
-.entry-info{flex:1;min-width:0}
-.entry-title{font-size:13px;font-weight:500;color:var(--text)}
-.entry-detail{font-size:12px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.entry-date{font-size:11px;color:var(--muted);flex-shrink:0}
-.entry-actions{display:flex;gap:6px;margin-top:6px}
-.btn-edit{padding:4px 12px;border-radius:100px;border:1.5px solid var(--blue-light);background:transparent;color:var(--blue);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
-.btn-delete{padding:4px 12px;border-radius:100px;border:1.5px solid #fcc;background:transparent;color:var(--red);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
-
-/* EDIT MODAL */
-.modal-overlay{position:fixed;inset:0;background:rgba(15,39,68,.5);z-index:200;display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .2s ease}
-.modal-overlay.hidden{display:none}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.modal{background:var(--card);border-radius:var(--radius) var(--radius) 0 0;padding:24px 20px 32px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;animation:slideUp .25s ease}
-@keyframes slideUp{from{transform:translateY(40px)}to{transform:translateY(0)}}
-.modal-title{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--navy);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
-.modal-close{background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer;padding:0}
-.btn-update{width:100%;padding:15px;border-radius:var(--radius-sm);border:none;background:linear-gradient(135deg,var(--orange),#f39c12);color:#fff;font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;cursor:pointer;margin-top:8px}
-
-/* DEMO BADGE */
-.demo-badge{background:#fff8e1;border:1px solid #f0c040;border-radius:8px;padding:10px 14px;font-size:12px;color:#7a5c00;margin-bottom:16px;display:flex;align-items:center;gap:8px}
 </style>
 </head>
+
 <body>
 
-<div class="header">
 <div class="header logo-header">
   <div class="center-logo-wrap">
-    <img src="assets/logo.png" alt="Nehal Industries Ltd" class="center-logo">
+    <img src="logo.png" alt="Nehal Industries Ltd" class="center-logo">
     <div class="header-sub">Synced Inventory Control</div>
   </div>
 
@@ -192,29 +179,34 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
   <div class="screen active" id="screen-home">
     <div class="home-greeting">Good day! 👋</div>
     <div class="home-date" id="homeDate"></div>
-    <div class="demo-badge" id="demoBadge">🧪 <span><b>Demo Mode</b> — entries saved locally for testing. Host on GitHub to connect to Google Sheets.</span></div>
-    <div class="action-grid">
-      <div class="action-card" onclick="showScreen('production')"><span class="action-icon">⚙️</span><div class="action-label">Production Entry</div>
-<div class="action-desc">Log finished rolls</div></div>
-      <div class="action-card" onclick="showScreen('inward')"><span class="action-icon">📦</span><div class="action-label">Raw Material Inward</div>
-<div class="action-desc">Record stock received</div></div>
-      <div class="action-card" onclick="showScreen('dispatch')"><span class="action-icon">🚚</span><div class="action-label">Dispatch Entry</div>
-<div class="action-desc">Record outgoing rolls</div></div>
-      <div class="action-card" onclick="showScreen('consumption')"><span class="action-icon">🧪</span><div class="action-label">Consumption</div>
-<div class="action-desc">Log material used</div></div>
-      <div class="action-card" onclick="showScreen('transfer')" style="grid-column:span 2"><span class="action-icon">🔄</span><div class="action-label">Internal Transfer</div>
-<div class="action-desc">Move stock between factories</div></div>
+
+    <div class="notice">
+      Live sync mode: entries are saved to Google Sheets and loaded on every device. Delete/edit also updates the Google Sheet.
     </div>
+
+    <div class="sync-bar">
+      <div class="sync-pill"><b id="entryCount">0</b><span>Active Entries</span></div>
+      <div class="sync-pill"><b id="lastSync">—</b><span>Last Sync</span></div>
+    </div>
+
+    <div class="action-grid">
+      <div class="action-card" onclick="startNew('production')"><span class="action-icon">⚙️</span><div class="action-label">Production</div><div class="action-desc">Finished rolls</div></div>
+      <div class="action-card" onclick="startNew('inward')"><span class="action-icon">📦</span><div class="action-label">Raw Inward</div><div class="action-desc">Stock received</div></div>
+      <div class="action-card" onclick="startNew('dispatch')"><span class="action-icon">🚚</span><div class="action-label">Dispatch</div><div class="action-desc">Rolls out</div></div>
+      <div class="action-card" onclick="startNew('consumption')"><span class="action-icon">🧪</span><div class="action-label">Consumption</div><div class="action-desc">Material used</div></div>
+      <div class="action-card" onclick="startNew('transfer')" style="grid-column:span 2"><span class="action-icon">🔄</span><div class="action-label">Internal Transfer</div><div class="action-desc">Move stock between factories</div></div>
+    </div>
+
     <div class="card">
-      <div class="card-title"><div class="icon" style="background:#e8f4fd">📋</div> Recent Entries <span style="margin-left:auto;font-size:12px;color:var(--muted);font-weight:400" id="entryCount"></span></div>
-      <div id="recentList"><span style="font-size:13px;color:var(--muted)">No entries yet — submit one to see it here</span></div>
+      <div class="card-title"><div class="icon" style="background:#e8f4fd">📋</div> Recent Synced Entries</div>
+      <div id="recentList"><span style="font-size:13px;color:var(--muted)">Loading...</span></div>
     </div>
   </div>
 
   <div class="screen" id="screen-production">
     <button class="btn-back" onclick="showScreen('home')">← Back</button>
     <div class="card">
-      <div class="card-title"><div class="icon" style="background:#e8f4fd">⚙️</div> Production Entry</div>
+      <div class="card-title"><div class="icon" style="background:#e8f4fd">⚙️</div> <span id="productionTitle">Production Entry</span></div>
       <div class="field"><label>Date <span class="req">*</span></label><input type="date" id="prod-date"></div>
       <div class="field"><label>Factory <span class="req">*</span></label><select id="prod-factory"><option value="">Select Factory</option><option>Tecknogopara</option><option>Mirergao</option></select></div>
       <div class="field-row">
@@ -222,35 +214,35 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="field"><label>Roll Size <span class="req">*</span></label><select id="prod-rollsize"><option value="">Select</option><option>100 YDS</option><option>200 YDS</option></select></div>
       </div>
       <div class="field-row">
-        <div class="field"><label>GSM <span class="req">*</span></label><select id="prod-gsm"><option value="">Select</option><option>22</option><option>25</option><option>28</option><option>30</option><option>32</option><option>35</option><option>38</option><option>40</option><option>45</option><option>50</option><option>55</option><option>60</option></select></div>
+        <div class="field"><label>GSM <span class="req">*</span></label><select id="prod-gsm"></select></div>
         <div class="field"><label>Color <span class="req">*</span></label><select id="prod-color"><option value="">Select</option><option>White</option><option>Black</option><option>Charcoal</option></select></div>
       </div>
       <div class="field"><label>Output Rolls <span class="req">*</span></label><input type="number" id="prod-rolls" placeholder="e.g. 85" min="1"></div>
       <div class="field"><label>Batch ID</label><input type="text" id="prod-batch" placeholder="e.g. B-2026-001"></div>
       <div class="field"><label>Remarks</label><input type="text" id="prod-remarks" placeholder="Optional"></div>
-      <button class="btn-submit" id="btn-prod-submit" onclick="submitProduction()">✅ Submit Production Entry</button>
+      <button class="btn" id="btn-prod" onclick="submitProduction()">✅ Submit Production</button>
     </div>
   </div>
 
   <div class="screen" id="screen-inward">
     <button class="btn-back" onclick="showScreen('home')">← Back</button>
     <div class="card">
-      <div class="card-title"><div class="icon" style="background:#e8fdf0">📦</div> Raw Material Inward</div>
+      <div class="card-title"><div class="icon" style="background:#e8fdf0">📦</div> <span id="inwardTitle">Raw Material Inward</span></div>
       <div class="field"><label>Date <span class="req">*</span></label><input type="date" id="in-date"></div>
       <div class="field"><label>Factory <span class="req">*</span></label><select id="in-factory"><option value="">Select Factory</option><option>Tecknogopara</option><option>Mirergao</option></select></div>
-      <div class="field"><label>Material <span class="req">*</span></label><select id="in-material"><option value="">Select Material</option><option value="PSF-WHITE">White PSF</option><option value="PSF-BLACK">Black PSF</option><option value="PES-080">PES 0-80</option><option value="PES-80170">PES 80-170</option><option value="THICKENER">Thickener</option><option value="PAM">Polyacrylamide</option><option value="PACKAGING">Packaging Material</option></select></div>
-      <div class="field"><label>Quantity (KG) <span class="req">*</span></label><input type="number" id="in-qty" placeholder="e.g. 500" min="0.1" step="0.01"></div>
-      <div class="field"><label>Supplier / Source</label><input type="text" id="in-supplier" placeholder="Supplier name"></div>
+      <div class="field"><label>Material <span class="req">*</span></label><select id="in-material"></select></div>
+      <div class="field"><label>Quantity KG <span class="req">*</span></label><input type="number" id="in-qty" placeholder="e.g. 500" min="0.01" step="0.01"></div>
+      <div class="field"><label>Purchase / Source Note</label><input type="text" id="in-supplier" placeholder="Supplier or source"></div>
       <div class="field"><label>Invoice / Challan No.</label><input type="text" id="in-challan" placeholder="e.g. INV-2026-0045"></div>
       <div class="field"><label>Remarks</label><input type="text" id="in-remarks" placeholder="Optional"></div>
-      <button class="btn-submit" id="btn-in-submit" onclick="submitInward()">✅ Submit Inward Entry</button>
+      <button class="btn" id="btn-in" onclick="submitInward()">✅ Submit Inward</button>
     </div>
   </div>
 
   <div class="screen" id="screen-dispatch">
     <button class="btn-back" onclick="showScreen('home')">← Back</button>
     <div class="card">
-      <div class="card-title"><div class="icon" style="background:#fdf5e8">🚚</div> Dispatch Entry</div>
+      <div class="card-title"><div class="icon" style="background:#fdf5e8">🚚</div> <span id="dispatchTitle">Dispatch Entry</span></div>
       <div class="field"><label>Date <span class="req">*</span></label><input type="date" id="dis-date"></div>
       <div class="field"><label>Factory <span class="req">*</span></label><select id="dis-factory"><option value="">Select Factory</option><option>Tecknogopara</option><option>Mirergao</option></select></div>
       <div class="field"><label>Customer Name</label><input type="text" id="dis-customer" placeholder="Customer name"></div>
@@ -259,34 +251,34 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="field"><label>Roll Size <span class="req">*</span></label><select id="dis-rollsize"><option value="">Select</option><option>100 YDS</option><option>200 YDS</option></select></div>
       </div>
       <div class="field-row">
-        <div class="field"><label>GSM <span class="req">*</span></label><select id="dis-gsm"><option value="">Select</option><option>22</option><option>25</option><option>28</option><option>30</option><option>32</option><option>35</option><option>38</option><option>40</option><option>45</option><option>50</option><option>55</option><option>60</option></select></div>
+        <div class="field"><label>GSM <span class="req">*</span></label><select id="dis-gsm"></select></div>
         <div class="field"><label>Color <span class="req">*</span></label><select id="dis-color"><option value="">Select</option><option>White</option><option>Black</option><option>Charcoal</option></select></div>
       </div>
       <div class="field"><label>Rolls Out <span class="req">*</span></label><input type="number" id="dis-rolls" placeholder="e.g. 50" min="1"></div>
       <div class="field"><label>Delivery Challan No.</label><input type="text" id="dis-challan" placeholder="e.g. DC-2026-0012"></div>
       <div class="field"><label>Remarks</label><input type="text" id="dis-remarks" placeholder="Optional"></div>
-      <button class="btn-submit" id="btn-dis-submit" onclick="submitDispatch()">✅ Submit Dispatch Entry</button>
+      <button class="btn" id="btn-dis" onclick="submitDispatch()">✅ Submit Dispatch</button>
     </div>
   </div>
 
   <div class="screen" id="screen-consumption">
     <button class="btn-back" onclick="showScreen('home')">← Back</button>
     <div class="card">
-      <div class="card-title"><div class="icon" style="background:#fde8e8">🧪</div> Raw Material Consumption</div>
+      <div class="card-title"><div class="icon" style="background:#fde8e8">🧪</div> <span id="consumptionTitle">Raw Material Consumption</span></div>
       <div class="field"><label>Date <span class="req">*</span></label><input type="date" id="con-date"></div>
       <div class="field"><label>Factory <span class="req">*</span></label><select id="con-factory"><option value="">Select Factory</option><option>Tecknogopara</option><option>Mirergao</option></select></div>
-      <div class="field"><label>Material <span class="req">*</span></label><select id="con-material"><option value="">Select Material</option><option value="PSF-WHITE">White PSF</option><option value="PSF-BLACK">Black PSF</option><option value="PES-080">PES 0-80</option><option value="PES-80170">PES 80-170</option><option value="THICKENER">Thickener</option><option value="PAM">Polyacrylamide</option><option value="PACKAGING">Packaging Material</option></select></div>
+      <div class="field"><label>Material <span class="req">*</span></label><select id="con-material"></select></div>
       <div class="field"><label>KG Used <span class="req">*</span></label><input type="number" id="con-qty" placeholder="e.g. 250.5" min="0.01" step="0.01"></div>
       <div class="field"><label>Linked Batch ID</label><input type="text" id="con-batch" placeholder="e.g. B-2026-001"></div>
       <div class="field"><label>Remarks</label><input type="text" id="con-remarks" placeholder="Optional"></div>
-      <button class="btn-submit" id="btn-con-submit" onclick="submitConsumption()">✅ Submit Consumption Entry</button>
+      <button class="btn" id="btn-con" onclick="submitConsumption()">✅ Submit Consumption</button>
     </div>
   </div>
 
   <div class="screen" id="screen-transfer">
     <button class="btn-back" onclick="showScreen('home')">← Back</button>
     <div class="card">
-      <div class="card-title"><div class="icon" style="background:#f0e8fd">🔄</div> Internal Transfer</div>
+      <div class="card-title"><div class="icon" style="background:#f0e8fd">🔄</div> <span id="transferTitle">Internal Transfer</span></div>
       <div class="field"><label>Date <span class="req">*</span></label><input type="date" id="tr-date"></div>
       <div class="field-row">
         <div class="field"><label>From Factory <span class="req">*</span></label><select id="tr-from"><option value="">Select</option><option>Tecknogopara</option><option>Mirergao</option></select></div>
@@ -297,530 +289,523 @@ body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min
         <div class="field"><label>Roll Size <span class="req">*</span></label><select id="tr-rollsize"><option value="">Select</option><option>100 YDS</option><option>200 YDS</option></select></div>
       </div>
       <div class="field-row">
-        <div class="field"><label>GSM <span class="req">*</span></label><select id="tr-gsm"><option value="">Select</option><option>22</option><option>25</option><option>28</option><option>30</option><option>32</option><option>35</option><option>38</option><option>40</option><option>45</option><option>50</option><option>55</option><option>60</option></select></div>
+        <div class="field"><label>GSM <span class="req">*</span></label><select id="tr-gsm"></select></div>
         <div class="field"><label>Color <span class="req">*</span></label><select id="tr-color"><option value="">Select</option><option>White</option><option>Black</option><option>Charcoal</option></select></div>
       </div>
       <div class="field"><label>Qty Rolls <span class="req">*</span></label><input type="number" id="tr-qty" placeholder="e.g. 20" min="1"></div>
       <div class="field"><label>Remarks</label><input type="text" id="tr-remarks" placeholder="Optional"></div>
-      <button class="btn-submit" id="btn-tr-submit" onclick="submitTransfer()">✅ Submit Transfer Entry</button>
+      <button class="btn" id="btn-tr" onclick="submitTransfer()">✅ Submit Transfer</button>
     </div>
   </div>
 
-</div>
-<div class="modal-overlay hidden" id="modalOverlay" onclick="closeModalOutside(event)">
-  <div class="modal" id="editModal">
-    <div class="modal-title">
-      <span>✏️ Edit Entry</span>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div id="modalFields"></div>
-    <button class="btn-update" onclick="saveEdit()">💾 Save Changes</button>
-  </div>
 </div>
 
 <div class="toast" id="toast"></div>
 
 <script>
-// CONFIG — set DEMO_MODE = true to test without Google Sheets
-var DEMO_MODE = false;
+// ============================================================
+// CONFIG
+// ============================================================
 var API_URL = 'https://script.google.com/macros/s/AKfycbyYzFBgzt05xvjedaDkIpH2y7dy5vxecuTHBQCU6Qv7VzvSjV0ZWXChHbg5PRnlIjh1Vg/exec';
 
 var entries = [];
 var editingId = null;
+var editingAction = null;
+var syncTimer = null;
+
+var GSM_LIST = [22,25,28,30,32,35,38,40,45,50,55,60];
+var MATERIALS = [
+  ['PSF-WHITE','White PSF'],
+  ['PSF-BLACK','Black PSF'],
+  ['PES-080','PES 0-80'],
+  ['PES-80170','PES 80-170'],
+  ['THICKENER','Thickener'],
+  ['PAM','Polyacrylamide'],
+  ['PACKAGING','Packaging Material']
+];
 
 var META = {
-  production:  { icon:'⚙️', label:'Production',  color:'#e8f4fd' },
-  inward:      { icon:'📦', label:'Inward',      color:'#e8fdf0' },
-  dispatch:    { icon:'🚚', label:'Dispatch',    color:'#fdf5e8' },
-  consumption: { icon:'🧪', label:'Consumption', color:'#fde8e8' },
-  transfer:    { icon:'🔄', label:'Transfer',    color:'#f0e8fd' }
+  production:{icon:'⚙️',label:'Production'},
+  inward:{icon:'📦',label:'Inward'},
+  dispatch:{icon:'🚚',label:'Dispatch'},
+  consumption:{icon:'🧪',label:'Consumption'},
+  transfer:{icon:'🔄',label:'Transfer'}
 };
 
-document.addEventListener('DOMContentLoaded', function() {
-  var today = new Date().toISOString().split('T')[0];
-  ['prod-date','in-date','dis-date','con-date','tr-date'].forEach(function(id){
+// ============================================================
+// INIT
+// ============================================================
+document.addEventListener('DOMContentLoaded', function(){
+  fillSelects();
+  setTodayDates();
+  setHomeDate();
+  pingApi();
+  loadEntries();
+
+  syncTimer = setInterval(loadEntries, 30000);
+});
+
+function fillSelects(){
+  ['prod-gsm','dis-gsm','tr-gsm'].forEach(function(id){
     var el = document.getElementById(id);
-    if (el) el.value = today;
+    el.innerHTML = '<option value="">Select</option>' + GSM_LIST.map(function(g){ return '<option>'+g+'</option>'; }).join('');
   });
 
+  ['in-material','con-material'].forEach(function(id){
+    var el = document.getElementById(id);
+    el.innerHTML = '<option value="">Select Material</option>' + MATERIALS.map(function(m){ return '<option value="'+m[0]+'">'+m[1]+'</option>'; }).join('');
+  });
+}
+
+function setTodayDates(){
+  var today = new Date().toISOString().split('T')[0];
+  ['prod-date','in-date','dis-date','con-date','tr-date'].forEach(function(id){
+    document.getElementById(id).value = today;
+  });
+}
+
+function setHomeDate(){
   var d = new Date();
   var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
   var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  var homeDate = document.getElementById('homeDate');
-  if (homeDate) homeDate.textContent = days[d.getDay()] + ', ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
-
-  var demoBadge = document.getElementById('demoBadge');
-  if (demoBadge) demoBadge.style.display = DEMO_MODE ? 'flex' : 'none';
-
-  updateStatusDot();
-  loadLocalEntries();
-  renderEntries();
-  refreshEntries();
-  setInterval(function(){ if (!DEMO_MODE) refreshEntries(true); }, 30000);
-});
-
-function updateStatusDot() {
-  var dot = document.getElementById('statusDot');
-  if (!dot) return;
-  if (DEMO_MODE) {
-    dot.classList.add('off');
-    dot.title = 'Demo Mode';
-  } else {
-    dot.classList.remove('off');
-    dot.title = 'Connected to Google Sheets';
-  }
+  document.getElementById('homeDate').textContent = days[d.getDay()] + ', ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
 }
 
-function showScreen(name) {
+// ============================================================
+// JSONP API — avoids CORS issues on GitHub Pages
+// ============================================================
+function apiCall(action, payload){
+  return new Promise(function(resolve, reject){
+    var callbackName = 'jsonp_' + Date.now() + '_' + Math.random().toString(36).slice(2);
+    var script = document.createElement('script');
+
+    window[callbackName] = function(response){
+      cleanup();
+      resolve(response);
+    };
+
+    function cleanup(){
+      delete window[callbackName];
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
+
+    script.onerror = function(){
+      cleanup();
+      reject(new Error('Network/API request failed'));
+    };
+
+    var url = API_URL
+      + '?action=' + encodeURIComponent(action)
+      + '&callback=' + encodeURIComponent(callbackName);
+
+    if (payload) {
+      url += '&data=' + encodeURIComponent(JSON.stringify(payload));
+    }
+
+    script.src = url;
+    document.body.appendChild(script);
+
+    setTimeout(function(){
+      if (window[callbackName]) {
+        cleanup();
+        reject(new Error('API timeout'));
+      }
+    }, 20000);
+  });
+}
+
+function addSource(payload){
+  payload.sourceDevice = getDeviceType();
+  payload.sourceUrl = window.location.href;
+  payload.sourceBrowser = navigator.userAgent;
+  return payload;
+}
+
+function getDeviceType(){
+  var ua = navigator.userAgent || '';
+  if (/Mobi|Android|iPhone|iPad|iPod/i.test(ua)) return 'Mobile';
+  return 'Desktop';
+}
+
+// ============================================================
+// NAV
+// ============================================================
+function showScreen(name){
   document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
   document.querySelectorAll('.nav-tab').forEach(function(t){ t.classList.remove('active'); });
 
-  var screen = document.getElementById('screen-' + name);
-  if (screen) screen.classList.add('active');
+  var target = document.getElementById('screen-' + name);
+  if (target) target.classList.add('active');
 
   var names = ['home','production','inward','dispatch','consumption','transfer'];
   var idx = names.indexOf(name);
   var tabs = document.querySelectorAll('.nav-tab');
-  if (idx >= 0 && tabs[idx]) tabs[idx].classList.add('active');
+  if(idx >= 0 && tabs[idx]) tabs[idx].classList.add('active');
 
-  window.scrollTo(0, 0);
+  window.scrollTo(0,0);
 }
 
-function showToast(msg, type) {
+function startNew(action){
+  editingId = null;
+  editingAction = null;
+  resetForm(action);
+  updateFormTitles();
+  showScreen(action);
+}
+
+// ============================================================
+// STATUS + TOAST
+// ============================================================
+function pingApi(){
+  apiCall('ping', {}).then(function(res){
+    var ok = res && res.success;
+    setStatus(ok, ok ? 'Connected' : 'Offline');
+  }).catch(function(){
+    setStatus(false, 'Offline');
+  });
+}
+
+function setStatus(ok, text){
+  var dot = document.getElementById('statusDot');
+  dot.classList.toggle('off', !ok);
+  document.getElementById('statusText').textContent = text;
+}
+
+function showToast(msg, type){
   var t = document.getElementById('toast');
-  if (!t) return;
   t.textContent = msg;
   t.className = 'toast ' + (type || '');
   t.classList.add('show');
   setTimeout(function(){ t.classList.remove('show'); }, 3200);
 }
 
-function g(id) {
-  var el = document.getElementById(id);
-  return el ? String(el.value || '').trim() : '';
+function setLoading(btnId, isLoading){
+  var btn = document.getElementById(btnId);
+  if(!btn) return;
+
+  if(isLoading){
+    btn.dataset.old = btn.innerHTML;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loader"></span>Saving...';
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = btn.dataset.old || btn.innerHTML;
+  }
 }
 
-function setVal(id, value) {
-  var el = document.getElementById(id);
-  if (el) el.value = value || '';
-}
+// ============================================================
+// FORM HELPERS
+// ============================================================
+function g(id){ return document.getElementById(id).value.trim(); }
 
-function validateRequired(ids) {
-  for (var i = 0; i < ids.length; i++) {
-    if (!g(ids[i])) {
-      showToast('Please fill all required fields ⚠️', 'error');
-      var el = document.getElementById(ids[i]);
-      if (el) el.focus();
+function requireIds(ids){
+  for(var i=0;i<ids.length;i++){
+    if(!g(ids[i])){
+      showToast('Please fill all required fields ⚠️','error');
+      document.getElementById(ids[i]).focus();
       return false;
     }
   }
   return true;
 }
 
-function uid() {
-  return Date.now().toString(36) + Math.random().toString(36).substr(2, 4);
-}
+function savePayload(payload, btnId, resetAction){
+  payload = addSource(payload);
 
-function fmtDate(d) {
-  if (!d) return '';
-  var p = d.split('-');
-  if (p.length !== 3) return d;
-  return p[2] + '/' + p[1] + '/' + p[0];
-}
+  var apiAction = editingId ? 'update' : 'create';
+  if(editingId) payload.id = editingId;
 
-function loadLocalEntries() {
-  try {
-    entries = JSON.parse(localStorage.getItem('ni_inventory_entries') || '[]');
-  } catch (e) {
-    entries = [];
-  }
-}
+  setLoading(btnId, true);
 
-function saveLocalEntries() {
-  try {
-    localStorage.setItem('ni_inventory_entries', JSON.stringify(entries));
-  } catch (e) {}
-}
+  apiCall(apiAction, payload).then(function(res){
+    setLoading(btnId, false);
 
-function getEntrySource() {
-  var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '');
-  return {
-    sourceDevice: isMobile ? 'Mobile' : 'Desktop',
-    sourceUrl: window.location.href,
-    sourceBrowser: (navigator.userAgent || '').substring(0, 180)
-  };
-}
-
-function addSourceInfo(payload) {
-  var source = getEntrySource();
-  payload.sourceDevice = source.sourceDevice;
-  payload.sourceUrl = source.sourceUrl;
-  payload.sourceBrowser = source.sourceBrowser;
-  return payload;
-}
-
-function jsonp(params, onSuccess, onError) {
-  var callbackName = 'ni_cb_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
-  params = params || {};
-  params.callback = callbackName;
-
-  var qs = Object.keys(params).map(function(k) {
-    return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
-  }).join('&');
-
-  var script = document.createElement('script');
-  var timer = setTimeout(function() {
-    cleanup();
-    if (onError) onError(new Error('Request timed out'));
-  }, 10000);
-
-  function cleanup() {
-    clearTimeout(timer);
-    try { delete window[callbackName]; } catch (e) { window[callbackName] = undefined; }
-    if (script && script.parentNode) script.parentNode.removeChild(script);
-  }
-
-  window[callbackName] = function(response) {
-    cleanup();
-    if (onSuccess) onSuccess(response);
-  };
-
-  script.onerror = function() {
-    cleanup();
-    if (onError) onError(new Error('Could not connect to API'));
-  };
-
-  script.src = API_URL + (API_URL.indexOf('?') >= 0 ? '&' : '?') + qs;
-  document.body.appendChild(script);
-}
-
-function refreshEntries(silent) {
-  if (DEMO_MODE) return;
-  jsonp({ action:'list' }, function(response) {
-    if (response && response.success && Array.isArray(response.entries)) {
-      entries = response.entries;
-      saveLocalEntries();
-      renderEntries();
-      if (!silent) showToast('Synced with Google Sheets ✅', 'success');
-    } else if (!silent) {
-      showToast((response && response.message) || 'Could not load entries from Google Sheets', 'error');
+    if(!res || !res.success){
+      showToast('❌ ' + (res && res.message ? res.message : 'Save failed'), 'error');
+      return;
     }
-  }, function(err) {
-    console.error(err);
-    if (!silent) showToast('Could not sync entries from Google Sheets', 'error');
+
+    showToast(editingId ? '✅ Entry updated' : '✅ Entry saved', 'success');
+
+    editingId = null;
+    editingAction = null;
+    resetForm(resetAction);
+    updateFormTitles();
+    loadEntries();
+    showScreen('home');
+
+  }).catch(function(err){
+    setLoading(btnId, false);
+    showToast('❌ Connection failed: ' + err.message, 'error');
   });
 }
 
-function postToApi(payload, afterSend, onError) {
-  fetch(API_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    body: JSON.stringify(payload)
-  })
-  .then(function(){ if (afterSend) afterSend(); })
-  .catch(function(err){ console.error(err); if (onError) onError(err); });
+function resetForm(action){
+  setTodayDates();
+
+  if(action === 'production'){
+    ['prod-factory','prod-type','prod-rollsize','prod-gsm','prod-color','prod-rolls','prod-batch','prod-remarks'].forEach(clearField);
+  }
+  if(action === 'inward'){
+    ['in-factory','in-material','in-qty','in-supplier','in-challan','in-remarks'].forEach(clearField);
+  }
+  if(action === 'dispatch'){
+    ['dis-factory','dis-customer','dis-type','dis-rollsize','dis-gsm','dis-color','dis-rolls','dis-challan','dis-remarks'].forEach(clearField);
+  }
+  if(action === 'consumption'){
+    ['con-factory','con-material','con-qty','con-batch','con-remarks'].forEach(clearField);
+  }
+  if(action === 'transfer'){
+    ['tr-from','tr-to','tr-type','tr-rollsize','tr-gsm','tr-color','tr-qty','tr-remarks'].forEach(clearField);
+  }
 }
 
-function renderEntries() {
-  var el = document.getElementById('recentList');
-  var countEl = document.getElementById('entryCount');
-  if (!el) return;
+function clearField(id){
+  var el = document.getElementById(id);
+  if(el) el.value = '';
+}
 
-  if (countEl) countEl.textContent = entries.length ? entries.length + ' entries' : '';
+function updateFormTitles(){
+  var map = {
+    production:['productionTitle','btn-prod','Production Entry','✅ Submit Production'],
+    inward:['inwardTitle','btn-in','Raw Material Inward','✅ Submit Inward'],
+    dispatch:['dispatchTitle','btn-dis','Dispatch Entry','✅ Submit Dispatch'],
+    consumption:['consumptionTitle','btn-con','Raw Material Consumption','✅ Submit Consumption'],
+    transfer:['transferTitle','btn-tr','Internal Transfer','✅ Submit Transfer']
+  };
 
-  if (!entries.length) {
-    el.innerHTML = '<span style="font-size:13px;color:var(--muted)">No entries yet — submit one to see it here</span>';
+  Object.keys(map).forEach(function(action){
+    var m = map[action];
+    document.getElementById(m[0]).textContent = editingAction === action ? 'Edit ' + m[2] : m[2];
+    document.getElementById(m[1]).innerHTML = editingAction === action ? '💾 Update Entry' : m[3];
+  });
+}
+
+// ============================================================
+// SUBMIT FUNCTIONS
+// ============================================================
+function submitProduction(){
+  if(!requireIds(['prod-date','prod-factory','prod-type','prod-rollsize','prod-gsm','prod-color','prod-rolls'])) return;
+
+  savePayload({
+    action:'production',
+    date:g('prod-date'),
+    factory:g('prod-factory'),
+    productType:g('prod-type'),
+    rollSize:g('prod-rollsize'),
+    gsm:g('prod-gsm'),
+    color:g('prod-color'),
+    rolls:g('prod-rolls'),
+    batch:g('prod-batch'),
+    remarks:g('prod-remarks')
+  }, 'btn-prod', 'production');
+}
+
+function submitInward(){
+  if(!requireIds(['in-date','in-factory','in-material','in-qty'])) return;
+
+  savePayload({
+    action:'inward',
+    date:g('in-date'),
+    factory:g('in-factory'),
+    materialCode:g('in-material'),
+    qty:g('in-qty'),
+    supplier:g('in-supplier'),
+    challan:g('in-challan'),
+    remarks:g('in-remarks')
+  }, 'btn-in', 'inward');
+}
+
+function submitDispatch(){
+  if(!requireIds(['dis-date','dis-factory','dis-type','dis-rollsize','dis-gsm','dis-color','dis-rolls'])) return;
+
+  savePayload({
+    action:'dispatch',
+    date:g('dis-date'),
+    factory:g('dis-factory'),
+    customer:g('dis-customer'),
+    productType:g('dis-type'),
+    rollSize:g('dis-rollsize'),
+    gsm:g('dis-gsm'),
+    color:g('dis-color'),
+    rolls:g('dis-rolls'),
+    challan:g('dis-challan'),
+    remarks:g('dis-remarks')
+  }, 'btn-dis', 'dispatch');
+}
+
+function submitConsumption(){
+  if(!requireIds(['con-date','con-factory','con-material','con-qty'])) return;
+
+  savePayload({
+    action:'consumption',
+    date:g('con-date'),
+    factory:g('con-factory'),
+    materialCode:g('con-material'),
+    qty:g('con-qty'),
+    batch:g('con-batch'),
+    remarks:g('con-remarks')
+  }, 'btn-con', 'consumption');
+}
+
+function submitTransfer(){
+  if(!requireIds(['tr-date','tr-from','tr-to','tr-type','tr-rollsize','tr-gsm','tr-color','tr-qty'])) return;
+
+  if(g('tr-from') === g('tr-to')){
+    showToast('From and To factory cannot be same','error');
     return;
   }
 
-  el.innerHTML = entries.slice().reverse().map(function(e) {
-    var m = META[e.action] || { icon:'📋', label:e.action || 'Entry', color:'#eee' };
+  savePayload({
+    action:'transfer',
+    date:g('tr-date'),
+    fromFactory:g('tr-from'),
+    toFactory:g('tr-to'),
+    productType:g('tr-type'),
+    rollSize:g('tr-rollsize'),
+    gsm:g('tr-gsm'),
+    color:g('tr-color'),
+    qty:g('tr-qty'),
+    remarks:g('tr-remarks')
+  }, 'btn-tr', 'transfer');
+}
+
+// ============================================================
+// LIST, EDIT, DELETE
+// ============================================================
+function loadEntries(){
+  apiCall('list', {}).then(function(res){
+    if(!res || !res.success){
+      setStatus(false, 'Offline');
+      renderEntries();
+      return;
+    }
+
+    entries = res.entries || [];
+    setStatus(true, 'Connected');
+    document.getElementById('entryCount').textContent = entries.length;
+    document.getElementById('lastSync').textContent = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
+    renderEntries();
+  }).catch(function(){
+    setStatus(false, 'Offline');
+    renderEntries();
+  });
+}
+
+function renderEntries(){
+  var el = document.getElementById('recentList');
+
+  if(!entries.length){
+    el.innerHTML = '<span style="font-size:13px;color:var(--muted)">No synced entries yet</span>';
+    return;
+  }
+
+  el.innerHTML = entries.slice(0, 25).map(function(e){
+    var meta = META[e.action] || {icon:'📋', label:e.action};
     var detail = entryDetail(e);
+    var source = e.sourceDevice ? ' · Source: ' + escapeHtml(e.sourceDevice) : '';
+
     return '<div class="entry-row">' +
-      '<span class="entry-icon">' + m.icon + '</span>' +
-      '<div class="entry-info">' +
-        '<div class="entry-title">' + escapeHtml(m.label) + '</div>' +
-        '<div class="entry-detail">' + escapeHtml(detail) + '</div>' +
-        '<div class="entry-detail">Source: ' + escapeHtml(e.sourceDevice || 'Unknown') + (e.createdAt ? ' · ' + escapeHtml(e.createdAt) : '') + '</div>' +
-        '<div class="entry-actions">' +
-          '<button class="btn-edit" onclick="openEdit(\'' + e.id + '\')">✏️ Edit</button>' +
-          '<button class="btn-delete" onclick="deleteEntry(\'' + e.id + '\')">🗑 Delete</button>' +
+      '<div class="entry-top">' +
+        '<div>' +
+          '<div class="entry-title">' + meta.icon + ' ' + escapeHtml(meta.label) + '</div>' +
+          '<div class="entry-detail">' + detail + '</div>' +
+          '<div class="entry-meta">' + escapeHtml(e.date || '') + source + ' · ID: ' + escapeHtml(e.id || '') + '</div>' +
         '</div>' +
       '</div>' +
-      '<div class="entry-date">' + escapeHtml(e.date || '') + '</div>' +
+      '<div class="entry-actions">' +
+        '<button class="small-btn" onclick="editEntry(\'' + escapeAttr(e.id) + '\')">✏️ Edit</button>' +
+        '<button class="small-btn delete" onclick="deleteEntry(\'' + escapeAttr(e.id) + '\')">🗑 Delete</button>' +
+      '</div>' +
     '</div>';
   }).join('');
 }
 
-function escapeHtml(value) {
-  return String(value == null ? '' : value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
-}
-
-function entryDetail(e) {
-  if (e.action === 'production') return e.factory + ' · ' + e.productType + ' ' + e.gsm + 'GSM ' + e.color + ' · ' + e.rolls + ' rolls';
-  if (e.action === 'inward') return e.factory + ' · ' + e.materialCode + ' · ' + e.qty + ' KG';
-  if (e.action === 'dispatch') return e.factory + ' · ' + e.productType + ' ' + e.gsm + 'GSM · ' + e.rolls + ' rolls' + (e.customer ? ' → ' + e.customer : '');
-  if (e.action === 'consumption') return e.factory + ' · ' + e.materialCode + ' · ' + e.qty + ' KG';
-  if (e.action === 'transfer') return e.fromFactory + ' → ' + e.toFactory + ' · ' + e.productType + ' ' + e.gsm + 'GSM · ' + e.qty + ' rolls';
+function entryDetail(e){
+  if(e.action === 'production') return escapeHtml(e.factory + ' · ' + e.productType + ' ' + e.gsm + 'GSM ' + e.color + ' · ' + (e.rolls || e.qty) + ' rolls');
+  if(e.action === 'inward') return escapeHtml(e.factory + ' · ' + (e.materialName || e.materialCode) + ' · ' + e.qty + ' KG');
+  if(e.action === 'dispatch') return escapeHtml(e.factory + ' · ' + e.productType + ' ' + e.gsm + 'GSM · ' + (e.rolls || e.qty) + ' rolls' + (e.customer ? ' → ' + e.customer : ''));
+  if(e.action === 'consumption') return escapeHtml(e.factory + ' · ' + (e.materialName || e.materialCode) + ' · ' + e.qty + ' KG');
+  if(e.action === 'transfer') return escapeHtml(e.fromFactory + ' → ' + e.toFactory + ' · ' + e.productType + ' ' + e.gsm + 'GSM · ' + e.qty + ' rolls');
   return '';
 }
 
-function originalButtonText(action) {
-  if (action === 'production') return '✅ Submit Production Entry';
-  if (action === 'inward') return '✅ Submit Inward Entry';
-  if (action === 'dispatch') return '✅ Submit Dispatch Entry';
-  if (action === 'consumption') return '✅ Submit Consumption Entry';
-  if (action === 'transfer') return '✅ Submit Transfer Entry';
-  return '✅ Submit Entry';
+function editEntry(id){
+  var e = entries.find(function(x){ return x.id === id; });
+  if(!e) return;
+
+  editingId = e.id;
+  editingAction = e.action;
+  resetForm(e.action);
+
+  if(e.action === 'production'){
+    setVal('prod-date', e.date); setVal('prod-factory', e.factory); setVal('prod-type', e.productType); setVal('prod-rollsize', e.rollSize);
+    setVal('prod-gsm', e.gsm); setVal('prod-color', e.color); setVal('prod-rolls', e.rolls || e.qty); setVal('prod-batch', e.batch); setVal('prod-remarks', e.remarks);
+  }
+
+  if(e.action === 'inward'){
+    setVal('in-date', e.date); setVal('in-factory', e.factory); setVal('in-material', e.materialCode); setVal('in-qty', e.qty);
+    setVal('in-supplier', e.supplier); setVal('in-challan', e.challan); setVal('in-remarks', e.remarks);
+  }
+
+  if(e.action === 'dispatch'){
+    setVal('dis-date', e.date); setVal('dis-factory', e.factory); setVal('dis-customer', e.customer); setVal('dis-type', e.productType); setVal('dis-rollsize', e.rollSize);
+    setVal('dis-gsm', e.gsm); setVal('dis-color', e.color); setVal('dis-rolls', e.rolls || e.qty); setVal('dis-challan', e.challan); setVal('dis-remarks', e.remarks);
+  }
+
+  if(e.action === 'consumption'){
+    setVal('con-date', e.date); setVal('con-factory', e.factory); setVal('con-material', e.materialCode); setVal('con-qty', e.qty);
+    setVal('con-batch', e.batch); setVal('con-remarks', e.remarks);
+  }
+
+  if(e.action === 'transfer'){
+    setVal('tr-date', e.date); setVal('tr-from', e.fromFactory); setVal('tr-to', e.toFactory); setVal('tr-type', e.productType); setVal('tr-rollsize', e.rollSize);
+    setVal('tr-gsm', e.gsm); setVal('tr-color', e.color); setVal('tr-qty', e.qty); setVal('tr-remarks', e.remarks);
+  }
+
+  updateFormTitles();
+  showScreen(e.action);
 }
 
-function saveEntry(payload, btnId, successMsg, resetFn) {
-  var btn = document.getElementById(btnId);
-  if (!btn) return;
+function deleteEntry(id){
+  var e = entries.find(function(x){ return x.id === id; });
+  if(!e) return;
 
-  btn.disabled = true;
-  btn.innerHTML = '<span class="loader"></span>Saving...';
+  if(!confirm('Delete this entry from the website and Google Sheet?')) return;
 
-  payload.id = payload.id || uid();
-  addSourceInfo(payload);
+  apiCall('delete', addSource({id:id})).then(function(res){
+    if(!res || !res.success){
+      showToast('❌ ' + (res && res.message ? res.message : 'Delete failed'), 'error');
+      return;
+    }
 
-  function finishLocal() {
-    var existingIndex = entries.findIndex(function(e){ return e.id === payload.id; });
-    if (existingIndex >= 0) entries[existingIndex] = payload;
-    else entries.push(payload);
-    saveLocalEntries();
-    showToast('✅ ' + successMsg, 'success');
-    if (resetFn) resetFn();
-    renderEntries();
-    showScreen('home');
-  }
+    showToast('✅ Entry deleted', 'success');
+    loadEntries();
 
-  function resetButton() {
-    btn.disabled = false;
-    btn.innerHTML = originalButtonText(payload.action);
-  }
-
-  if (DEMO_MODE) {
-    setTimeout(function(){ finishLocal(); resetButton(); }, 400);
-    return;
-  }
-
-  postToApi(Object.assign({ operation:'save' }, payload), function(){
-    finishLocal();
-    resetButton();
-    setTimeout(function(){ refreshEntries(true); }, 1200);
-  }, function(){
-    resetButton();
-    showToast('❌ Connection failed. Check Apps Script deployment/permissions.', 'error');
+  }).catch(function(err){
+    showToast('❌ Delete failed: ' + err.message, 'error');
   });
 }
 
-function submitProduction() {
-  if (!validateRequired(['prod-date','prod-factory','prod-type','prod-rollsize','prod-gsm','prod-color','prod-rolls'])) return;
-  var payload = {
-    action:'production',
-    date: g('prod-date'),
-    factory: g('prod-factory'),
-    productType: g('prod-type'),
-    rollSize: g('prod-rollsize'),
-    gsm: g('prod-gsm'),
-    color: g('prod-color'),
-    rolls: g('prod-rolls'),
-    batch: g('prod-batch'),
-    remarks: g('prod-remarks')
-  };
-  saveEntry(payload, 'btn-prod-submit', 'Production entry saved', resetProduction);
+// ============================================================
+// UTILITIES
+// ============================================================
+function setVal(id, value){
+  var el = document.getElementById(id);
+  if(el) el.value = value || '';
 }
 
-function submitInward() {
-  if (!validateRequired(['in-date','in-factory','in-material','in-qty'])) return;
-  var payload = {
-    action:'inward',
-    date: g('in-date'),
-    factory: g('in-factory'),
-    materialCode: g('in-material'),
-    qty: g('in-qty'),
-    supplier: g('in-supplier'),
-    challan: g('in-challan'),
-    remarks: g('in-remarks')
-  };
-  saveEntry(payload, 'btn-in-submit', 'Inward entry saved', resetInward);
+function escapeHtml(value){
+  return String(value == null ? '' : value)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;')
+    .replace(/'/g,'&#039;');
 }
 
-function submitDispatch() {
-  if (!validateRequired(['dis-date','dis-factory','dis-type','dis-rollsize','dis-gsm','dis-color','dis-rolls'])) return;
-  var payload = {
-    action:'dispatch',
-    date: g('dis-date'),
-    factory: g('dis-factory'),
-    customer: g('dis-customer'),
-    productType: g('dis-type'),
-    rollSize: g('dis-rollsize'),
-    gsm: g('dis-gsm'),
-    color: g('dis-color'),
-    rolls: g('dis-rolls'),
-    challan: g('dis-challan'),
-    remarks: g('dis-remarks')
-  };
-  saveEntry(payload, 'btn-dis-submit', 'Dispatch entry saved', resetDispatch);
-}
-
-function submitConsumption() {
-  if (!validateRequired(['con-date','con-factory','con-material','con-qty'])) return;
-  var payload = {
-    action:'consumption',
-    date: g('con-date'),
-    factory: g('con-factory'),
-    materialCode: g('con-material'),
-    qty: g('con-qty'),
-    batch: g('con-batch'),
-    remarks: g('con-remarks')
-  };
-  saveEntry(payload, 'btn-con-submit', 'Consumption entry saved', resetConsumption);
-}
-
-function submitTransfer() {
-  if (!validateRequired(['tr-date','tr-from','tr-to','tr-type','tr-rollsize','tr-gsm','tr-color','tr-qty'])) return;
-  if (g('tr-from') === g('tr-to')) {
-    showToast('From and To factory cannot be the same', 'error');
-    return;
-  }
-  var payload = {
-    action:'transfer',
-    date: g('tr-date'),
-    fromFactory: g('tr-from'),
-    toFactory: g('tr-to'),
-    productType: g('tr-type'),
-    rollSize: g('tr-rollsize'),
-    gsm: g('tr-gsm'),
-    color: g('tr-color'),
-    qty: g('tr-qty'),
-    remarks: g('tr-remarks')
-  };
-  saveEntry(payload, 'btn-tr-submit', 'Transfer entry saved', resetTransfer);
-}
-
-function resetProduction() {
-  ['prod-factory','prod-type','prod-rollsize','prod-gsm','prod-color','prod-rolls','prod-batch','prod-remarks'].forEach(function(id){ setVal(id, ''); });
-}
-function resetInward() {
-  ['in-factory','in-material','in-qty','in-supplier','in-challan','in-remarks'].forEach(function(id){ setVal(id, ''); });
-}
-function resetDispatch() {
-  ['dis-factory','dis-customer','dis-type','dis-rollsize','dis-gsm','dis-color','dis-rolls','dis-challan','dis-remarks'].forEach(function(id){ setVal(id, ''); });
-}
-function resetConsumption() {
-  ['con-factory','con-material','con-qty','con-batch','con-remarks'].forEach(function(id){ setVal(id, ''); });
-}
-function resetTransfer() {
-  ['tr-from','tr-to','tr-type','tr-rollsize','tr-gsm','tr-color','tr-qty','tr-remarks'].forEach(function(id){ setVal(id, ''); });
-}
-
-function deleteEntry(id) {
-  if (!confirm('Delete this entry? This will also remove it from Google Sheets.')) return;
-
-  var entry = entries.find(function(e){ return e.id === id; });
-  entries = entries.filter(function(e){ return e.id !== id; });
-  saveLocalEntries();
-  renderEntries();
-
-  if (DEMO_MODE) {
-    showToast('Entry deleted', 'success');
-    return;
-  }
-
-  postToApi({ operation:'delete', id:id, action: entry ? entry.action : '' }, function(){
-    showToast('Entry deleted from Google Sheets', 'success');
-    setTimeout(function(){ refreshEntries(true); }, 1200);
-  }, function(){
-    showToast('Delete failed. Check Apps Script.', 'error');
-  });
-}
-
-function openEdit(id) {
-  var entry = entries.find(function(e){ return e.id === id; });
-  if (!entry) return;
-
-  editingId = id;
-  var modalFields = document.getElementById('modalFields');
-  var fields = editableFields(entry);
-  modalFields.innerHTML = fields.map(function(f){
-    return '<div class="field">' +
-      '<label>' + escapeHtml(f.label) + '</label>' +
-      '<input type="text" id="edit-' + f.key + '" value="' + escapeHtml(entry[f.key] || '') + '">' +
-    '</div>';
-  }).join('');
-
-  document.getElementById('modalOverlay').classList.remove('hidden');
-}
-
-function editableFields(entry) {
-  if (entry.action === 'production') return [
-    {key:'date',label:'Date'}, {key:'factory',label:'Factory'}, {key:'productType',label:'Product Type'},
-    {key:'rollSize',label:'Roll Size'}, {key:'gsm',label:'GSM'}, {key:'color',label:'Color'},
-    {key:'rolls',label:'Rolls'}, {key:'batch',label:'Batch ID'}, {key:'remarks',label:'Remarks'}
-  ];
-  if (entry.action === 'inward') return [
-    {key:'date',label:'Date'}, {key:'factory',label:'Factory'}, {key:'materialCode',label:'Material'},
-    {key:'qty',label:'Quantity KG'}, {key:'supplier',label:'Supplier'}, {key:'challan',label:'Invoice/Challan'}, {key:'remarks',label:'Remarks'}
-  ];
-  if (entry.action === 'dispatch') return [
-    {key:'date',label:'Date'}, {key:'factory',label:'Factory'}, {key:'customer',label:'Customer'},
-    {key:'productType',label:'Product Type'}, {key:'rollSize',label:'Roll Size'}, {key:'gsm',label:'GSM'},
-    {key:'color',label:'Color'}, {key:'rolls',label:'Rolls'}, {key:'challan',label:'Challan'}, {key:'remarks',label:'Remarks'}
-  ];
-  if (entry.action === 'consumption') return [
-    {key:'date',label:'Date'}, {key:'factory',label:'Factory'}, {key:'materialCode',label:'Material'},
-    {key:'qty',label:'Quantity KG'}, {key:'batch',label:'Linked Batch ID'}, {key:'remarks',label:'Remarks'}
-  ];
-  if (entry.action === 'transfer') return [
-    {key:'date',label:'Date'}, {key:'fromFactory',label:'From Factory'}, {key:'toFactory',label:'To Factory'},
-    {key:'productType',label:'Product Type'}, {key:'rollSize',label:'Roll Size'}, {key:'gsm',label:'GSM'},
-    {key:'color',label:'Color'}, {key:'qty',label:'Quantity Rolls'}, {key:'remarks',label:'Remarks'}
-  ];
-  return [];
-}
-
-function saveEdit() {
-  var entry = entries.find(function(e){ return e.id === editingId; });
-  if (!entry) return;
-
-  editableFields(entry).forEach(function(f){
-    var el = document.getElementById('edit-' + f.key);
-    if (el) entry[f.key] = el.value.trim();
-  });
-
-  addSourceInfo(entry);
-  saveLocalEntries();
-  renderEntries();
-  closeModal();
-
-  if (DEMO_MODE) {
-    showToast('Changes saved', 'success');
-    return;
-  }
-
-  postToApi(Object.assign({ operation:'update' }, entry), function(){
-    showToast('Changes saved to Google Sheets', 'success');
-    setTimeout(function(){ refreshEntries(true); }, 1200);
-  }, function(){
-    showToast('Update failed. Check Apps Script.', 'error');
-  });
-}
-
-function closeModal() {
-  editingId = null;
-  var overlay = document.getElementById('modalOverlay');
-  if (overlay) overlay.classList.add('hidden');
-}
-
-function closeModalOutside(event) {
-  if (event.target && event.target.id === 'modalOverlay') closeModal();
+function escapeAttr(value){
+  return String(value == null ? '' : value).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
 }
 </script>
 </body>
