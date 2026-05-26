@@ -1,845 +1,861 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-<title>Nehal Industries — Inventory</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
-
+<title>Nehal Industries — IMS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
-:root{
-  --navy:#0f2744;
-  --navy2:#17365d;
-  --blue:#1e6abf;
-  --accent:#f0a500;
-  --green:#2ecc71;
-  --red:#e74c3c;
-  --orange:#e67e22;
-  --bg:#f0f4f9;
-  --card:#ffffff;
-  --text:#1a2a3a;
-  --muted:#7a8fa6;
-  --border:#dce6f0;
-  --input:#f7fafd;
-  --shadow:0 4px 20px rgba(15,39,68,.10);
-  --radius:16px;
-  --radius-sm:10px;
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
-.header{background:linear-gradient(135deg,var(--navy),var(--navy2));padding:18px 18px 0;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(15,39,68,.3)}
-.header-top{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px}
-.header h1{font-family:'Rajdhani',sans-serif;font-size:23px;font-weight:700;color:#fff;letter-spacing:.5px}
-.header h1 span{color:var(--accent)}
-.header-sub{font-size:11px;color:rgba(255,255,255,.65);margin-top:2px;letter-spacing:1px;text-transform:uppercase}
-.status{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.75);font-size:11px}
-.status-dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
-.status-dot.off{background:var(--red);box-shadow:0 0 8px var(--red)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
-.nav-scroll{display:flex;gap:8px;padding:0 0 14px;overflow-x:auto;scrollbar-width:none}
-.nav-scroll::-webkit-scrollbar{display:none}
-.nav-tab{flex-shrink:0;padding:7px 13px;border-radius:100px;font-size:13px;font-weight:500;background:rgba(255,255,255,.08);color:rgba(255,255,255,.68);border:1px solid rgba(255,255,255,.12);cursor:pointer;white-space:nowrap}
-.nav-tab.active{background:var(--accent);color:var(--navy);border-color:var(--accent);font-weight:700}
-.main{padding:18px;max-width:520px;margin:0 auto}
-.screen{display:none;animation:fadeUp .25s ease}
-.screen.active{display:block}
-@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-.card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:16px;border:1px solid var(--border)}
-.card-title{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--navy);margin-bottom:16px;display:flex;align-items:center;gap:8px}
-.card-title .icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
-.field{margin-bottom:14px}
-.field label{display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
-.field input,.field select{width:100%;padding:13px 15px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--input);font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);outline:none}
-.field input:focus,.field select:focus{border-color:#3b8fe8;box-shadow:0 0 0 3px rgba(59,143,232,.12)}
-.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.req{color:var(--red);margin-left:2px}
-.btn{width:100%;padding:15px;border-radius:var(--radius-sm);border:none;background:linear-gradient(135deg,var(--blue),#3b8fe8);color:#fff;font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;letter-spacing:.4px;cursor:pointer;box-shadow:0 4px 16px rgba(30,106,191,.3)}
-.btn:disabled{background:#aeb9c5;box-shadow:none;cursor:not-allowed}
-.btn.secondary{background:#fff;color:var(--blue);border:1.5px solid var(--blue);box-shadow:none}
-.btn.danger{background:var(--red)}
-.btn.orange{background:linear-gradient(135deg,var(--orange),#f39c12)}
-.btn-back{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0;margin-bottom:14px;font-family:'DM Sans',sans-serif}
-.home-greeting{font-family:'Rajdhani',sans-serif;font-size:27px;font-weight:700;color:var(--navy);margin-bottom:4px}
-.home-date{font-size:13px;color:var(--muted);margin-bottom:14px}
-.sync-bar{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:15px}
-.sync-pill{background:#fff;border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center;box-shadow:var(--shadow)}
-.sync-pill b{display:block;color:var(--navy);font-family:'Rajdhani';font-size:20px}
-.sync-pill span{font-size:11px;color:var(--muted)}
-.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
-.action-card{background:var(--card);border-radius:var(--radius);padding:18px 12px;box-shadow:var(--shadow);border:1.5px solid var(--border);cursor:pointer;text-align:center}
-.action-card:active{transform:scale(.98)}
-.action-icon{font-size:28px;margin-bottom:8px;display:block}
-.action-label{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:var(--navy);line-height:1.15}
-.action-desc{font-size:11px;color:var(--muted);margin-top:2px}
-.entry-row{padding:12px 0;border-bottom:1px solid var(--border)}
-.entry-row:last-child{border-bottom:none}
-.entry-top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
-.entry-title{font-size:14px;font-weight:700;color:var(--text)}
-.entry-detail{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.45}
-.entry-meta{font-size:11px;color:var(--muted);margin-top:6px}
-.entry-actions{display:flex;gap:7px;margin-top:9px}
-.small-btn{padding:6px 12px;border-radius:100px;border:1.5px solid var(--blue);background:#fff;color:var(--blue);font-size:12px;font-weight:700;cursor:pointer}
-.small-btn.delete{border-color:#f2b8b8;color:var(--red)}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:#fff;padding:14px 22px;border-radius:100px;font-size:14px;font-weight:600;box-shadow:0 8px 32px rgba(0,0,0,.25);z-index:999;transition:transform .25s;white-space:nowrap;max-width:92vw;text-align:center}
-.toast.show{transform:translateX(-50%) translateY(0)}
-.toast.success{background:#1a6640}
-.toast.error{background:#8b1a1a}
-.loader{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.notice{background:#fff8e1;border:1px solid #f0c040;border-radius:10px;padding:11px 13px;font-size:12px;color:#7a5c00;margin-bottom:16px;line-height:1.4}
-.hidden{display:none!important}
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ============================================================
-   CENTERED LOGO HEADER — no top menu bar
-   ============================================================ */
-.logo-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  min-height: 112px;
-  padding: 16px 58px 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, var(--navy), var(--navy2));
-  box-shadow: 0 2px 20px rgba(15,39,68,.3);
-}
-
-.center-logo-wrap {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 7px;
-}
-
-.center-logo {
-  height: 72px;
-  width: auto;
-  max-width: 390px;
-  object-fit: contain;
-  display: block;
-}
-
-.status-floating {
-  position: absolute;
-  right: 16px;
-  top: 16px;
-}
-
-/* Remove the old top function menu */
-.nav-scroll {
-  display: none !important;
-}
-
-/* Remove old text logo if any old code remains */
-.header h1 {
-  display: none !important;
-}
-
-@media (max-width: 520px) {
-  .logo-header {
-    min-height: 94px;
-    padding: 14px 48px 12px;
+  :root {
+    --blue-900: #042C53;
+    --blue-800: #0C447C;
+    --blue-700: #185FA5;
+    --blue-600: #1a6fc4;
+    --blue-500: #378ADD;
+    --blue-200: #85B7EB;
+    --blue-100: #B5D4F4;
+    --blue-50:  #E6F1FB;
+    --gold:     #EF9F27;
+    --gold-lt:  #FAEEDA;
+    --white:    #ffffff;
+    --surface:  #f4f7fb;
+    --surface2: #eaf0f8;
+    --text:     #0d1b2a;
+    --text-2:   #3d5166;
+    --text-3:   #7a93a8;
+    --border:   rgba(24,95,165,0.15);
+    --border2:  rgba(24,95,165,0.25);
+    --danger:   #e24b4a;
+    --success:  #1D9E75;
+    --radius:   14px;
+    --radius-sm:8px;
   }
 
-  .center-logo {
-    height: 55px;
-    max-width: 280px;
+  html, body {
+    height: 100%;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--surface);
+    color: var(--text);
+    -webkit-tap-highlight-color: transparent;
   }
 
-  .status-floating {
-    right: 10px;
-    top: 10px;
+  /* ── HEADER ── */
+  .header {
+    background: var(--blue-800);
+    padding: 20px 20px 16px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .logo-mark {
+    width: 44px;
+    height: 44px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border: 1px solid rgba(255,255,255,0.18);
+  }
+
+  .logo-mark svg { width: 28px; height: 28px; }
+
+  .header-text { flex: 1; }
+  .header-company {
+    font-family: 'DM Serif Display', serif;
+    font-size: 17px;
+    color: #fff;
+    letter-spacing: 0.3px;
+    line-height: 1.2;
+  }
+  .header-sub {
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    margin-top: 2px;
+  }
+
+  .header-status {
+    width: 8px; height: 8px;
+    background: #5DCAA5;
+    border-radius: 50%;
+    box-shadow: 0 0 0 3px rgba(93,202,165,0.25);
+    flex-shrink: 0;
+  }
+
+  /* ── MAIN SCROLL ── */
+  .main {
+    padding: 20px 16px 100px;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-3);
+    margin: 24px 0 10px 4px;
+  }
+  .section-title:first-of-type { margin-top: 4px; }
+
+  /* ── ENTRY CARDS GRID ── */
+  .entry-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .entry-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 14px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+    -webkit-user-select: none;
+  }
+
+  .entry-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--card-accent, var(--blue-500));
+    border-radius: var(--radius) var(--radius) 0 0;
+  }
+
+  .entry-card:active { transform: scale(0.97); }
+
+  .entry-card .card-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: var(--card-icon-bg, var(--blue-50));
+    display: flex; align-items: center; justify-content: center;
+    color: var(--card-icon-color, var(--blue-700));
+    font-size: 18px;
+  }
+
+  .entry-card .card-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .entry-card .card-desc {
+    font-size: 11px;
+    color: var(--text-3);
+    line-height: 1.4;
+  }
+
+  /* accent variants */
+  .card-inward    { --card-accent: #1D9E75; --card-icon-bg: #E1F5EE; --card-icon-color: #0F6E56; }
+  .card-production{ --card-accent: var(--blue-700); --card-icon-bg: var(--blue-50); --card-icon-color: var(--blue-800); }
+  .card-consume   { --card-accent: #EF9F27; --card-icon-bg: #FAEEDA; --card-icon-color: #854F0B; }
+  .card-dispatch  { --card-accent: #D85A30; --card-icon-bg: #FAECE7; --card-icon-color: #712B13; }
+  .card-transfer  { --card-accent: #7F77DD; --card-icon-bg: #EEEDFE; --card-icon-color: #3C3489; }
+  .card-log       { --card-accent: var(--text-3); --card-icon-bg: #f0f4f8; --card-icon-color: var(--text-2); }
+  .card-delete    { --card-accent: var(--danger); --card-icon-bg: #FCEBEB; --card-icon-color: #791F1F; }
+
+  /* ── MODAL OVERLAY ── */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(4,44,83,0.55);
+    z-index: 200;
+    align-items: flex-end;
+    justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--white);
+    border-radius: 20px 20px 0 0;
+    width: 100%;
+    max-width: 500px;
+    max-height: 92vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 0 env(safe-area-inset-bottom, 20px);
+    animation: slideUp 0.28s cubic-bezier(0.22,1,0.36,1);
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+  }
+
+  .modal-handle {
+    width: 36px; height: 4px;
+    background: #dde4ef;
+    border-radius: 2px;
+    margin: 12px auto 0;
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .modal-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .modal-close {
+    width: 32px; height: 32px;
+    background: var(--surface);
+    border: none; border-radius: 50%;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-2);
+  }
+
+  .modal-body { padding: 20px; }
+
+  /* ── FORM ELEMENTS ── */
+  .form-group { margin-bottom: 16px; }
+
+  label {
+    display: block;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    color: var(--text-2);
+    margin-bottom: 6px;
+  }
+
+  input[type=text], input[type=number], input[type=date],
+  select, textarea {
+    width: 100%;
+    padding: 11px 14px;
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    color: var(--text);
+    background: var(--white);
+    outline: none;
+    transition: border-color 0.15s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--blue-500);
+    box-shadow: 0 0 0 3px rgba(55,138,221,0.12);
+  }
+
+  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a93a8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
+
+  textarea { resize: none; height: 80px; }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* ── SUBMIT BUTTON ── */
+  .btn-submit {
+    width: 100%;
+    padding: 15px;
+    background: var(--blue-800);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+    margin-top: 4px;
+  }
+  .btn-submit:active { transform: scale(0.98); background: var(--blue-900); }
+  .btn-submit:disabled { background: var(--text-3); cursor: not-allowed; }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 30px; left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--text);
+    color: #fff;
+    padding: 12px 22px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 500;
+    opacity: 0;
+    transition: opacity 0.25s, transform 0.25s;
+    z-index: 300;
+    white-space: nowrap;
+    max-width: 90vw;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .toast.success { background: #0F6E56; }
+  .toast.error   { background: #791F1F; }
+
+  /* ── LOG SHEET ── */
+  .log-list { display: flex; flex-direction: column; gap: 10px; }
+
+  .log-item {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    position: relative;
+  }
+
+  .log-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 6px;
+  }
+
+  .log-type-badge {
     font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 20px;
+    background: var(--blue-50);
+    color: var(--blue-800);
   }
-}
 
+  .log-date {
+    font-size: 11px;
+    color: var(--text-3);
+  }
+
+  .log-details {
+    font-size: 13px;
+    color: var(--text-2);
+    line-height: 1.5;
+  }
+
+  .log-qty {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .log-delete-btn {
+    background: #FCEBEB;
+    color: #791F1F;
+    border: none;
+    border-radius: 6px;
+    padding: 5px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 8px;
+  }
+
+  /* ── DELETE MODAL ── */
+  .delete-warning {
+    background: #FCEBEB;
+    border: 1px solid #F7C1C1;
+    border-radius: var(--radius-sm);
+    padding: 14px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #501313;
+    line-height: 1.5;
+  }
+
+  .btn-danger {
+    width: 100%;
+    padding: 15px;
+    background: var(--danger);
+    color: #fff;
+    border: none;
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .btn-cancel {
+    width: 100%;
+    padding: 13px;
+    background: transparent;
+    color: var(--text-2);
+    border: 1px solid var(--border2);
+    border-radius: var(--radius-sm);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+
+  .spinner {
+    display: inline-block;
+    width: 16px; height: 16px;
+    border: 2px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    vertical-align: middle;
+    margin-right: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--text-3);
+    font-size: 14px;
+  }
+
+  .field-note {
+    font-size: 11px;
+    color: var(--text-3);
+    margin-top: 4px;
+  }
 </style>
 </head>
-
 <body>
 
-<div class="header logo-header">
-  <div class="center-logo-wrap">
-    <img src="logo.png" alt="Nehal Industries Ltd" class="center-logo">
-    <div class="header-sub">Synced Inventory Control</div>
+<!-- HEADER -->
+<div class="header">
+  <div class="logo-mark">
+    <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="3" width="9" height="9" rx="2" fill="white" opacity="0.9"/>
+      <rect x="16" y="3" width="9" height="9" rx="2" fill="white" opacity="0.9"/>
+      <rect x="3" y="16" width="9" height="9" rx="2" fill="white" opacity="0.9"/>
+      <rect x="16" y="16" width="9" height="9" rx="2" fill="white" opacity="0.6"/>
+      <circle cx="20.5" cy="20.5" r="2" fill="white" opacity="0.9"/>
+    </svg>
   </div>
-
-  <div class="status status-floating">
-    <div class="status-dot off" id="statusDot"></div>
-    <span id="statusText">Checking</span>
+  <div class="header-text">
+    <div class="header-company">Nehal Industries Ltd.</div>
+    <div class="header-sub">Inventory Management</div>
   </div>
+  <div class="header-status" id="apiStatus" title="Checking API…"></div>
 </div>
 
+<!-- MAIN -->
 <div class="main">
 
-  <div class="screen active" id="screen-home">
-    <div class="home-greeting">Good day! 👋</div>
-    <div class="home-date" id="homeDate"></div>
-
-    <div class="notice">
-      Live sync mode: entries are saved to Google Sheets and loaded on every device. Delete/edit also updates the Google Sheet.
+  <div class="section-title">New Entry</div>
+  <div class="entry-grid">
+    <div class="entry-card card-inward" onclick="openModal('raw_inward')">
+      <div class="card-icon">📦</div>
+      <div class="card-label">Raw Material Inward</div>
+      <div class="card-desc">Record incoming stock</div>
     </div>
-
-    <div class="sync-bar">
-      <div class="sync-pill"><b id="entryCount">0</b><span>Active Entries</span></div>
-      <div class="sync-pill"><b id="lastSync">—</b><span>Last Sync</span></div>
+    <div class="entry-card card-production" onclick="openModal('production')">
+      <div class="card-icon">🏭</div>
+      <div class="card-label">Production Entry</div>
+      <div class="card-desc">Log finished rolls output</div>
     </div>
-
-    <div class="action-grid">
-      <div class="action-card" onclick="startNew('production')"><span class="action-icon">⚙️</span><div class="action-label">Production</div><div class="action-desc">Finished rolls</div></div>
-      <div class="action-card" onclick="startNew('inward')"><span class="action-icon">📦</span><div class="action-label">Raw Inward</div><div class="action-desc">Stock received</div></div>
-      <div class="action-card" onclick="startNew('dispatch')"><span class="action-icon">🚚</span><div class="action-label">Dispatch</div><div class="action-desc">Rolls out</div></div>
-      <div class="action-card" onclick="startNew('consumption')"><span class="action-icon">🧪</span><div class="action-label">Consumption</div><div class="action-desc">Material used</div></div>
-      <div class="action-card" onclick="startNew('transfer')" style="grid-column:span 2"><span class="action-icon">🔄</span><div class="action-label">Internal Transfer</div><div class="action-desc">Move stock between factories</div></div>
+    <div class="entry-card card-consume" onclick="openModal('consumption')">
+      <div class="card-icon">⚙️</div>
+      <div class="card-label">Material Consumption</div>
+      <div class="card-desc">Record usage of RM</div>
     </div>
-
-    <div class="card">
-      <div class="card-title"><div class="icon" style="background:#e8f4fd">📋</div> Recent Synced Entries</div>
-      <div id="recentList"><span style="font-size:13px;color:var(--muted)">Loading...</span></div>
+    <div class="entry-card card-dispatch" onclick="openModal('dispatch')">
+      <div class="card-icon">🚚</div>
+      <div class="card-label">Dispatch Entry</div>
+      <div class="card-desc">Outgoing finished goods</div>
     </div>
-  </div>
-
-  <div class="screen" id="screen-production">
-    <button class="btn-back" onclick="showScreen('home')">← Back</button>
-    <div class="card">
-      <div class="card-title"><div class="icon" style="background:#e8f4fd">⚙️</div> <span id="productionTitle">Production Entry</span></div>
-      <div class="field"><label>Date <span class="req">*</span></label><input type="date" id="prod-date"></div>
-      <div class="field"><label>Factory <span class="req">*</span></label><select id="prod-factory"><option value="">Select Factory</option><option>Tecknogopara</option><option>Mirergao</option></select></div>
-      <div class="field-row">
-        <div class="field"><label>Product Type <span class="req">*</span></label><select id="prod-type"><option value="">Select</option><option>Single Dot</option><option>Double Dot</option></select></div>
-        <div class="field"><label>Roll Size <span class="req">*</span></label><select id="prod-rollsize"><option value="">Select</option><option>100 YDS</option><option>200 YDS</option></select></div>
-      </div>
-      <div class="field-row">
-        <div class="field"><label>GSM <span class="req">*</span></label><select id="prod-gsm"></select></div>
-        <div class="field"><label>Color <span class="req">*</span></label><select id="prod-color"><option value="">Select</option><option>White</option><option>Black</option><option>Charcoal</option></select></div>
-      </div>
-      <div class="field"><label>Output Rolls <span class="req">*</span></label><input type="number" id="prod-rolls" placeholder="e.g. 85" min="1"></div>
-      <div class="field"><label>Batch ID</label><input type="text" id="prod-batch" placeholder="e.g. B-2026-001"></div>
-      <div class="field"><label>Remarks</label><input type="text" id="prod-remarks" placeholder="Optional"></div>
-      <button class="btn" id="btn-prod" onclick="submitProduction()">✅ Submit Production</button>
+    <div class="entry-card card-transfer" onclick="openModal('transfer')">
+      <div class="card-icon">🔄</div>
+      <div class="card-label">Internal Transfer</div>
+      <div class="card-desc">Move between factories</div>
     </div>
   </div>
 
-  <div class="screen" id="screen-inward">
-    <button class="btn-back" onclick="showScreen('home')">← Back</button>
-    <div class="card">
-      <div class="card-title"><div class="icon" style="background:#e8fdf0">📦</div> <span id="inwardTitle">Raw Material Inward</span></div>
-      <div class="field"><label>Date <span class="req">*</span></label><input type="date" id="in-date"></div>
-      <div class="field"><label>Factory <span class="req">*</span></label><select id="in-factory"><option value="">Select Factory</option><option>Tecknogopara</option><option>Mirergao</option></select></div>
-      <div class="field"><label>Material <span class="req">*</span></label><select id="in-material"></select></div>
-      <div class="field"><label>Quantity KG <span class="req">*</span></label><input type="number" id="in-qty" placeholder="e.g. 500" min="0.01" step="0.01"></div>
-      <div class="field"><label>Purchase / Source Note</label><input type="text" id="in-supplier" placeholder="Supplier or source"></div>
-      <div class="field"><label>Invoice / Challan No.</label><input type="text" id="in-challan" placeholder="e.g. INV-2026-0045"></div>
-      <div class="field"><label>Remarks</label><input type="text" id="in-remarks" placeholder="Optional"></div>
-      <button class="btn" id="btn-in" onclick="submitInward()">✅ Submit Inward</button>
+  <div class="section-title">Manage</div>
+  <div class="entry-grid">
+    <div class="entry-card card-log" onclick="openLog()">
+      <div class="card-icon">📋</div>
+      <div class="card-label">Entry Log</div>
+      <div class="card-desc">View recent entries</div>
     </div>
-  </div>
-
-  <div class="screen" id="screen-dispatch">
-    <button class="btn-back" onclick="showScreen('home')">← Back</button>
-    <div class="card">
-      <div class="card-title"><div class="icon" style="background:#fdf5e8">🚚</div> <span id="dispatchTitle">Dispatch Entry</span></div>
-      <div class="field"><label>Date <span class="req">*</span></label><input type="date" id="dis-date"></div>
-      <div class="field"><label>Factory <span class="req">*</span></label><select id="dis-factory"><option value="">Select Factory</option><option>Tecknogopara</option><option>Mirergao</option></select></div>
-      <div class="field"><label>Customer Name</label><input type="text" id="dis-customer" placeholder="Customer name"></div>
-      <div class="field-row">
-        <div class="field"><label>Product Type <span class="req">*</span></label><select id="dis-type"><option value="">Select</option><option>Single Dot</option><option>Double Dot</option></select></div>
-        <div class="field"><label>Roll Size <span class="req">*</span></label><select id="dis-rollsize"><option value="">Select</option><option>100 YDS</option><option>200 YDS</option></select></div>
-      </div>
-      <div class="field-row">
-        <div class="field"><label>GSM <span class="req">*</span></label><select id="dis-gsm"></select></div>
-        <div class="field"><label>Color <span class="req">*</span></label><select id="dis-color"><option value="">Select</option><option>White</option><option>Black</option><option>Charcoal</option></select></div>
-      </div>
-      <div class="field"><label>Rolls Out <span class="req">*</span></label><input type="number" id="dis-rolls" placeholder="e.g. 50" min="1"></div>
-      <div class="field"><label>Delivery Challan No.</label><input type="text" id="dis-challan" placeholder="e.g. DC-2026-0012"></div>
-      <div class="field"><label>Remarks</label><input type="text" id="dis-remarks" placeholder="Optional"></div>
-      <button class="btn" id="btn-dis" onclick="submitDispatch()">✅ Submit Dispatch</button>
-    </div>
-  </div>
-
-  <div class="screen" id="screen-consumption">
-    <button class="btn-back" onclick="showScreen('home')">← Back</button>
-    <div class="card">
-      <div class="card-title"><div class="icon" style="background:#fde8e8">🧪</div> <span id="consumptionTitle">Raw Material Consumption</span></div>
-      <div class="field"><label>Date <span class="req">*</span></label><input type="date" id="con-date"></div>
-      <div class="field"><label>Factory <span class="req">*</span></label><select id="con-factory"><option value="">Select Factory</option><option>Tecknogopara</option><option>Mirergao</option></select></div>
-      <div class="field"><label>Material <span class="req">*</span></label><select id="con-material"></select></div>
-      <div class="field"><label>KG Used <span class="req">*</span></label><input type="number" id="con-qty" placeholder="e.g. 250.5" min="0.01" step="0.01"></div>
-      <div class="field"><label>Linked Batch ID</label><input type="text" id="con-batch" placeholder="e.g. B-2026-001"></div>
-      <div class="field"><label>Remarks</label><input type="text" id="con-remarks" placeholder="Optional"></div>
-      <button class="btn" id="btn-con" onclick="submitConsumption()">✅ Submit Consumption</button>
-    </div>
-  </div>
-
-  <div class="screen" id="screen-transfer">
-    <button class="btn-back" onclick="showScreen('home')">← Back</button>
-    <div class="card">
-      <div class="card-title"><div class="icon" style="background:#f0e8fd">🔄</div> <span id="transferTitle">Internal Transfer</span></div>
-      <div class="field"><label>Date <span class="req">*</span></label><input type="date" id="tr-date"></div>
-      <div class="field-row">
-        <div class="field"><label>From Factory <span class="req">*</span></label><select id="tr-from"><option value="">Select</option><option>Tecknogopara</option><option>Mirergao</option></select></div>
-        <div class="field"><label>To Factory <span class="req">*</span></label><select id="tr-to"><option value="">Select</option><option>Tecknogopara</option><option>Mirergao</option></select></div>
-      </div>
-      <div class="field-row">
-        <div class="field"><label>Product Type <span class="req">*</span></label><select id="tr-type"><option value="">Select</option><option>Single Dot</option><option>Double Dot</option></select></div>
-        <div class="field"><label>Roll Size <span class="req">*</span></label><select id="tr-rollsize"><option value="">Select</option><option>100 YDS</option><option>200 YDS</option></select></div>
-      </div>
-      <div class="field-row">
-        <div class="field"><label>GSM <span class="req">*</span></label><select id="tr-gsm"></select></div>
-        <div class="field"><label>Color <span class="req">*</span></label><select id="tr-color"><option value="">Select</option><option>White</option><option>Black</option><option>Charcoal</option></select></div>
-      </div>
-      <div class="field"><label>Qty Rolls <span class="req">*</span></label><input type="number" id="tr-qty" placeholder="e.g. 20" min="1"></div>
-      <div class="field"><label>Remarks</label><input type="text" id="tr-remarks" placeholder="Optional"></div>
-      <button class="btn" id="btn-tr" onclick="submitTransfer()">✅ Submit Transfer</button>
+    <div class="entry-card card-delete" onclick="openModal('delete_entry')">
+      <div class="card-icon">🗑️</div>
+      <div class="card-label">Delete Entry</div>
+      <div class="card-desc">Remove by row number</div>
     </div>
   </div>
 
 </div>
 
+<!-- MODAL OVERLAY -->
+<div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modalBox">
+    <div class="modal-handle"></div>
+    <div class="modal-header">
+      <div class="modal-title" id="modalTitle">Entry</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
-// ============================================================
-// CONFIG
-// ============================================================
-var API_URL = 'https://script.google.com/macros/s/AKfycbwdugr9IH0DZ9aCh-dOsA4p8miC3uMttMBJd5k8alEa8VVj_MYWzD9hxaKLtkF2kkdJ2Q/exec';
+const API = "https://script.google.com/macros/s/AKfycbyIG-mtCz7PMhmT3hq_SA4L1S7RHpVYBAzXxb2BA0ynxjwQT60cZFpO68nBwv4SdZlp/exec";
 
-var entries = [];
-var editingId = null;
-var editingAction = null;
-var syncTimer = null;
-
-var GSM_LIST = [22,25,28,30,32,35,38,40,45,50,55,60];
-var MATERIALS = [
-  ['PSF-WHITE','White PSF'],
-  ['PSF-BLACK','Black PSF'],
-  ['PES-080','PES 0-80'],
-  ['PES-80170','PES 80-170'],
-  ['THICKENER','Thickener'],
-  ['PAM','Polyacrylamide'],
-  ['PACKAGING','Packaging Material']
+const FACTORIES     = ["Tecknogopara","Mirergao"];
+const PRODUCT_TYPES = ["Single Dot","Double Dot"];
+const COLORS        = ["White","Black","Charcoal"];
+const ROLL_SIZES    = ["100 YDS","200 YDS"];
+const GSM_LIST      = [22,25,28,30,32,35,38,40,45,50,55,60];
+const MATERIALS     = [
+  {code:"PSF-WHITE",  name:"White PSF"},
+  {code:"PSF-BLACK",  name:"Black PSF"},
+  {code:"PES-080",    name:"PES 0-80"},
+  {code:"PES-80170",  name:"PES 80-170"},
+  {code:"THICKENER",  name:"Thickener"},
+  {code:"PAM",        name:"Polyacrylamide"},
+  {code:"PACKAGING",  name:"Packaging Material"}
 ];
 
-var META = {
-  production:{icon:'⚙️',label:'Production'},
-  inward:{icon:'📦',label:'Inward'},
-  dispatch:{icon:'🚚',label:'Dispatch'},
-  consumption:{icon:'🧪',label:'Consumption'},
-  transfer:{icon:'🔄',label:'Transfer'}
+let currentModal = null;
+let logCache = [];
+
+function today() {
+  return new Date().toISOString().split("T")[0];
+}
+
+function sel(options, name, placeholder) {
+  return `<select name="${name}" required>
+    <option value="" disabled selected>${placeholder || "Select…"}</option>
+    ${options.map(o => typeof o === "object"
+      ? `<option value="${o.code}">${o.code} — ${o.name}</option>`
+      : `<option value="${o}">${o}</option>`).join("")}
+  </select>`;
+}
+
+const FORMS = {
+  raw_inward: {
+    title: "Raw Material Inward",
+    fields: () => `
+      <div class="form-group"><label>Date</label><input type="date" name="date" value="${today()}" required></div>
+      <div class="form-group"><label>Factory</label>${sel(FACTORIES,"factory")}</div>
+      <div class="form-group"><label>Material</label>${sel(MATERIALS,"materialCode")}</div>
+      <div class="form-group"><label>Quantity (KG)</label><input type="number" name="quantity" placeholder="0.00" step="0.01" min="0.01" required></div>
+      <div class="form-group"><label>Supplier / Source</label><input type="text" name="supplier" placeholder="Supplier name (optional)"></div>
+      <div class="form-group"><label>Remarks</label><textarea name="remarks" placeholder="Optional notes…"></textarea></div>
+    `
+  },
+  production: {
+    title: "Production Entry",
+    fields: () => `
+      <div class="form-group"><label>Date</label><input type="date" name="date" value="${today()}" required></div>
+      <div class="form-group"><label>Factory</label>${sel(FACTORIES,"factory")}</div>
+      <div class="form-row">
+        <div class="form-group"><label>Product Type</label>${sel(PRODUCT_TYPES,"productType")}</div>
+        <div class="form-group"><label>Roll Size</label>${sel(ROLL_SIZES,"rollSize")}</div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>GSM</label>${sel(GSM_LIST,"gsm")}</div>
+        <div class="form-group"><label>Color</label>${sel(COLORS,"color")}</div>
+      </div>
+      <div class="form-group"><label>Output Rolls</label><input type="number" name="quantity" placeholder="Rolls produced" min="1" step="1" required></div>
+      <div class="form-group"><label>Remarks</label><textarea name="remarks" placeholder="Optional notes…"></textarea></div>
+    `
+  },
+  consumption: {
+    title: "Material Consumption",
+    fields: () => `
+      <div class="form-group"><label>Date</label><input type="date" name="date" value="${today()}" required></div>
+      <div class="form-group"><label>Factory</label>${sel(FACTORIES,"factory")}</div>
+      <div class="form-group"><label>Material</label>${sel(MATERIALS,"materialCode")}</div>
+      <div class="form-group"><label>KG Used</label><input type="number" name="quantity" placeholder="0.00" step="0.01" min="0.01" required></div>
+      <div class="form-group"><label>Remarks</label><textarea name="remarks" placeholder="Optional notes…"></textarea></div>
+    `
+  },
+  dispatch: {
+    title: "Dispatch Entry",
+    fields: () => `
+      <div class="form-group"><label>Date</label><input type="date" name="date" value="${today()}" required></div>
+      <div class="form-group"><label>Factory</label>${sel(FACTORIES,"factory")}</div>
+      <div class="form-row">
+        <div class="form-group"><label>Product Type</label>${sel(PRODUCT_TYPES,"productType")}</div>
+        <div class="form-group"><label>Roll Size</label>${sel(ROLL_SIZES,"rollSize")}</div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>GSM</label>${sel(GSM_LIST,"gsm")}</div>
+        <div class="form-group"><label>Color</label>${sel(COLORS,"color")}</div>
+      </div>
+      <div class="form-group"><label>Rolls Out</label><input type="number" name="quantity" placeholder="Number of rolls" min="1" step="1" required></div>
+      <div class="form-group"><label>Delivery Challan No.</label><input type="text" name="challanNo" placeholder="DC/2025/001"></div>
+      <div class="form-group"><label>Remarks</label><textarea name="remarks" placeholder="Optional notes…"></textarea></div>
+    `
+  },
+  transfer: {
+    title: "Internal Transfer",
+    fields: () => `
+      <div class="form-group"><label>Date</label><input type="date" name="date" value="${today()}" required></div>
+      <div class="form-row">
+        <div class="form-group"><label>From Factory</label>${sel(FACTORIES,"fromFactory")}</div>
+        <div class="form-group"><label>To Factory</label>${sel(FACTORIES,"toFactory")}</div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Product Type</label>${sel(PRODUCT_TYPES,"productType")}</div>
+        <div class="form-group"><label>Roll Size</label>${sel(ROLL_SIZES,"rollSize")}</div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>GSM</label>${sel(GSM_LIST,"gsm")}</div>
+        <div class="form-group"><label>Color</label>${sel(COLORS,"color")}</div>
+      </div>
+      <div class="form-group"><label>Quantity (Rolls)</label><input type="number" name="quantity" placeholder="Number of rolls" min="1" step="1" required></div>
+      <div class="form-group"><label>Remarks</label><textarea name="remarks" placeholder="Optional notes…"></textarea></div>
+    `
+  },
+  delete_entry: {
+    title: "Delete Entry",
+    fields: () => `
+      <div class="delete-warning">
+        ⚠️ <strong>Note:</strong> Deletion removes the row from the specific entry sheet. The Finished Goods & Raw Materials totals will update automatically. This cannot be undone.
+      </div>
+      <div class="form-group">
+        <label>Sheet</label>
+        <select name="sheetName" required>
+          <option value="" disabled selected>Select sheet…</option>
+          <option value="Raw Material Inward">Raw Material Inward</option>
+          <option value="Production Entry">Production Entry</option>
+          <option value="Raw Material Consumption">Raw Material Consumption</option>
+          <option value="Dispatch Entry">Dispatch Entry</option>
+          <option value="Internal Transfer">Internal Transfer</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Row Number</label>
+        <input type="number" name="rowNumber" placeholder="e.g. 5" min="2" step="1" required>
+        <div class="field-note">Row 1 is always the header. Data starts at row 2.</div>
+      </div>
+      <div class="form-group">
+        <label>Confirm reason</label>
+        <textarea name="remarks" placeholder="Why are you deleting this entry?"></textarea>
+      </div>
+    `
+  }
 };
 
-// ============================================================
-// INIT
-// ============================================================
-document.addEventListener('DOMContentLoaded', function(){
-  fillSelects();
-  setTodayDates();
-  setHomeDate();
-  pingApi();
-  loadEntries(true);
-
-  syncTimer = setInterval(loadEntries, 30000);
-});
-
-function fillSelects(){
-  ['prod-gsm','dis-gsm','tr-gsm'].forEach(function(id){
-    var el = document.getElementById(id);
-    el.innerHTML = '<option value="">Select</option>' + GSM_LIST.map(function(g){ return '<option>'+g+'</option>'; }).join('');
-  });
-
-  ['in-material','con-material'].forEach(function(id){
-    var el = document.getElementById(id);
-    el.innerHTML = '<option value="">Select Material</option>' + MATERIALS.map(function(m){ return '<option value="'+m[0]+'">'+m[1]+'</option>'; }).join('');
-  });
+function openModal(type) {
+  currentModal = type;
+  const cfg = FORMS[type];
+  document.getElementById("modalTitle").textContent = cfg.title;
+  document.getElementById("modalBody").innerHTML = cfg.fields() + buildSubmitBtn(type);
+  document.getElementById("modalOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
 }
 
-function setTodayDates(){
-  var today = new Date().toISOString().split('T')[0];
-  ['prod-date','in-date','dis-date','con-date','tr-date'].forEach(function(id){
-    document.getElementById(id).value = today;
-  });
+function buildSubmitBtn(type) {
+  const isDel = type === "delete_entry";
+  return `<button class="${isDel ? 'btn-danger' : 'btn-submit'}" onclick="submitForm(event)" id="submitBtn">
+    ${isDel ? "Delete Entry" : "Save Entry"}
+  </button>`;
 }
 
-function setHomeDate(){
-  var d = new Date();
-  var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  document.getElementById('homeDate').textContent = days[d.getDay()] + ', ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+function closeModal() {
+  document.getElementById("modalOverlay").classList.remove("open");
+  document.body.style.overflow = "";
+  currentModal = null;
 }
 
-// ============================================================
-// JSONP API — avoids CORS issues on GitHub Pages
-// ============================================================
-function apiCall(action, payload){
-  return new Promise(function(resolve, reject){
-    var callbackName = 'jsonp_' + Date.now() + '_' + Math.random().toString(36).slice(2);
-    var script = document.createElement('script');
-    var finished = false;
-
-    window[callbackName] = function(response){
-      if (finished) return;
-      finished = true;
-      cleanup();
-      resolve(response);
-    };
-
-    function cleanup(){
-      try { delete window[callbackName]; } catch(e) { window[callbackName] = undefined; }
-      if (script && script.parentNode) script.parentNode.removeChild(script);
-    }
-
-    script.onerror = function(){
-      if (finished) return;
-      finished = true;
-      cleanup();
-      reject(new Error('Network/API request failed'));
-    };
-
-    var url = API_URL
-      + '?action=' + encodeURIComponent(action)
-      + '&callback=' + encodeURIComponent(callbackName)
-      + '&_=' + encodeURIComponent(Date.now());
-
-    if (payload) {
-      url += '&data=' + encodeURIComponent(JSON.stringify(payload));
-    }
-
-    script.src = url;
-    script.async = true;
-    document.body.appendChild(script);
-
-    setTimeout(function(){
-      if (!finished) {
-        finished = true;
-        cleanup();
-        reject(new Error('API timeout. Check Apps Script deployment/version.'));
-      }
-    }, 25000);
-  });
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById("modalOverlay")) closeModal();
 }
 
-function addSource(payload){
-  payload.sourceDevice = getDeviceType();
-  payload.sourceUrl = window.location.href;
-  payload.sourceBrowser = navigator.userAgent;
-  return payload;
-}
+async function submitForm(e) {
+  e.preventDefault();
+  const btn = document.getElementById("submitBtn");
+  const body = document.getElementById("modalBody");
+  const inputs = body.querySelectorAll("input, select, textarea");
+  const data = { entryType: currentModal };
 
-function getDeviceType(){
-  var ua = navigator.userAgent || '';
-  if (/Mobi|Android|iPhone|iPad|iPod/i.test(ua)) return 'Mobile';
-  return 'Desktop';
-}
-
-// ============================================================
-// NAV
-// ============================================================
-function showScreen(name){
-  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
-  document.querySelectorAll('.nav-tab').forEach(function(t){ t.classList.remove('active'); });
-
-  var target = document.getElementById('screen-' + name);
-  if (target) target.classList.add('active');
-
-  var names = ['home','production','inward','dispatch','consumption','transfer'];
-  var idx = names.indexOf(name);
-  var tabs = document.querySelectorAll('.nav-tab');
-  if(idx >= 0 && tabs[idx]) tabs[idx].classList.add('active');
-
-  window.scrollTo(0,0);
-}
-
-function startNew(action){
-  editingId = null;
-  editingAction = null;
-  resetForm(action);
-  updateFormTitles();
-  showScreen(action);
-}
-
-// ============================================================
-// STATUS + TOAST
-// ============================================================
-function pingApi(){
-  apiCall('ping', {}).then(function(res){
-    var ok = res && res.success;
-    setStatus(ok, ok ? 'Connected' : 'Offline');
-  }).catch(function(){
-    setStatus(false, 'Offline');
-  });
-}
-
-function setStatus(ok, text){
-  var dot = document.getElementById('statusDot');
-  dot.classList.toggle('off', !ok);
-  document.getElementById('statusText').textContent = text;
-}
-
-function showToast(msg, type){
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast ' + (type || '');
-  t.classList.add('show');
-  setTimeout(function(){ t.classList.remove('show'); }, 3200);
-}
-
-function setLoading(btnId, isLoading){
-  var btn = document.getElementById(btnId);
-  if(!btn) return;
-
-  if(isLoading){
-    btn.dataset.old = btn.innerHTML;
-    btn.disabled = true;
-    btn.innerHTML = '<span class="loader"></span>Saving...';
-  } else {
-    btn.disabled = false;
-    btn.innerHTML = btn.dataset.old || btn.innerHTML;
-  }
-}
-
-// ============================================================
-// FORM HELPERS
-// ============================================================
-function g(id){ return document.getElementById(id).value.trim(); }
-
-function requireIds(ids){
-  for(var i=0;i<ids.length;i++){
-    if(!g(ids[i])){
-      showToast('Please fill all required fields ⚠️','error');
-      document.getElementById(ids[i]).focus();
-      return false;
+  for (const el of inputs) {
+    if (el.name && el.value !== undefined) {
+      data[el.name] = el.value;
     }
   }
-  return true;
-}
 
-function savePayload(payload, btnId, resetAction){
-  payload = addSource(payload);
-
-  var apiAction = editingId ? 'update' : 'create';
-  if(editingId) payload.id = editingId;
-
-  setLoading(btnId, true);
-
-  apiCall(apiAction, payload).then(function(res){
-    setLoading(btnId, false);
-
-    if(!res || !res.success){
-      showToast('❌ ' + (res && res.message ? res.message : 'Save failed'), 'error');
-      console.error('Save failed response:', res);
+  // Validate required fields
+  const required = body.querySelectorAll("[required]");
+  for (const el of required) {
+    if (!el.value.trim()) {
+      el.focus();
+      showToast("Please fill all required fields.", "error");
       return;
     }
+  }
 
-    // Update the web-app list immediately using the response from Apps Script.
-    // Then reload from Google Sheets to confirm the real synced state.
-    if (res.entry && res.entry.id) {
-      var existingIndex = entries.findIndex(function(x){ return String(x.id) === String(res.entry.id); });
-      if (existingIndex >= 0) entries[existingIndex] = res.entry;
-      else entries.unshift(res.entry);
-      document.getElementById('entryCount').textContent = entries.length;
-      document.getElementById('lastSync').textContent = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-      renderEntries();
+  if (currentModal === "delete_entry") {
+    await submitDelete(data, btn);
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = `<span class="spinner"></span> Saving…`;
+
+  try {
+    const res = await fetch(API, {
+      method: "POST",
+      body: JSON.stringify(data),
+      headers: { "Content-Type": "text/plain" }
+    });
+    const json = await res.json();
+    if (json.success) {
+      showToast("Entry saved successfully!", "success");
+      closeModal();
+      logCache = [];
+    } else {
+      showToast(json.error || "Server error. Try again.", "error");
+      btn.disabled = false;
+      btn.innerHTML = "Save Entry";
     }
-
-    showToast(editingId ? '✅ Entry updated and synced' : '✅ Entry saved and synced', 'success');
-
-    editingId = null;
-    editingAction = null;
-    resetForm(resetAction);
-    updateFormTitles();
-    showScreen('home');
-
-    // Force fresh Google Sheet sync after Apps Script writes finish.
-    setTimeout(function(){ loadEntries(true); }, 800);
-    setTimeout(function(){ loadEntries(true); }, 2500);
-
-  }).catch(function(err){
-    setLoading(btnId, false);
-    showToast('❌ Connection failed: ' + err.message, 'error');
-    console.error('Save error:', err);
-  });
-}
-
-function resetForm(action){
-  setTodayDates();
-
-  if(action === 'production'){
-    ['prod-factory','prod-type','prod-rollsize','prod-gsm','prod-color','prod-rolls','prod-batch','prod-remarks'].forEach(clearField);
-  }
-  if(action === 'inward'){
-    ['in-factory','in-material','in-qty','in-supplier','in-challan','in-remarks'].forEach(clearField);
-  }
-  if(action === 'dispatch'){
-    ['dis-factory','dis-customer','dis-type','dis-rollsize','dis-gsm','dis-color','dis-rolls','dis-challan','dis-remarks'].forEach(clearField);
-  }
-  if(action === 'consumption'){
-    ['con-factory','con-material','con-qty','con-batch','con-remarks'].forEach(clearField);
-  }
-  if(action === 'transfer'){
-    ['tr-from','tr-to','tr-type','tr-rollsize','tr-gsm','tr-color','tr-qty','tr-remarks'].forEach(clearField);
+  } catch (err) {
+    showToast("Network error. Check connection.", "error");
+    btn.disabled = false;
+    btn.innerHTML = "Save Entry";
   }
 }
 
-function clearField(id){
-  var el = document.getElementById(id);
-  if(el) el.value = '';
-}
+async function submitDelete(data, btn) {
+  btn.disabled = true;
+  btn.textContent = "Deleting…";
 
-function updateFormTitles(){
-  var map = {
-    production:['productionTitle','btn-prod','Production Entry','✅ Submit Production'],
-    inward:['inwardTitle','btn-in','Raw Material Inward','✅ Submit Inward'],
-    dispatch:['dispatchTitle','btn-dis','Dispatch Entry','✅ Submit Dispatch'],
-    consumption:['consumptionTitle','btn-con','Raw Material Consumption','✅ Submit Consumption'],
-    transfer:['transferTitle','btn-tr','Internal Transfer','✅ Submit Transfer']
+  const payload = {
+    entryType: "delete",
+    sheetName: data.sheetName,
+    rowNumber: parseInt(data.rowNumber),
+    remarks: data.remarks
   };
 
-  Object.keys(map).forEach(function(action){
-    var m = map[action];
-    document.getElementById(m[0]).textContent = editingAction === action ? 'Edit ' + m[2] : m[2];
-    document.getElementById(m[1]).innerHTML = editingAction === action ? '💾 Update Entry' : m[3];
-  });
-}
-
-// ============================================================
-// SUBMIT FUNCTIONS
-// ============================================================
-function submitProduction(){
-  if(!requireIds(['prod-date','prod-factory','prod-type','prod-rollsize','prod-gsm','prod-color','prod-rolls'])) return;
-
-  savePayload({
-    action:'production',
-    date:g('prod-date'),
-    factory:g('prod-factory'),
-    productType:g('prod-type'),
-    rollSize:g('prod-rollsize'),
-    gsm:g('prod-gsm'),
-    color:g('prod-color'),
-    rolls:g('prod-rolls'),
-    batch:g('prod-batch'),
-    remarks:g('prod-remarks')
-  }, 'btn-prod', 'production');
-}
-
-function submitInward(){
-  if(!requireIds(['in-date','in-factory','in-material','in-qty'])) return;
-
-  savePayload({
-    action:'inward',
-    date:g('in-date'),
-    factory:g('in-factory'),
-    materialCode:g('in-material'),
-    qty:g('in-qty'),
-    supplier:g('in-supplier'),
-    challan:g('in-challan'),
-    remarks:g('in-remarks')
-  }, 'btn-in', 'inward');
-}
-
-function submitDispatch(){
-  if(!requireIds(['dis-date','dis-factory','dis-type','dis-rollsize','dis-gsm','dis-color','dis-rolls'])) return;
-
-  savePayload({
-    action:'dispatch',
-    date:g('dis-date'),
-    factory:g('dis-factory'),
-    customer:g('dis-customer'),
-    productType:g('dis-type'),
-    rollSize:g('dis-rollsize'),
-    gsm:g('dis-gsm'),
-    color:g('dis-color'),
-    rolls:g('dis-rolls'),
-    challan:g('dis-challan'),
-    remarks:g('dis-remarks')
-  }, 'btn-dis', 'dispatch');
-}
-
-function submitConsumption(){
-  if(!requireIds(['con-date','con-factory','con-material','con-qty'])) return;
-
-  savePayload({
-    action:'consumption',
-    date:g('con-date'),
-    factory:g('con-factory'),
-    materialCode:g('con-material'),
-    qty:g('con-qty'),
-    batch:g('con-batch'),
-    remarks:g('con-remarks')
-  }, 'btn-con', 'consumption');
-}
-
-function submitTransfer(){
-  if(!requireIds(['tr-date','tr-from','tr-to','tr-type','tr-rollsize','tr-gsm','tr-color','tr-qty'])) return;
-
-  if(g('tr-from') === g('tr-to')){
-    showToast('From and To factory cannot be same','error');
-    return;
-  }
-
-  savePayload({
-    action:'transfer',
-    date:g('tr-date'),
-    fromFactory:g('tr-from'),
-    toFactory:g('tr-to'),
-    productType:g('tr-type'),
-    rollSize:g('tr-rollsize'),
-    gsm:g('tr-gsm'),
-    color:g('tr-color'),
-    qty:g('tr-qty'),
-    remarks:g('tr-remarks')
-  }, 'btn-tr', 'transfer');
-}
-
-// ============================================================
-// LIST, EDIT, DELETE
-// ============================================================
-function loadEntries(force){
-  apiCall('list', { force: !!force }).then(function(res){
-    if(!res || !res.success){
-      setStatus(false, 'Offline');
-      console.error('List failed response:', res);
-      renderEntries();
-      return;
+  try {
+    const res = await fetch(API, {
+      method: "POST",
+      body: JSON.stringify(payload),
+      headers: { "Content-Type": "text/plain" }
+    });
+    const json = await res.json();
+    if (json.success) {
+      showToast("Entry deleted.", "success");
+      closeModal();
+      logCache = [];
+    } else {
+      showToast(json.error || "Could not delete. Check row number.", "error");
+      btn.disabled = false;
+      btn.textContent = "Delete Entry";
     }
-
-    entries = res.entries || [];
-    setStatus(true, 'Connected');
-    document.getElementById('entryCount').textContent = entries.length;
-    document.getElementById('lastSync').textContent = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-    renderEntries();
-  }).catch(function(err){
-    setStatus(false, 'Offline');
-    console.error('List error:', err);
-    renderEntries();
-  });
+  } catch {
+    showToast("Network error. Try again.", "error");
+    btn.disabled = false;
+    btn.textContent = "Delete Entry";
+  }
 }
 
-function renderEntries(){
-  var el = document.getElementById('recentList');
-
-  if(!entries.length){
-    el.innerHTML = '<span style="font-size:13px;color:var(--muted)">No synced entries yet</span>';
-    return;
-  }
-
-  el.innerHTML = entries.slice(0, 25).map(function(e){
-    var meta = META[e.action] || {icon:'📋', label:e.action};
-    var detail = entryDetail(e);
-    var source = e.sourceDevice ? ' · Source: ' + escapeHtml(e.sourceDevice) : '';
-
-    return '<div class="entry-row">' +
-      '<div class="entry-top">' +
-        '<div>' +
-          '<div class="entry-title">' + meta.icon + ' ' + escapeHtml(meta.label) + '</div>' +
-          '<div class="entry-detail">' + detail + '</div>' +
-          '<div class="entry-meta">' + escapeHtml(e.date || '') + source + ' · ID: ' + escapeHtml(e.id || '') + '</div>' +
-        '</div>' +
-      '</div>' +
-      '<div class="entry-actions">' +
-        '<button class="small-btn" onclick="editEntry(\'' + escapeAttr(e.id) + '\')">✏️ Edit</button>' +
-        '<button class="small-btn delete" onclick="deleteEntry(\'' + escapeAttr(e.id) + '\')">🗑 Delete</button>' +
-      '</div>' +
-    '</div>';
-  }).join('');
+function openLog() {
+  document.getElementById("modalTitle").textContent = "Entry Log";
+  document.getElementById("modalBody").innerHTML = `<div class="empty-state"><span class="spinner" style="border-color:rgba(0,0,0,0.15);border-top-color:var(--blue-500)"></span><br><br>Loading entries…</div>`;
+  document.getElementById("modalOverlay").classList.add("open");
+  document.body.style.overflow = "hidden";
+  currentModal = "log";
+  fetchLog();
 }
 
-function entryDetail(e){
-  if(e.action === 'production') return escapeHtml(e.factory + ' · ' + e.productType + ' ' + e.gsm + 'GSM ' + e.color + ' · ' + (e.rolls || e.qty) + ' rolls');
-  if(e.action === 'inward') return escapeHtml(e.factory + ' · ' + (e.materialName || e.materialCode) + ' · ' + e.qty + ' KG');
-  if(e.action === 'dispatch') return escapeHtml(e.factory + ' · ' + e.productType + ' ' + e.gsm + 'GSM · ' + (e.rolls || e.qty) + ' rolls' + (e.customer ? ' → ' + e.customer : ''));
-  if(e.action === 'consumption') return escapeHtml(e.factory + ' · ' + (e.materialName || e.materialCode) + ' · ' + e.qty + ' KG');
-  if(e.action === 'transfer') return escapeHtml(e.fromFactory + ' → ' + e.toFactory + ' · ' + e.productType + ' ' + e.gsm + 'GSM · ' + e.qty + ' rolls');
-  return '';
-}
+async function fetchLog() {
+  try {
+    const res = await fetch(API + "?action=log&limit=30&t=" + Date.now());
+    const json = await res.json();
 
-function editEntry(id){
-  var e = entries.find(function(x){ return x.id === id; });
-  if(!e) return;
-
-  editingId = e.id;
-  editingAction = e.action;
-  resetForm(e.action);
-
-  if(e.action === 'production'){
-    setVal('prod-date', e.date); setVal('prod-factory', e.factory); setVal('prod-type', e.productType); setVal('prod-rollsize', e.rollSize);
-    setVal('prod-gsm', e.gsm); setVal('prod-color', e.color); setVal('prod-rolls', e.rolls || e.qty); setVal('prod-batch', e.batch); setVal('prod-remarks', e.remarks);
-  }
-
-  if(e.action === 'inward'){
-    setVal('in-date', e.date); setVal('in-factory', e.factory); setVal('in-material', e.materialCode); setVal('in-qty', e.qty);
-    setVal('in-supplier', e.supplier); setVal('in-challan', e.challan); setVal('in-remarks', e.remarks);
-  }
-
-  if(e.action === 'dispatch'){
-    setVal('dis-date', e.date); setVal('dis-factory', e.factory); setVal('dis-customer', e.customer); setVal('dis-type', e.productType); setVal('dis-rollsize', e.rollSize);
-    setVal('dis-gsm', e.gsm); setVal('dis-color', e.color); setVal('dis-rolls', e.rolls || e.qty); setVal('dis-challan', e.challan); setVal('dis-remarks', e.remarks);
-  }
-
-  if(e.action === 'consumption'){
-    setVal('con-date', e.date); setVal('con-factory', e.factory); setVal('con-material', e.materialCode); setVal('con-qty', e.qty);
-    setVal('con-batch', e.batch); setVal('con-remarks', e.remarks);
-  }
-
-  if(e.action === 'transfer'){
-    setVal('tr-date', e.date); setVal('tr-from', e.fromFactory); setVal('tr-to', e.toFactory); setVal('tr-type', e.productType); setVal('tr-rollsize', e.rollSize);
-    setVal('tr-gsm', e.gsm); setVal('tr-color', e.color); setVal('tr-qty', e.qty); setVal('tr-remarks', e.remarks);
-  }
-
-  updateFormTitles();
-  showScreen(e.action);
-}
-
-function deleteEntry(id){
-  var e = entries.find(function(x){ return String(x.id) === String(id); });
-  if(!e) return;
-
-  if(!confirm('Delete this entry from the website and Google Sheet?')) return;
-
-  apiCall('delete', addSource({id:id})).then(function(res){
-    if(!res || !res.success){
-      showToast('❌ ' + (res && res.message ? res.message : 'Delete failed'), 'error');
-      console.error('Delete failed response:', res);
-      return;
+    if (json.entries && json.entries.length) {
+      logCache = json.entries;
+      renderLog(json.entries);
+    } else {
+      document.getElementById("modalBody").innerHTML = `<div class="empty-state">No entries found in the log.<br><br><small>The API may not return log data — check WebAPI.gs for a getLog handler.</small></div>`;
     }
-
-    entries = entries.filter(function(x){ return String(x.id) !== String(id); });
-    document.getElementById('entryCount').textContent = entries.length;
-    document.getElementById('lastSync').textContent = new Date().toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'});
-    renderEntries();
-
-    showToast('✅ Entry deleted and synced', 'success');
-    setTimeout(function(){ loadEntries(true); }, 800);
-
-  }).catch(function(err){
-    showToast('❌ Delete failed: ' + err.message, 'error');
-    console.error('Delete error:', err);
-  });
+  } catch {
+    document.getElementById("modalBody").innerHTML = renderLogFallback();
+  }
 }
 
-// ============================================================
-// UTILITIES
-// ============================================================
-function setVal(id, value){
-  var el = document.getElementById(id);
-  if(el) el.value = value || '';
+function renderLog(entries) {
+  const badges = {
+    raw_inward:"#E1F5EE|#0F6E56",production:"#E6F1FB|#185FA5",
+    consumption:"#FAEEDA|#854F0B",dispatch:"#FAECE7|#712B13",transfer:"#EEEDFE|#3C3489"
+  };
+  const labels = {
+    raw_inward:"RM Inward",production:"Production",
+    consumption:"Consumption",dispatch:"Dispatch",transfer:"Transfer"
+  };
+
+  const html = entries.map((e, i) => {
+    const [bg, color] = (badges[e.entryType] || "#f0f4f8|#3d5166").split("|");
+    const lbl = labels[e.entryType] || e.entryType;
+    const det = [e.factory||e.fromFactory, e.productType||e.materialCode, e.color, e.rollSize].filter(Boolean).join(" · ");
+    return `
+      <div class="log-item">
+        <div class="log-item-header">
+          <span class="log-type-badge" style="background:${bg};color:${color}">${lbl}</span>
+          <span class="log-date">${e.date || ""}</span>
+        </div>
+        <div class="log-details">${det || "—"}</div>
+        <div class="log-qty">${e.quantity ? "Qty: " + e.quantity : ""}</div>
+      </div>`;
+  }).join("");
+
+  document.getElementById("modalBody").innerHTML = `
+    <div class="log-list">${html}</div>
+    <div class="field-note" style="text-align:center;margin-top:14px">Showing last ${entries.length} entries</div>`;
 }
 
-function escapeHtml(value){
-  return String(value == null ? '' : value)
-    .replace(/&/g,'&amp;')
-    .replace(/</g,'&lt;')
-    .replace(/>/g,'&gt;')
-    .replace(/"/g,'&quot;')
-    .replace(/'/g,'&#039;');
+function renderLogFallback() {
+  return `<div class="empty-state">
+    Could not load log data from the API.<br><br>
+    <small>To enable the log view, add a <code>doGet</code> handler in <strong>WebAPI.gs</strong> that returns EntriesDB rows when <code>action=log</code> is passed as a query parameter.</small>
+  </div>`;
 }
 
-function escapeAttr(value){
-  return String(value == null ? '' : value).replace(/\\/g,'\\\\').replace(/'/g,"\\'");
+function showToast(msg, type) {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = "toast show " + (type || "");
+  setTimeout(() => { t.className = "toast"; }, 3200);
 }
+
+// Ping API on load
+(async () => {
+  try {
+    const r = await fetch(API);
+    const j = await r.json();
+    if (j.success) document.getElementById("apiStatus").style.background = "#5DCAA5";
+    else document.getElementById("apiStatus").style.background = "#EF9F27";
+  } catch {
+    document.getElementById("apiStatus").style.background = "#e24b4a";
+  }
+})();
 </script>
 </body>
 </html>
