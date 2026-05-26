@@ -294,6 +294,8 @@ document.addEventListener('DOMContentLoaded', function() {
   updateStatusDot();
   loadLocalEntries();
   renderEntries();
+  refreshEntries();
+  setInterval(function(){ if (!DEMO_MODE) refreshEntries(true); }, 30000);
 });
 
 function updateStatusDot() {
@@ -379,6 +381,85 @@ function saveLocalEntries() {
   } catch (e) {}
 }
 
+function getEntrySource() {
+  var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent || '');
+  return {
+    sourceDevice: isMobile ? 'Mobile' : 'Desktop',
+    sourceUrl: window.location.href,
+    sourceBrowser: (navigator.userAgent || '').substring(0, 180)
+  };
+}
+
+function addSourceInfo(payload) {
+  var source = getEntrySource();
+  payload.sourceDevice = source.sourceDevice;
+  payload.sourceUrl = source.sourceUrl;
+  payload.sourceBrowser = source.sourceBrowser;
+  return payload;
+}
+
+function jsonp(params, onSuccess, onError) {
+  var callbackName = 'ni_cb_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+  params = params || {};
+  params.callback = callbackName;
+
+  var qs = Object.keys(params).map(function(k) {
+    return encodeURIComponent(k) + '=' + encodeURIComponent(params[k]);
+  }).join('&');
+
+  var script = document.createElement('script');
+  var timer = setTimeout(function() {
+    cleanup();
+    if (onError) onError(new Error('Request timed out'));
+  }, 10000);
+
+  function cleanup() {
+    clearTimeout(timer);
+    try { delete window[callbackName]; } catch (e) { window[callbackName] = undefined; }
+    if (script && script.parentNode) script.parentNode.removeChild(script);
+  }
+
+  window[callbackName] = function(response) {
+    cleanup();
+    if (onSuccess) onSuccess(response);
+  };
+
+  script.onerror = function() {
+    cleanup();
+    if (onError) onError(new Error('Could not connect to API'));
+  };
+
+  script.src = API_URL + (API_URL.indexOf('?') >= 0 ? '&' : '?') + qs;
+  document.body.appendChild(script);
+}
+
+function refreshEntries(silent) {
+  if (DEMO_MODE) return;
+  jsonp({ action:'list' }, function(response) {
+    if (response && response.success && Array.isArray(response.entries)) {
+      entries = response.entries;
+      saveLocalEntries();
+      renderEntries();
+      if (!silent) showToast('Synced with Google Sheets ✅', 'success');
+    } else if (!silent) {
+      showToast((response && response.message) || 'Could not load entries from Google Sheets', 'error');
+    }
+  }, function(err) {
+    console.error(err);
+    if (!silent) showToast('Could not sync entries from Google Sheets', 'error');
+  });
+}
+
+function postToApi(payload, afterSend, onError) {
+  fetch(API_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    body: JSON.stringify(payload)
+  })
+  .then(function(){ if (afterSend) afterSend(); })
+  .catch(function(err){ console.error(err); if (onError) onError(err); });
+}
+
 function renderEntries() {
   var el = document.getElementById('recentList');
   var countEl = document.getElementById('entryCount');
@@ -399,6 +480,7 @@ function renderEntries() {
       '<div class="entry-info">' +
         '<div class="entry-title">' + escapeHtml(m.label) + '</div>' +
         '<div class="entry-detail">' + escapeHtml(detail) + '</div>' +
+        '<div class="entry-detail">Source: ' + escapeHtml(e.sourceDevice || 'Unknown') + (e.createdAt ? ' · ' + escapeHtml(e.createdAt) : '') + '</div>' +
         '<div class="entry-actions">' +
           '<button class="btn-edit" onclick="openEdit(\'' + e.id + '\')">✏️ Edit</button>' +
           '<button class="btn-delete" onclick="deleteEntry(\'' + e.id + '\')">🗑 Delete</button>' +
@@ -443,41 +525,37 @@ function saveEntry(payload, btnId, successMsg, resetFn) {
   btn.disabled = true;
   btn.innerHTML = '<span class="loader"></span>Saving...';
 
-  function done(ok, msg) {
+  payload.id = payload.id || uid();
+  addSourceInfo(payload);
+
+  function finishLocal() {
+    var existingIndex = entries.findIndex(function(e){ return e.id === payload.id; });
+    if (existingIndex >= 0) entries[existingIndex] = payload;
+    else entries.push(payload);
+    saveLocalEntries();
+    showToast('✅ ' + successMsg, 'success');
+    if (resetFn) resetFn();
+    renderEntries();
+    showScreen('home');
+  }
+
+  function resetButton() {
     btn.disabled = false;
     btn.innerHTML = originalButtonText(payload.action);
-    if (ok) {
-      payload.id = uid();
-      entries.push(payload);
-      saveLocalEntries();
-      showToast('✅ ' + successMsg, 'success');
-      if (resetFn) resetFn();
-      renderEntries();
-      showScreen('home');
-    } else {
-      showToast(msg || 'Could not save entry', 'error');
-    }
   }
 
   if (DEMO_MODE) {
-    setTimeout(function(){ done(true); }, 400);
+    setTimeout(function(){ finishLocal(); resetButton(); }, 400);
     return;
   }
 
-  // Google Apps Script often blocks normal CORS JSON requests from GitHub Pages.
-  // no-cors allows the entry to be sent to Apps Script. The browser cannot read
-  // the response, so we show success after the request is sent.
-  fetch(API_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    body: JSON.stringify(payload)
-  })
-  .then(function(){
-    done(true);
-  })
-  .catch(function(err){
-    console.error(err);
-    done(false, '❌ Connection failed. Check Apps Script deployment/permissions.');
+  postToApi(Object.assign({ operation:'save' }, payload), function(){
+    finishLocal();
+    resetButton();
+    setTimeout(function(){ refreshEntries(true); }, 1200);
+  }, function(){
+    resetButton();
+    showToast('❌ Connection failed. Check Apps Script deployment/permissions.', 'error');
   });
 }
 
@@ -583,11 +661,24 @@ function resetTransfer() {
 }
 
 function deleteEntry(id) {
-  if (!confirm('Delete this entry?')) return;
+  if (!confirm('Delete this entry? This will also remove it from Google Sheets.')) return;
+
+  var entry = entries.find(function(e){ return e.id === id; });
   entries = entries.filter(function(e){ return e.id !== id; });
   saveLocalEntries();
   renderEntries();
-  showToast('Entry deleted', 'success');
+
+  if (DEMO_MODE) {
+    showToast('Entry deleted', 'success');
+    return;
+  }
+
+  postToApi({ operation:'delete', id:id, action: entry ? entry.action : '' }, function(){
+    showToast('Entry deleted from Google Sheets', 'success');
+    setTimeout(function(){ refreshEntries(true); }, 1200);
+  }, function(){
+    showToast('Delete failed. Check Apps Script.', 'error');
+  });
 }
 
 function openEdit(id) {
@@ -611,7 +702,7 @@ function editableFields(entry) {
   if (entry.action === 'production') return [
     {key:'date',label:'Date'}, {key:'factory',label:'Factory'}, {key:'productType',label:'Product Type'},
     {key:'rollSize',label:'Roll Size'}, {key:'gsm',label:'GSM'}, {key:'color',label:'Color'},
-    {key:'rolls',label:'Rolls'}, {key:'batchId',label:'Batch ID'}, {key:'remarks',label:'Remarks'}
+    {key:'rolls',label:'Rolls'}, {key:'batch',label:'Batch ID'}, {key:'remarks',label:'Remarks'}
   ];
   if (entry.action === 'inward') return [
     {key:'date',label:'Date'}, {key:'factory',label:'Factory'}, {key:'materialCode',label:'Material'},
@@ -624,7 +715,7 @@ function editableFields(entry) {
   ];
   if (entry.action === 'consumption') return [
     {key:'date',label:'Date'}, {key:'factory',label:'Factory'}, {key:'materialCode',label:'Material'},
-    {key:'qty',label:'Quantity KG'}, {key:'batchId',label:'Linked Batch ID'}, {key:'remarks',label:'Remarks'}
+    {key:'qty',label:'Quantity KG'}, {key:'batch',label:'Linked Batch ID'}, {key:'remarks',label:'Remarks'}
   ];
   if (entry.action === 'transfer') return [
     {key:'date',label:'Date'}, {key:'fromFactory',label:'From Factory'}, {key:'toFactory',label:'To Factory'},
@@ -643,10 +734,22 @@ function saveEdit() {
     if (el) entry[f.key] = el.value.trim();
   });
 
+  addSourceInfo(entry);
   saveLocalEntries();
   renderEntries();
   closeModal();
-  showToast('Changes saved', 'success');
+
+  if (DEMO_MODE) {
+    showToast('Changes saved', 'success');
+    return;
+  }
+
+  postToApi(Object.assign({ operation:'update' }, entry), function(){
+    showToast('Changes saved to Google Sheets', 'success');
+    setTimeout(function(){ refreshEntries(true); }, 1200);
+  }, function(){
+    showToast('Update failed. Check Apps Script.', 'error');
+  });
 }
 
 function closeModal() {
