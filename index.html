@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Nehal Industries — Inventory</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#0f2744;--navy-mid:#1a3a5c;--blue:#1e6abf;--blue-light:#3b8fe8;
+  --accent:#f0a500;--green:#2ecc71;--red:#e74c3c;--orange:#e67e22;
+  --bg:#f0f4f9;--card:#fff;--text:#1a2a3a;--muted:#7a8fa6;
+  --border:#dce6f0;--input-bg:#f7fafd;
+  --shadow:0 4px 20px rgba(15,39,68,0.10);--radius:16px;--radius-sm:10px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+
+/* HEADER */
+.header{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);padding:20px 20px 0;position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(15,39,68,0.3)}
+.header-top{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px}
+.header h1{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:#fff;letter-spacing:.5px}
+.header h1 span{color:var(--accent)}
+.header-sub{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px;letter-spacing:1px;text-transform:uppercase}
+.status-dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite;flex-shrink:0}
+.status-dot.off{background:var(--red);box-shadow:0 0 8px var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* NAV */
+.nav-scroll{display:flex;gap:8px;padding:0 20px 14px;overflow-x:auto;scrollbar-width:none}
+.nav-scroll::-webkit-scrollbar{display:none}
+.nav-tab{flex-shrink:0;padding:7px 14px;border-radius:100px;font-size:13px;font-weight:500;background:rgba(255,255,255,.08);color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.12);cursor:pointer;transition:all .2s;white-space:nowrap}
+.nav-tab.active{background:var(--accent);color:var(--navy);border-color:var(--accent);font-weight:600}
+
+/* MAIN */
+.main{padding:20px;max-width:480px;margin:0 auto}
+.screen{display:none;animation:fadeUp .3s ease}
+.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+/* CARD */
+.card{background:var(--card);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow);margin-bottom:16px;border:1px solid var(--border)}
+.card-title{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:600;color:var(--navy);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card-title .icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+
+/* FORM */
+.field{margin-bottom:14px}
+.field label{display:block;font-size:12px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+.field input,.field select{width:100%;padding:13px 16px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--input-bg);font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);appearance:none;-webkit-appearance:none;outline:none;transition:border-color .2s,box-shadow .2s}
+.field input:focus,.field select:focus{border-color:var(--blue-light);box-shadow:0 0 0 3px rgba(59,143,232,.12)}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a8fa6' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.req{color:var(--red);margin-left:2px}
+
+/* BUTTONS */
+.btn-submit{width:100%;padding:16px;border-radius:var(--radius-sm);border:none;background:linear-gradient(135deg,var(--blue) 0%,var(--blue-light) 100%);color:#fff;font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;letter-spacing:.5px;cursor:pointer;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 16px rgba(30,106,191,.35);margin-top:4px}
+.btn-submit:active{transform:scale(.98)}
+.btn-submit:disabled{background:#b0c0d0;box-shadow:none;cursor:not-allowed}
+.btn-back{display:flex;align-items:center;gap:6px;font-size:14px;color:var(--muted);background:none;border:none;cursor:pointer;padding:0;margin-bottom:16px;font-family:'DM Sans',sans-serif}
+
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:#fff;padding:14px 24px;border-radius:100px;font-size:14px;font-weight:500;box-shadow:0 8px 32px rgba(0,0,0,.25);z-index:999;transition:transform .3s cubic-bezier(.34,1.56,.64,1);white-space:nowrap;max-width:90vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.toast.success{background:#1a6640}
+.toast.error{background:#8b1a1a}
+
+/* LOADER */
+.loader{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* HOME */
+.home-greeting{font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.home-date{font-size:13px;color:var(--muted);margin-bottom:20px}
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.action-card{background:var(--card);border-radius:var(--radius);padding:18px 14px;box-shadow:var(--shadow);border:1.5px solid var(--border);cursor:pointer;transition:transform .15s,box-shadow .15s,border-color .15s;text-align:center}
+.action-card:active{transform:scale(.97)}
+.action-card:hover{border-color:var(--blue-light);box-shadow:0 6px 24px rgba(30,106,191,.15)}
+.action-icon{font-size:28px;margin-bottom:8px;display:block}
+.action-label{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;color:var(--navy);line-height:1.2}
+.action-desc{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* RECENT ENTRIES */
+.entry-row{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--border)}
+.entry-row:last-child{border-bottom:none}
+.entry-icon{font-size:22px;flex-shrink:0;margin-top:2px}
+.entry-info{flex:1;min-width:0}
+.entry-title{font-size:13px;font-weight:500;color:var(--text)}
+.entry-detail{font-size:12px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.entry-date{font-size:11px;color:var(--muted);flex-shrink:0}
+.entry-actions{display:flex;gap:6px;margin-top:6px}
+.btn-edit{padding:4px 12px;border-radius:100px;border:1.5px solid var(--blue-light);background:transparent;color:var(--blue);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
+.btn-delete{padding:4px 12px;border-radius:100px;border:1.5px solid #fcc;background:transparent;color:var(--red);font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif}
+
+/* EDIT MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,39,68,.5);z-index:200;display:flex;align-items:flex-end;justify-content:center;animation:fadeIn .2s ease}
+.modal-overlay.hidden{display:none}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--card);border-radius:var(--radius) var(--radius) 0 0;padding:24px 20px 32px;width:100%;max-width:480px;max-height:85vh;overflow-y:auto;animation:slideUp .25s ease}
+@keyframes slideUp{from{transform:translateY(40px)}to{transform:translateY(0)}}
+.modal-title{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--navy);margin-bottom:16px;display:flex;justify-content:space-between;align-items:center}
+.modal-close{background:none;border:none;font-size:22px;color:var(--muted);cursor:pointer;padding:0}
+.btn-update{width:100%;padding:15px;border-radius:var(--radius-sm);border:none;background:linear-gradient(135deg,var(--orange),#f39c12);color:#fff;font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;cursor:pointer;margin-top:8px}
+
+/* DEMO BADGE */
+.demo-badge{background:#fff8e1;border:1px solid #f0c040;border-radius:8px;padding:10px 14px;font-size:12px;color:#7a5c00;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>NEHAL <span>INDUSTRIES</span></h1>
+      <div class="header-sub">Inventory Control System</div>
+    </div>
+    <div class="status-dot" id="statusDot"></div>
+  </div>
+  <div class="nav-scroll">
+    <div class="nav-tab active" onclick="showScreen('home')">🏠 Home</div>
+    <div class="nav-tab" onclick="showScreen('production')">⚙️ Production</div>
+    <div class="nav-tab" onclick="showScreen('inward')">📦 Inward</div>
+    <div class="nav-tab" onclick="showScreen('dispatch')">🚚 Dispatch</div>
+    <div class="nav-tab" onclick="showScreen('consumption')">🧪 Consumption</div>
+    <div class="nav-tab" onclick="showScreen('transfer')">🔄 Transfer</div>
+  </div>
+</div>
+
+<div class="main">
+
+  <div class="screen active" id="screen-home">
+    <div class="home-greeting">Good day! 👋</div>
+    <div class="home-date" id="homeDate"></div>
+    <div class="demo-badge" id="demoBadge">🧪 <span><b>Demo Mode</b> — entries saved locally for testing. Host on GitHub to connect to Google Sheets.</span></div>
+    <div class="action-grid">
+      <div class="action-card" onclick="showScreen('production')"><span class="action-icon">⚙️</span><div class="action-label">Production Entry</div>
+<div class="action-desc">Log finished rolls</div></div>
+      <div class="action-card" onclick="showScreen('inward')"><span class="action-icon">📦</span><div class="action-label">Raw Material Inward</div>
+<div class="action-desc">Record stock received</div></div>
+      <div class="action-card" onclick="showScreen('dispatch')"><span class="action-icon">🚚</span><div class="action-label">Dispatch Entry</div>
+<div class="action-desc">Record outgoing rolls</div></div>
+      <div class="action-card" onclick="showScreen('consumption')"><span class="action-icon">🧪</span><div class="action-label">Consumption</div>
+<div class="action-desc">Log material used</div></div>
+      <div class="action-card" onclick="showScreen('transfer')" style="grid-column:span 2"><span class="action-icon">🔄</span><div class="action-label">Internal Transfer</div>
+<div class="action-desc">Move stock between factories</div></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:#e8f4fd">📋</div> Recent Entries <span style="margin-left:auto;font-size:12px;color:var(--muted);font-weight:400" id="entryCount"></span></div>
+      <div id="recentList"><span style="font-size:13px;color:var(--muted)">No entries yet — submit one to see it here</span></div>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-production">
+    <button class="btn-back" onclick="showScreen('home')">← Back</button>
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:#e8f4fd">⚙️</div> Production Entry</div>
+      <div class="field"><label>Date <span class="req">*</span></label><input type="date" id="prod-date"></div>
+      <div class="field"><label>Factory <span class="req">*</span></label><select id="prod-factory"><option value="">Select Factory</option><option>Tecknogopara</option><option>Mirergao</option></select></div>
+      <div class="field-row">
+        <div class="field"><label>Product Type <span class="req">*</span></label><select id="prod-type"><option value="">Select</option><option>Single Dot</option><option>Double Dot</option></select></div>
+        <div class="field"><label>Roll Size <span class="req">*</span></label><select id="prod-rollsize"><option value="">Select</option><option>100 YDS</option><option>200 YDS</option></select></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>GSM <span class="req">*</span></label><select id="prod-gsm"><option value="">Select</option><option>22</option><option>25</option><option>28</option><option>30</option><option>32</option><option>35</option><option>38</option><option>40</option><option>45</option><option>50</option><option>55</option><option>60</option></select></div>
+        <div class="field"><label>Color <span class="req">*</span></label><select id="prod-color"><option value="">Select</option><option>White</option><option>Black</option><option>Charcoal</option></select></div>
+      </div>
+      <div class="field"><label>Output Rolls <span class="req">*</span></label><input type="number" id="prod-rolls" placeholder="e.g. 85" min="1"></div>
+      <div class="field"><label>Batch ID</label><input type="text" id="prod-batch" placeholder="e.g. B-2026-001"></div>
+      <div class="field"><label>Remarks</label><input type="text" id="prod-remarks" placeholder="Optional"></div>
+      <button class="btn-submit" id="btn-prod-submit" onclick="submitProduction()">✅ Submit Production Entry</button>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-inward">
+    <button class="btn-back" onclick="showScreen('home')">← Back</button>
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:#e8fdf0">📦</div> Raw Material Inward</div>
+      <div class="field"><label>Date <span class="req">*</span></label><input type="date" id="in-date"></div>
+      <div class="field"><label>Factory <span class="req">*</span></label><select id="in-factory"><option value="">Select Factory</option><option>Tecknogopara</option><option>Mirergao</option></select></div>
+      <div class="field"><label>Material <span class="req">*</span></label><select id="in-material"><option value="">Select Material</option><option value="PSF-WHITE">White PSF</option><option value="PSF-BLACK">Black PSF</option><option value="PES-080">PES 0-80</option><option value="PES-80170">PES 80-170</option><option value="THICKENER">Thickener</option><option value="PAM">Polyacrylamide</option><option value="PACKAGING">Packaging Material</option></select></div>
+      <div class="field"><label>Quantity (KG) <span class="req">*</span></label><input type="number" id="in-qty" placeholder="e.g. 500" min="0.1" step="0.01"></div>
+      <div class="field"><label>Supplier / Source</label><input type="text" id="in-supplier" placeholder="Supplier name"></div>
+      <div class="field"><label>Invoice / Challan No.</label><input type="text" id="in-challan" placeholder="e.g. INV-2026-0045"></div>
+      <div class="field"><label>Remarks</label><input type="text" id="in-remarks" placeholder="Optional"></div>
+      <button class="btn-submit" id="btn-in-submit" onclick="submitInward()">✅ Submit Inward Entry</button>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-dispatch">
+    <button class="btn-back" onclick="showScreen('home')">← Back</button>
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:#fdf5e8">🚚</div> Dispatch Entry</div>
+      <div class="field"><label>Date <span class="req">*</span></label><input type="date" id="dis-date"></div>
+      <div class="field"><label>Factory <span class="req">*</span></label><select id="dis-factory"><option value="">Select Factory</option><option>Tecknogopara</option><option>Mirergao</option></select></div>
+      <div class="field"><label>Customer Name</label><input type="text" id="dis-customer" placeholder="Customer name"></div>
+      <div class="field-row">
+        <div class="field"><label>Product Type <span class="req">*</span></label><select id="dis-type"><option value="">Select</option><option>Single Dot</option><option>Double Dot</option></select></div>
+        <div class="field"><label>Roll Size <span class="req">*</span></label><select id="dis-rollsize"><option value="">Select</option><option>100 YDS</option><option>200 YDS</option></select></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>GSM <span class="req">*</span></label><select id="dis-gsm"><option value="">Select</option><option>22</option><option>25</option><option>28</option><option>30</option><option>32</option><option>35</option><option>38</option><option>40</option><option>45</option><option>50</option><option>55</option><option>60</option></select></div>
+        <div class="field"><label>Color <span class="req">*</span></label><select id="dis-color"><option value="">Select</option><option>White</option><option>Black</option><option>Charcoal</option></select></div>
+      </div>
+      <div class="field"><label>Rolls Out <span class="req">*</span></label><input type="number" id="dis-rolls" placeholder="e.g. 50" min="1"></div>
+      <div class="field"><label>Delivery Challan No.</label><input type="text" id="dis-challan" placeholder="e.g. DC-2026-0012"></div>
+      <div class="field"><label>Remarks</label><input type="text" id="dis-remarks" placeholder="Optional"></div>
+      <button class="btn-submit" id="btn-dis-submit" onclick="submitDispatch()">✅ Submit Dispatch Entry</button>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-consumption">
+    <button class="btn-back" onclick="showScreen('home')">← Back</button>
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:#fde8e8">🧪</div> Raw Material Consumption</div>
+      <div class="field"><label>Date <span class="req">*</span></label><input type="date" id="con-date"></div>
+      <div class="field"><label>Factory <span class="req">*</span></label><select id="con-factory"><option value="">Select Factory</option><option>Tecknogopara</option><option>Mirergao</option></select></div>
+      <div class="field"><label>Material <span class="req">*</span></label><select id="con-material"><option value="">Select Material</option><option value="PSF-WHITE">White PSF</option><option value="PSF-BLACK">Black PSF</option><option value="PES-080">PES 0-80</option><option value="PES-80170">PES 80-170</option><option value="THICKENER">Thickener</option><option value="PAM">Polyacrylamide</option><option value="PACKAGING">Packaging Material</option></select></div>
+      <div class="field"><label>KG Used <span class="req">*</span></label><input type="number" id="con-qty" placeholder="e.g. 250.5" min="0.01" step="0.01"></div>
+      <div class="field"><label>Linked Batch ID</label><input type="text" id="con-batch" placeholder="e.g. B-2026-001"></div>
+      <div class="field"><label>Remarks</label><input type="text" id="con-remarks" placeholder="Optional"></div>
+      <button class="btn-submit" id="btn-con-submit" onclick="submitConsumption()">✅ Submit Consumption Entry</button>
+    </div>
+  </div>
+
+  <div class="screen" id="screen-transfer">
+    <button class="btn-back" onclick="showScreen('home')">← Back</button>
+    <div class="card">
+      <div class="card-title"><div class="icon" style="background:#f0e8fd">🔄</div> Internal Transfer</div>
+      <div class="field"><label>Date <span class="req">*</span></label><input type="date" id="tr-date"></div>
+      <div class="field-row">
+        <div class="field"><label>From Factory <span class="req">*</span></label><select id="tr-from"><option value="">Select</option><option>Tecknogopara</option><option>Mirergao</option></select></div>
+        <div class="field"><label>To Factory <span class="req">*</span></label><select id="tr-to"><option value="">Select</option><option>Tecknogopara</option><option>Mirergao</option></select></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>Product Type <span class="req">*</span></label><select id="tr-type"><option value="">Select</option><option>Single Dot</option><option>Double Dot</option></select></div>
+        <div class="field"><label>Roll Size <span class="req">*</span></label><select id="tr-rollsize"><option value="">Select</option><option>100 YDS</option><option>200 YDS</option></select></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>GSM <span class="req">*</span></label><select id="tr-gsm"><option value="">Select</option><option>22</option><option>25</option><option>28</option><option>30</option><option>32</option><option>35</option><option>38</option><option>40</option><option>45</option><option>50</option><option>55</option><option>60</option></select></div>
+        <div class="field"><label>Color <span class="req">*</span></label><select id="tr-color"><option value="">Select</option><option>White</option><option>Black</option><option>Charcoal</option></select></div>
+      </div>
+      <div class="field"><label>Qty Rolls <span class="req">*</span></label><input type="number" id="tr-qty" placeholder="e.g. 20" min="1"></div>
+      <div class="field"><label>Remarks</label><input type="text" id="tr-remarks" placeholder="Optional"></div>
+      <button class="btn-submit" id="btn-tr-submit" onclick="submitTransfer()">✅ Submit Transfer Entry</button>
+    </div>
+  </div>
+
+</div>
+<div class="modal-overlay hidden" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal" id="editModal">
+    <div class="modal-title">
+      <span>✏️ Edit Entry</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modalFields"></div>
+    <button class="btn-update" onclick="saveEdit()">💾 Save Changes</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// CONFIG — set DEMO_MODE = true to test without Google Sheets
+var DEMO_MODE = false;
+var API_URL = 'https://script.google.com/macros/s/AKfycbyYzFBgzt05xvjedaDkIpH2y7dy5vxecuTHBQCU6Qv7VzvSjV0ZWXChHbg5PRnlIjh1Vg/exec';
+
+var entries = [];
+var editingId = null;
+
+var META = {
+  production:  { icon:'⚙️', label:'Production',  color:'#e8f4fd' },
+  inward:      { icon:'📦', label:'Inward',      color:'#e8fdf0' },
+  dispatch:    { icon:'🚚', label:'Dispatch',    color:'#fdf5e8' },
+  consumption: { icon:'🧪', label:'Consumption', color:'#fde8e8' },
+  transfer:    { icon:'🔄', label:'Transfer',    color:'#f0e8fd' }
+};
+
+document.addEventListener('DOMContentLoaded', function() {
+  var today = new Date().toISOString().split('T')[0];
+  ['prod-date','in-date','dis-date','con-date','tr-date'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) el.value = today;
+  });
+
+  var d = new Date();
+  var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var homeDate = document.getElementById('homeDate');
+  if (homeDate) homeDate.textContent = days[d.getDay()] + ', ' + d.getDate() + ' ' + months[d.getMonth()] + ' ' + d.getFullYear();
+
+  var demoBadge = document.getElementById('demoBadge');
+  if (demoBadge) demoBadge.style.display = DEMO_MODE ? 'flex' : 'none';
+
+  updateStatusDot();
+  loadLocalEntries();
+  renderEntries();
+});
+
+function updateStatusDot() {
+  var dot = document.getElementById('statusDot');
+  if (!dot) return;
+  if (DEMO_MODE) {
+    dot.classList.add('off');
+    dot.title = 'Demo Mode';
+  } else {
+    dot.classList.remove('off');
+    dot.title = 'Connected to Google Sheets';
+  }
+}
+
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(function(s){ s.classList.remove('active'); });
+  document.querySelectorAll('.nav-tab').forEach(function(t){ t.classList.remove('active'); });
+
+  var screen = document.getElementById('screen-' + name);
+  if (screen) screen.classList.add('active');
+
+  var names = ['home','production','inward','dispatch','consumption','transfer'];
+  var idx = names.indexOf(name);
+  var tabs = document.querySelectorAll('.nav-tab');
+  if (idx >= 0 && tabs[idx]) tabs[idx].classList.add('active');
+
+  window.scrollTo(0, 0);
+}
+
+function showToast(msg, type) {
+  var t = document.getElementById('toast');
+  if (!t) return;
+  t.textContent = msg;
+  t.className = 'toast ' + (type || '');
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 3200);
+}
+
+function g(id) {
+  var el = document.getElementById(id);
+  return el ? String(el.value || '').trim() : '';
+}
+
+function setVal(id, value) {
+  var el = document.getElementById(id);
+  if (el) el.value = value || '';
+}
+
+function validateRequired(ids) {
+  for (var i = 0; i < ids.length; i++) {
+    if (!g(ids[i])) {
+      showToast('Please fill all required fields ⚠️', 'error');
+      var el = document.getElementById(ids[i]);
+      if (el) el.focus();
+      return false;
+    }
+  }
+  return true;
+}
+
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).substr(2, 4);
+}
+
+function fmtDate(d) {
+  if (!d) return '';
+  var p = d.split('-');
+  if (p.length !== 3) return d;
+  return p[2] + '/' + p[1] + '/' + p[0];
+}
+
+function loadLocalEntries() {
+  try {
+    entries = JSON.parse(localStorage.getItem('ni_inventory_entries') || '[]');
+  } catch (e) {
+    entries = [];
+  }
+}
+
+function saveLocalEntries() {
+  try {
+    localStorage.setItem('ni_inventory_entries', JSON.stringify(entries));
+  } catch (e) {}
+}
+
+function renderEntries() {
+  var el = document.getElementById('recentList');
+  var countEl = document.getElementById('entryCount');
+  if (!el) return;
+
+  if (countEl) countEl.textContent = entries.length ? entries.length + ' entries' : '';
+
+  if (!entries.length) {
+    el.innerHTML = '<span style="font-size:13px;color:var(--muted)">No entries yet — submit one to see it here</span>';
+    return;
+  }
+
+  el.innerHTML = entries.slice().reverse().map(function(e) {
+    var m = META[e.action] || { icon:'📋', label:e.action || 'Entry', color:'#eee' };
+    var detail = entryDetail(e);
+    return '<div class="entry-row">' +
+      '<span class="entry-icon">' + m.icon + '</span>' +
+      '<div class="entry-info">' +
+        '<div class="entry-title">' + escapeHtml(m.label) + '</div>' +
+        '<div class="entry-detail">' + escapeHtml(detail) + '</div>' +
+        '<div class="entry-actions">' +
+          '<button class="btn-edit" onclick="openEdit(\'' + e.id + '\')">✏️ Edit</button>' +
+          '<button class="btn-delete" onclick="deleteEntry(\'' + e.id + '\')">🗑 Delete</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="entry-date">' + escapeHtml(e.date || '') + '</div>' +
+    '</div>';
+  }).join('');
+}
+
+function escapeHtml(value) {
+  return String(value == null ? '' : value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
+}
+
+function entryDetail(e) {
+  if (e.action === 'production') return e.factory + ' · ' + e.productType + ' ' + e.gsm + 'GSM ' + e.color + ' · ' + e.rolls + ' rolls';
+  if (e.action === 'inward') return e.factory + ' · ' + e.materialCode + ' · ' + e.qty + ' KG';
+  if (e.action === 'dispatch') return e.factory + ' · ' + e.productType + ' ' + e.gsm + 'GSM · ' + e.rolls + ' rolls' + (e.customer ? ' → ' + e.customer : '');
+  if (e.action === 'consumption') return e.factory + ' · ' + e.materialCode + ' · ' + e.qty + ' KG';
+  if (e.action === 'transfer') return e.fromFactory + ' → ' + e.toFactory + ' · ' + e.productType + ' ' + e.gsm + 'GSM · ' + e.qty + ' rolls';
+  return '';
+}
+
+function originalButtonText(action) {
+  if (action === 'production') return '✅ Submit Production Entry';
+  if (action === 'inward') return '✅ Submit Inward Entry';
+  if (action === 'dispatch') return '✅ Submit Dispatch Entry';
+  if (action === 'consumption') return '✅ Submit Consumption Entry';
+  if (action === 'transfer') return '✅ Submit Transfer Entry';
+  return '✅ Submit Entry';
+}
+
+function saveEntry(payload, btnId, successMsg, resetFn) {
+  var btn = document.getElementById(btnId);
+  if (!btn) return;
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loader"></span>Saving...';
+
+  function done(ok, msg) {
+    btn.disabled = false;
+    btn.innerHTML = originalButtonText(payload.action);
+    if (ok) {
+      payload.id = uid();
+      entries.push(payload);
+      saveLocalEntries();
+      showToast('✅ ' + successMsg, 'success');
+      if (resetFn) resetFn();
+      renderEntries();
+      showScreen('home');
+    } else {
+      showToast(msg || 'Could not save entry', 'error');
+    }
+  }
+
+  if (DEMO_MODE) {
+    setTimeout(function(){ done(true); }, 400);
+    return;
+  }
+
+  fetch(API_URL, {
+    method: 'POST',
+    mode: 'cors',
+    body: JSON.stringify(payload),
+    headers: { 'Content-Type': 'application/json' }
+  })
+  .then(function(r){ return r.json(); })
+  .then(function(data){
+    if (data && data.success) done(true);
+    else done(false, '❌ ' + ((data && data.message) || 'Google Sheet rejected the entry'));
+  })
+  .catch(function(err){
+    console.error(err);
+    done(false, '❌ Connection failed. Check Apps Script deployment/permissions.');
+  });
+}
+
+function submitProduction() {
+  if (!validateRequired(['prod-date','prod-factory','prod-type','prod-rollsize','prod-gsm','prod-color','prod-rolls'])) return;
+  var payload = {
+    action:'production',
+    date: fmtDate(g('prod-date')),
+    factory: g('prod-factory'),
+    productType: g('prod-type'),
+    rollSize: g('prod-rollsize'),
+    gsm: g('prod-gsm'),
+    color: g('prod-color'),
+    rolls: g('prod-rolls'),
+    batchId: g('prod-batch'),
+    remarks: g('prod-remarks')
+  };
+  saveEntry(payload, 'btn-prod-submit', 'Production entry saved', resetProduction);
+}
+
+function submitInward() {
+  if (!validateRequired(['in-date','in-factory','in-material','in-qty'])) return;
+  var payload = {
+    action:'inward',
+    date: fmtDate(g('in-date')),
+    factory: g('in-factory'),
+    materialCode: g('in-material'),
+    qty: g('in-qty'),
+    supplier: g('in-supplier'),
+    challan: g('in-challan'),
+    remarks: g('in-remarks')
+  };
+  saveEntry(payload, 'btn-in-submit', 'Inward entry saved', resetInward);
+}
+
+function submitDispatch() {
+  if (!validateRequired(['dis-date','dis-factory','dis-type','dis-rollsize','dis-gsm','dis-color','dis-rolls'])) return;
+  var payload = {
+    action:'dispatch',
+    date: fmtDate(g('dis-date')),
+    factory: g('dis-factory'),
+    customer: g('dis-customer'),
+    productType: g('dis-type'),
+    rollSize: g('dis-rollsize'),
+    gsm: g('dis-gsm'),
+    color: g('dis-color'),
+    rolls: g('dis-rolls'),
+    challan: g('dis-challan'),
+    remarks: g('dis-remarks')
+  };
+  saveEntry(payload, 'btn-dis-submit', 'Dispatch entry saved', resetDispatch);
+}
+
+function submitConsumption() {
+  if (!validateRequired(['con-date','con-factory','con-material','con-qty'])) return;
+  var payload = {
+    action:'consumption',
+    date: fmtDate(g('con-date')),
+    factory: g('con-factory'),
+    materialCode: g('con-material'),
+    qty: g('con-qty'),
+    batchId: g('con-batch'),
+    remarks: g('con-remarks')
+  };
+  saveEntry(payload, 'btn-con-submit', 'Consumption entry saved', resetConsumption);
+}
+
+function submitTransfer() {
+  if (!validateRequired(['tr-date','tr-from','tr-to','tr-type','tr-rollsize','tr-gsm','tr-color','tr-qty'])) return;
+  if (g('tr-from') === g('tr-to')) {
+    showToast('From and To factory cannot be the same', 'error');
+    return;
+  }
+  var payload = {
+    action:'transfer',
+    date: fmtDate(g('tr-date')),
+    fromFactory: g('tr-from'),
+    toFactory: g('tr-to'),
+    productType: g('tr-type'),
+    rollSize: g('tr-rollsize'),
+    gsm: g('tr-gsm'),
+    color: g('tr-color'),
+    qty: g('tr-qty'),
+    remarks: g('tr-remarks')
+  };
+  saveEntry(payload, 'btn-tr-submit', 'Transfer entry saved', resetTransfer);
+}
+
+function resetProduction() {
+  ['prod-factory','prod-type','prod-rollsize','prod-gsm','prod-color','prod-rolls','prod-batch','prod-remarks'].forEach(function(id){ setVal(id, ''); });
+}
+function resetInward() {
+  ['in-factory','in-material','in-qty','in-supplier','in-challan','in-remarks'].forEach(function(id){ setVal(id, ''); });
+}
+function resetDispatch() {
+  ['dis-factory','dis-customer','dis-type','dis-rollsize','dis-gsm','dis-color','dis-rolls','dis-challan','dis-remarks'].forEach(function(id){ setVal(id, ''); });
+}
+function resetConsumption() {
+  ['con-factory','con-material','con-qty','con-batch','con-remarks'].forEach(function(id){ setVal(id, ''); });
+}
+function resetTransfer() {
+  ['tr-from','tr-to','tr-type','tr-rollsize','tr-gsm','tr-color','tr-qty','tr-remarks'].forEach(function(id){ setVal(id, ''); });
+}
+
+function deleteEntry(id) {
+  if (!confirm('Delete this entry?')) return;
+  entries = entries.filter(function(e){ return e.id !== id; });
+  saveLocalEntries();
+  renderEntries();
+  showToast('Entry deleted', 'success');
+}
+
+function openEdit(id) {
+  var entry = entries.find(function(e){ return e.id === id; });
+  if (!entry) return;
+
+  editingId = id;
+  var modalFields = document.getElementById('modalFields');
+  var fields = editableFields(entry);
+  modalFields.innerHTML = fields.map(function(f){
+    return '<div class="field">' +
+      '<label>' + escapeHtml(f.label) + '</label>' +
+      '<input type="text" id="edit-' + f.key + '" value="' + escapeHtml(entry[f.key] || '') + '">' +
+    '</div>';
+  }).join('');
+
+  document.getElementById('modalOverlay').classList.remove('hidden');
+}
+
+function editableFields(entry) {
+  if (entry.action === 'production') return [
+    {key:'date',label:'Date'}, {key:'factory',label:'Factory'}, {key:'productType',label:'Product Type'},
+    {key:'rollSize',label:'Roll Size'}, {key:'gsm',label:'GSM'}, {key:'color',label:'Color'},
+    {key:'rolls',label:'Rolls'}, {key:'batchId',label:'Batch ID'}, {key:'remarks',label:'Remarks'}
+  ];
+  if (entry.action === 'inward') return [
+    {key:'date',label:'Date'}, {key:'factory',label:'Factory'}, {key:'materialCode',label:'Material'},
+    {key:'qty',label:'Quantity KG'}, {key:'supplier',label:'Supplier'}, {key:'challan',label:'Invoice/Challan'}, {key:'remarks',label:'Remarks'}
+  ];
+  if (entry.action === 'dispatch') return [
+    {key:'date',label:'Date'}, {key:'factory',label:'Factory'}, {key:'customer',label:'Customer'},
+    {key:'productType',label:'Product Type'}, {key:'rollSize',label:'Roll Size'}, {key:'gsm',label:'GSM'},
+    {key:'color',label:'Color'}, {key:'rolls',label:'Rolls'}, {key:'challan',label:'Challan'}, {key:'remarks',label:'Remarks'}
+  ];
+  if (entry.action === 'consumption') return [
+    {key:'date',label:'Date'}, {key:'factory',label:'Factory'}, {key:'materialCode',label:'Material'},
+    {key:'qty',label:'Quantity KG'}, {key:'batchId',label:'Linked Batch ID'}, {key:'remarks',label:'Remarks'}
+  ];
+  if (entry.action === 'transfer') return [
+    {key:'date',label:'Date'}, {key:'fromFactory',label:'From Factory'}, {key:'toFactory',label:'To Factory'},
+    {key:'productType',label:'Product Type'}, {key:'rollSize',label:'Roll Size'}, {key:'gsm',label:'GSM'},
+    {key:'color',label:'Color'}, {key:'qty',label:'Quantity Rolls'}, {key:'remarks',label:'Remarks'}
+  ];
+  return [];
+}
+
+function saveEdit() {
+  var entry = entries.find(function(e){ return e.id === editingId; });
+  if (!entry) return;
+
+  editableFields(entry).forEach(function(f){
+    var el = document.getElementById('edit-' + f.key);
+    if (el) entry[f.key] = el.value.trim();
+  });
+
+  saveLocalEntries();
+  renderEntries();
+  closeModal();
+  showToast('Changes saved', 'success');
+}
+
+function closeModal() {
+  editingId = null;
+  var overlay = document.getElementById('modalOverlay');
+  if (overlay) overlay.classList.add('hidden');
+}
+
+function closeModalOutside(event) {
+  if (event.target && event.target.id === 'modalOverlay') closeModal();
+}
+</script>
+</body>
+</html>
