@@ -3,444 +3,510 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>Nehal Industries — IMS</title>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-  :root {
-    --blue-900: #042C53;
-    --blue-800: #0C447C;
-    --blue-700: #185FA5;
-    --blue-600: #1a6fc4;
-    --blue-500: #378ADD;
-    --blue-200: #85B7EB;
-    --blue-100: #B5D4F4;
-    --blue-50:  #E6F1FB;
-    --gold:     #EF9F27;
-    --gold-lt:  #FAEEDA;
-    --white:    #ffffff;
-    --surface:  #f4f7fb;
-    --surface2: #eaf0f8;
-    --text:     #0d1b2a;
-    --text-2:   #3d5166;
-    --text-3:   #7a93a8;
-    --border:   rgba(24,95,165,0.15);
-    --border2:  rgba(24,95,165,0.25);
-    --danger:   #e24b4a;
-    --success:  #1D9E75;
-    --radius:   14px;
-    --radius-sm:8px;
+:root {
+  --blue-900: #042C53;
+  --blue-800: #0C447C;
+  --blue-700: #185FA5;
+  --blue-500: #378ADD;
+  --blue-50: #E6F1FB;
+  --white: #ffffff;
+  --surface: #f4f7fb;
+  --text: #0d1b2a;
+  --text-2: #3d5166;
+  --text-3: #7a93a8;
+  --border: rgba(24,95,165,0.18);
+  --danger: #e24b4a;
+  --success: #1D9E75;
+  --gold: #EF9F27;
+}
+
+html,
+body {
+  min-height: 100%;
+  font-family: "DM Sans", sans-serif;
+  background: var(--surface);
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.header {
+  background: var(--blue-800);
+  padding: 20px 20px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo-mark {
+  width: 44px;
+  height: 44px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(255,255,255,0.18);
+}
+
+.logo-mark svg {
+  width: 28px;
+  height: 28px;
+}
+
+.header-text {
+  flex: 1;
+}
+
+.header-company {
+  font-family: "DM Serif Display", serif;
+  font-size: 18px;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.header-sub {
+  font-size: 11px;
+  color: rgba(255,255,255,0.65);
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.header-status {
+  width: 9px;
+  height: 9px;
+  background: #5DCAA5;
+  border-radius: 50%;
+  box-shadow: 0 0 0 3px rgba(93,202,165,0.25);
+}
+
+.main {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 20px 16px 90px;
+}
+
+.section-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--text-3);
+  margin: 22px 0 10px 4px;
+}
+
+.section-title:first-child {
+  margin-top: 4px;
+}
+
+.entry-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.entry-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 16px 14px;
+  cursor: pointer;
+  min-height: 130px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(4,44,83,0.04);
+}
+
+.entry-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--accent);
+}
+
+.entry-card:active {
+  transform: scale(0.98);
+}
+
+.card-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: var(--icon-bg);
+  color: var(--icon-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 19px;
+  margin-bottom: 10px;
+}
+
+.card-label {
+  font-size: 13.5px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.card-desc {
+  font-size: 11px;
+  color: var(--text-3);
+  margin-top: 5px;
+  line-height: 1.4;
+}
+
+.card-inward {
+  --accent: #1D9E75;
+  --icon-bg: #E1F5EE;
+  --icon-color: #0F6E56;
+}
+
+.card-production {
+  --accent: #185FA5;
+  --icon-bg: #E6F1FB;
+  --icon-color: #0C447C;
+}
+
+.card-consume {
+  --accent: #EF9F27;
+  --icon-bg: #FAEEDA;
+  --icon-color: #854F0B;
+}
+
+.card-dispatch {
+  --accent: #D85A30;
+  --icon-bg: #FAECE7;
+  --icon-color: #712B13;
+}
+
+.card-transfer {
+  --accent: #7F77DD;
+  --icon-bg: #EEEDFE;
+  --icon-color: #3C3489;
+}
+
+.card-log {
+  --accent: #3d5166;
+  --icon-bg: #EEF3F8;
+  --icon-color: #3d5166;
+}
+
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(4,44,83,0.55);
+  z-index: 200;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal {
+  width: 100%;
+  max-width: 520px;
+  max-height: 92vh;
+  background: #fff;
+  border-radius: 22px 22px 0 0;
+  overflow-y: auto;
+  animation: slideUp 0.25s ease-out;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
   }
-
-  html, body {
-    height: 100%;
-    font-family: 'DM Sans', sans-serif;
-    background: var(--surface);
-    color: var(--text);
-    -webkit-tap-highlight-color: transparent;
+  to {
+    transform: translateY(0);
   }
+}
 
-  /* ── HEADER ── */
-  .header {
-    background: var(--blue-800);
-    padding: 20px 20px 16px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
+.modal-handle {
+  width: 38px;
+  height: 4px;
+  background: #d8e1ec;
+  border-radius: 2px;
+  margin: 12px auto 0;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.modal-title {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.modal-close {
+  width: 34px;
+  height: 34px;
+  border: none;
+  background: #f1f5f9;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text-2);
+  margin-bottom: 6px;
+  letter-spacing: 0.3px;
+}
+
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid rgba(24,95,165,0.26);
+  border-radius: 10px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 15px;
+  color: var(--text);
+  background: #fff;
+  outline: none;
+}
+
+textarea {
+  height: 82px;
+  resize: none;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--blue-500);
+  box-shadow: 0 0 0 3px rgba(55,138,221,0.12);
+}
+
+.btn-submit,
+.btn-danger,
+.btn-secondary {
+  width: 100%;
+  border: none;
+  border-radius: 11px;
+  padding: 15px;
+  font-family: "DM Sans", sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-submit {
+  background: var(--blue-800);
+  color: #fff;
+}
+
+.btn-submit:disabled,
+.btn-danger:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-danger {
+  background: var(--danger);
+  color: #fff;
+}
+
+.btn-secondary {
+  background: #eef3f8;
+  color: var(--text-2);
+}
+
+.toast {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: var(--text);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 999px;
+  font-size: 14px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 999;
+  max-width: 90vw;
+  text-align: center;
+  transition: 0.25s ease;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.toast.success {
+  background: #0F6E56;
+}
+
+.toast.error {
+  background: #791F1F;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 34px 16px;
+  color: var(--text-3);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
   }
+}
 
-  .logo-mark {
-    width: 44px;
-    height: 44px;
-    background: rgba(255,255,255,0.12);
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    border: 1px solid rgba(255,255,255,0.18);
-  }
+.log-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
 
-  .logo-mark svg { width: 28px; height: 28px; }
+.log-item {
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: #fff;
+  padding: 14px;
+  box-shadow: 0 4px 14px rgba(4,44,83,0.04);
+}
 
-  .header-text { flex: 1; }
-  .header-company {
-    font-family: 'DM Serif Display', serif;
-    font-size: 17px;
-    color: #fff;
-    letter-spacing: 0.3px;
-    line-height: 1.2;
-  }
-  .header-sub {
-    font-size: 11px;
-    color: rgba(255,255,255,0.6);
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-    margin-top: 2px;
-  }
+.log-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: flex-start;
+  margin-bottom: 8px;
+}
 
-  .header-status {
-    width: 8px; height: 8px;
-    background: #5DCAA5;
-    border-radius: 50%;
-    box-shadow: 0 0 0 3px rgba(93,202,165,0.25);
-    flex-shrink: 0;
-  }
+.badge {
+  font-size: 10px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: var(--blue-50);
+  color: var(--blue-800);
+}
 
-  /* ── MAIN SCROLL ── */
-  .main {
-    padding: 20px 16px 100px;
-    max-width: 500px;
-    margin: 0 auto;
-  }
+.log-date {
+  font-size: 11px;
+  color: var(--text-3);
+  text-align: right;
+}
 
-  /* ── SECTION TITLE ── */
-  .section-title {
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    color: var(--text-3);
-    margin: 24px 0 10px 4px;
-  }
-  .section-title:first-of-type { margin-top: 4px; }
+.log-main {
+  font-size: 14px;
+  color: var(--text);
+  line-height: 1.5;
+  margin-bottom: 6px;
+}
 
-  /* ── ENTRY CARDS GRID ── */
-  .entry-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-  }
+.log-sub {
+  font-size: 12px;
+  color: var(--text-3);
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
 
-  .entry-card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px 14px;
-    cursor: pointer;
-    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    position: relative;
-    overflow: hidden;
-    -webkit-user-select: none;
-  }
+.log-qty {
+  font-weight: 800;
+  color: var(--blue-900);
+}
 
-  .entry-card::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
-    background: var(--card-accent, var(--blue-500));
-    border-radius: var(--radius) var(--radius) 0 0;
-  }
+.delete-small {
+  width: 100%;
+  border: none;
+  background: #FCEBEB;
+  color: #791F1F;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+}
 
-  .entry-card:active { transform: scale(0.97); }
+.delete-small:disabled {
+  opacity: 0.5;
+}
 
-  .entry-card .card-icon {
-    width: 36px; height: 36px;
-    border-radius: 8px;
-    background: var(--card-icon-bg, var(--blue-50));
-    display: flex; align-items: center; justify-content: center;
-    color: var(--card-icon-color, var(--blue-700));
-    font-size: 18px;
-  }
+.refresh-btn {
+  margin-bottom: 14px;
+}
 
-  .entry-card .card-label {
-    font-size: 13px;
-    font-weight: 600;
-    color: var(--text);
-    line-height: 1.3;
-  }
-
-  .entry-card .card-desc {
-    font-size: 11px;
-    color: var(--text-3);
-    line-height: 1.4;
-  }
-
-  /* accent variants */
-  .card-inward    { --card-accent: #1D9E75; --card-icon-bg: #E1F5EE; --card-icon-color: #0F6E56; }
-  .card-production{ --card-accent: var(--blue-700); --card-icon-bg: var(--blue-50); --card-icon-color: var(--blue-800); }
-  .card-consume   { --card-accent: #EF9F27; --card-icon-bg: #FAEEDA; --card-icon-color: #854F0B; }
-  .card-dispatch  { --card-accent: #D85A30; --card-icon-bg: #FAECE7; --card-icon-color: #712B13; }
-  .card-transfer  { --card-accent: #7F77DD; --card-icon-bg: #EEEDFE; --card-icon-color: #3C3489; }
-  .card-log       { --card-accent: var(--text-3); --card-icon-bg: #f0f4f8; --card-icon-color: var(--text-2); }
-  .card-delete    { --card-accent: var(--danger); --card-icon-bg: #FCEBEB; --card-icon-color: #791F1F; }
-
-  /* ── MODAL OVERLAY ── */
-  .modal-overlay {
-    display: none;
-    position: fixed; inset: 0;
-    background: rgba(4,44,83,0.55);
-    z-index: 200;
-    align-items: flex-end;
-    justify-content: center;
-  }
-  .modal-overlay.open { display: flex; }
-
-  .modal {
-    background: var(--white);
-    border-radius: 20px 20px 0 0;
-    width: 100%;
-    max-width: 500px;
-    max-height: 92vh;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: 0 0 env(safe-area-inset-bottom, 20px);
-    animation: slideUp 0.28s cubic-bezier(0.22,1,0.36,1);
-  }
-
-  @keyframes slideUp {
-    from { transform: translateY(100%); }
-    to   { transform: translateY(0); }
-  }
-
-  .modal-handle {
-    width: 36px; height: 4px;
-    background: #dde4ef;
-    border-radius: 2px;
-    margin: 12px auto 0;
-  }
-
-  .modal-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px 14px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .modal-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  .modal-close {
-    width: 32px; height: 32px;
-    background: var(--surface);
-    border: none; border-radius: 50%;
-    cursor: pointer;
-    font-size: 16px;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--text-2);
-  }
-
-  .modal-body { padding: 20px; }
-
-  /* ── FORM ELEMENTS ── */
-  .form-group { margin-bottom: 16px; }
-
-  label {
-    display: block;
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.4px;
-    text-transform: uppercase;
-    color: var(--text-2);
-    margin-bottom: 6px;
-  }
-
-  input[type=text], input[type=number], input[type=date],
-  select, textarea {
-    width: 100%;
-    padding: 11px 14px;
-    border: 1px solid var(--border2);
-    border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    color: var(--text);
-    background: var(--white);
-    outline: none;
-    transition: border-color 0.15s;
-    -webkit-appearance: none;
-    appearance: none;
-  }
-
-  input:focus, select:focus, textarea:focus {
-    border-color: var(--blue-500);
-    box-shadow: 0 0 0 3px rgba(55,138,221,0.12);
-  }
-
-  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a93a8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 36px; }
-
-  textarea { resize: none; height: 80px; }
-
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-  /* ── SUBMIT BUTTON ── */
-  .btn-submit {
-    width: 100%;
-    padding: 15px;
-    background: var(--blue-800);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
-    margin-top: 4px;
-  }
-  .btn-submit:active { transform: scale(0.98); background: var(--blue-900); }
-  .btn-submit:disabled { background: var(--text-3); cursor: not-allowed; }
-
-  /* ── TOAST ── */
-  .toast {
-    position: fixed;
-    bottom: 30px; left: 50%;
-    transform: translateX(-50%) translateY(20px);
-    background: var(--text);
-    color: #fff;
-    padding: 12px 22px;
-    border-radius: 30px;
-    font-size: 14px;
-    font-weight: 500;
-    opacity: 0;
-    transition: opacity 0.25s, transform 0.25s;
-    z-index: 300;
-    white-space: nowrap;
-    max-width: 90vw;
-  }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-  .toast.success { background: #0F6E56; }
-  .toast.error   { background: #791F1F; }
-
-  /* ── LOG SHEET ── */
-  .log-list { display: flex; flex-direction: column; gap: 10px; }
-
-  .log-item {
-    background: var(--white);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 12px 14px;
-    position: relative;
-  }
-
-  .log-item-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 6px;
-  }
-
-  .log-type-badge {
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 0.6px;
-    text-transform: uppercase;
-    padding: 3px 8px;
-    border-radius: 20px;
-    background: var(--blue-50);
-    color: var(--blue-800);
-  }
-
-  .log-date {
-    font-size: 11px;
-    color: var(--text-3);
-  }
-
-  .log-details {
-    font-size: 13px;
-    color: var(--text-2);
-    line-height: 1.5;
-  }
-
-  .log-qty {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  .log-delete-btn {
-    background: #FCEBEB;
-    color: #791F1F;
-    border: none;
-    border-radius: 6px;
-    padding: 5px 10px;
-    font-size: 12px;
-    font-weight: 600;
-    cursor: pointer;
-    margin-top: 8px;
-  }
-
-  /* ── DELETE MODAL ── */
-  .delete-warning {
-    background: #FCEBEB;
-    border: 1px solid #F7C1C1;
-    border-radius: var(--radius-sm);
-    padding: 14px;
-    margin-bottom: 20px;
-    font-size: 14px;
-    color: #501313;
-    line-height: 1.5;
-  }
-
-  .btn-danger {
-    width: 100%;
-    padding: 15px;
-    background: var(--danger);
-    color: #fff;
-    border: none;
-    border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background 0.15s;
-  }
-
-  .btn-cancel {
-    width: 100%;
-    padding: 13px;
-    background: transparent;
-    color: var(--text-2);
-    border: 1px solid var(--border2);
-    border-radius: var(--radius-sm);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-
-  .spinner {
-    display: inline-block;
-    width: 16px; height: 16px;
-    border: 2px solid rgba(255,255,255,0.4);
-    border-top-color: #fff;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-    vertical-align: middle;
-    margin-right: 8px;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  .empty-state {
-    text-align: center;
-    padding: 40px 20px;
-    color: var(--text-3);
-    font-size: 14px;
-  }
-
-  .field-note {
-    font-size: 11px;
-    color: var(--text-3);
-    margin-top: 4px;
-  }
+.warning-box {
+  background: #fff7ed;
+  border: 1px solid #fed7aa;
+  color: #7c2d12;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
 </style>
 </head>
+
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <div class="logo-mark">
     <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -451,231 +517,368 @@
       <circle cx="20.5" cy="20.5" r="2" fill="white" opacity="0.9"/>
     </svg>
   </div>
+
   <div class="header-text">
     <div class="header-company">Nehal Industries Ltd.</div>
     <div class="header-sub">Inventory Management</div>
   </div>
-  <div class="header-status" id="apiStatus" title="Checking API…"></div>
+
+  <div class="header-status" id="apiStatus"></div>
 </div>
 
-<!-- MAIN -->
 <div class="main">
-
   <div class="section-title">New Entry</div>
+
   <div class="entry-grid">
     <div class="entry-card card-inward" onclick="openModal('raw_inward')">
       <div class="card-icon">📦</div>
       <div class="card-label">Raw Material Inward</div>
-      <div class="card-desc">Record incoming stock</div>
+      <div class="card-desc">Record incoming material stock</div>
     </div>
+
     <div class="entry-card card-production" onclick="openModal('production')">
       <div class="card-icon">🏭</div>
       <div class="card-label">Production Entry</div>
-      <div class="card-desc">Log finished rolls output</div>
+      <div class="card-desc">Log finished roll production</div>
     </div>
+
     <div class="entry-card card-consume" onclick="openModal('consumption')">
       <div class="card-icon">⚙️</div>
       <div class="card-label">Material Consumption</div>
-      <div class="card-desc">Record usage of RM</div>
+      <div class="card-desc">Record raw material use</div>
     </div>
+
     <div class="entry-card card-dispatch" onclick="openModal('dispatch')">
       <div class="card-icon">🚚</div>
       <div class="card-label">Dispatch Entry</div>
-      <div class="card-desc">Outgoing finished goods</div>
+      <div class="card-desc">Record outgoing stock</div>
     </div>
+
     <div class="entry-card card-transfer" onclick="openModal('transfer')">
       <div class="card-icon">🔄</div>
       <div class="card-label">Internal Transfer</div>
-      <div class="card-desc">Move between factories</div>
+      <div class="card-desc">Move stock between factories</div>
     </div>
   </div>
 
   <div class="section-title">Manage</div>
+
   <div class="entry-grid">
     <div class="entry-card card-log" onclick="openLog()">
       <div class="card-icon">📋</div>
-      <div class="card-label">Entry Log</div>
-      <div class="card-desc">View recent entries</div>
-    </div>
-    <div class="entry-card card-delete" onclick="openModal('delete_entry')">
-      <div class="card-icon">🗑️</div>
-      <div class="card-label">Delete Entry</div>
-      <div class="card-desc">Remove by row number</div>
+      <div class="card-label">Recent Entries</div>
+      <div class="card-desc">View and delete recent entries</div>
     </div>
   </div>
-
 </div>
 
-<!-- MODAL OVERLAY -->
 <div class="modal-overlay" id="modalOverlay" onclick="handleOverlayClick(event)">
-  <div class="modal" id="modalBox">
+  <div class="modal">
     <div class="modal-handle"></div>
+
     <div class="modal-header">
       <div class="modal-title" id="modalTitle">Entry</div>
       <button class="modal-close" onclick="closeModal()">✕</button>
     </div>
+
     <div class="modal-body" id="modalBody"></div>
   </div>
 </div>
 
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
 
 <script>
 const API = "https://script.google.com/macros/s/AKfycbyIG-mtCz7PMhmT3hq_SA4L1S7RHpVYBAzXxb2BA0ynxjwQT60cZFpO68nBwv4SdZlp/exec";
 
-const FACTORIES     = ["Tecknogopara","Mirergao"];
-const PRODUCT_TYPES = ["Single Dot","Double Dot"];
-const COLORS        = ["White","Black","Charcoal"];
-const ROLL_SIZES    = ["100 YDS","200 YDS"];
-const GSM_LIST      = [22,25,28,30,32,35,38,40,45,50,55,60];
-const MATERIALS     = [
-  {code:"PSF-WHITE",  name:"White PSF"},
-  {code:"PSF-BLACK",  name:"Black PSF"},
-  {code:"PES-080",    name:"PES 0-80"},
-  {code:"PES-80170",  name:"PES 80-170"},
-  {code:"THICKENER",  name:"Thickener"},
-  {code:"PAM",        name:"Polyacrylamide"},
-  {code:"PACKAGING",  name:"Packaging Material"}
+const FACTORIES = ["Tecknogopara", "Mirergao"];
+const PRODUCT_TYPES = ["Single Dot", "Double Dot"];
+const COLORS = ["White", "Black", "Charcoal"];
+const ROLL_SIZES = ["100 YDS", "200 YDS"];
+const GSM_LIST = [22,25,28,30,32,35,38,40,45,50,55,60];
+
+const MATERIALS = [
+  { code: "PSF-WHITE", name: "White PSF" },
+  { code: "PSF-BLACK", name: "Black PSF" },
+  { code: "PES-080", name: "PES 0-80" },
+  { code: "PES-80170", name: "PES 80-170" },
+  { code: "THICKENER", name: "Thickener" },
+  { code: "PAM", name: "Polyacrylamide" },
+  { code: "PACKAGING", name: "Packaging Material" }
 ];
 
 let currentModal = null;
-let logCache = [];
 
 function today() {
   return new Date().toISOString().split("T")[0];
 }
 
-function sel(options, name, placeholder) {
-  return `<select name="${name}" required>
-    <option value="" disabled selected>${placeholder || "Select…"}</option>
-    ${options.map(o => typeof o === "object"
-      ? `<option value="${o.code}">${o.code} — ${o.name}</option>`
-      : `<option value="${o}">${o}</option>`).join("")}
-  </select>`;
+function selectOptions(options, name, placeholder) {
+  return `
+    <select name="${name}" required>
+      <option value="" disabled selected>${placeholder || "Select..."}</option>
+      ${options.map(function(option) {
+        if (typeof option === "object") {
+          return `<option value="${option.code}">${option.code} — ${option.name}</option>`;
+        }
+        return `<option value="${option}">${option}</option>`;
+      }).join("")}
+    </select>
+  `;
 }
 
 const FORMS = {
   raw_inward: {
     title: "Raw Material Inward",
-    fields: () => `
-      <div class="form-group"><label>Date</label><input type="date" name="date" value="${today()}" required></div>
-      <div class="form-group"><label>Factory</label>${sel(FACTORIES,"factory")}</div>
-      <div class="form-group"><label>Material</label>${sel(MATERIALS,"materialCode")}</div>
-      <div class="form-group"><label>Quantity (KG)</label><input type="number" name="quantity" placeholder="0.00" step="0.01" min="0.01" required></div>
-      <div class="form-group"><label>Supplier / Source</label><input type="text" name="supplier" placeholder="Supplier name (optional)"></div>
-      <div class="form-group"><label>Remarks</label><textarea name="remarks" placeholder="Optional notes…"></textarea></div>
-    `
+    button: "Save Raw Material",
+    fields: function() {
+      return `
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" name="date" value="${today()}" required>
+        </div>
+
+        <div class="form-group">
+          <label>Factory</label>
+          ${selectOptions(FACTORIES, "factory")}
+        </div>
+
+        <div class="form-group">
+          <label>Material</label>
+          ${selectOptions(MATERIALS, "materialCode")}
+        </div>
+
+        <div class="form-group">
+          <label>Quantity KG</label>
+          <input type="number" name="quantity" placeholder="Example: 10000" step="0.01" min="0.01" required>
+        </div>
+
+        <div class="form-group">
+          <label>Supplier / Source</label>
+          <input type="text" name="supplier" placeholder="Supplier name optional">
+        </div>
+
+        <div class="form-group">
+          <label>Remarks</label>
+          <textarea name="remarks" placeholder="Optional notes"></textarea>
+        </div>
+      `;
+    }
   },
+
   production: {
     title: "Production Entry",
-    fields: () => `
-      <div class="form-group"><label>Date</label><input type="date" name="date" value="${today()}" required></div>
-      <div class="form-group"><label>Factory</label>${sel(FACTORIES,"factory")}</div>
-      <div class="form-row">
-        <div class="form-group"><label>Product Type</label>${sel(PRODUCT_TYPES,"productType")}</div>
-        <div class="form-group"><label>Roll Size</label>${sel(ROLL_SIZES,"rollSize")}</div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>GSM</label>${sel(GSM_LIST,"gsm")}</div>
-        <div class="form-group"><label>Color</label>${sel(COLORS,"color")}</div>
-      </div>
-      <div class="form-group"><label>Output Rolls</label><input type="number" name="quantity" placeholder="Rolls produced" min="1" step="1" required></div>
-      <div class="form-group"><label>Remarks</label><textarea name="remarks" placeholder="Optional notes…"></textarea></div>
-    `
+    button: "Save Production",
+    fields: function() {
+      return `
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" name="date" value="${today()}" required>
+        </div>
+
+        <div class="form-group">
+          <label>Factory</label>
+          ${selectOptions(FACTORIES, "factory")}
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Product Type</label>
+            ${selectOptions(PRODUCT_TYPES, "productType")}
+          </div>
+
+          <div class="form-group">
+            <label>Roll Size</label>
+            ${selectOptions(ROLL_SIZES, "rollSize")}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>GSM</label>
+            ${selectOptions(GSM_LIST, "gsm")}
+          </div>
+
+          <div class="form-group">
+            <label>Color</label>
+            ${selectOptions(COLORS, "color")}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Output Rolls</label>
+          <input type="number" name="quantity" placeholder="Number of rolls" min="1" step="1" required>
+        </div>
+
+        <div class="form-group">
+          <label>Remarks</label>
+          <textarea name="remarks" placeholder="Optional notes"></textarea>
+        </div>
+      `;
+    }
   },
+
   consumption: {
     title: "Material Consumption",
-    fields: () => `
-      <div class="form-group"><label>Date</label><input type="date" name="date" value="${today()}" required></div>
-      <div class="form-group"><label>Factory</label>${sel(FACTORIES,"factory")}</div>
-      <div class="form-group"><label>Material</label>${sel(MATERIALS,"materialCode")}</div>
-      <div class="form-group"><label>KG Used</label><input type="number" name="quantity" placeholder="0.00" step="0.01" min="0.01" required></div>
-      <div class="form-group"><label>Remarks</label><textarea name="remarks" placeholder="Optional notes…"></textarea></div>
-    `
+    button: "Save Consumption",
+    fields: function() {
+      return `
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" name="date" value="${today()}" required>
+        </div>
+
+        <div class="form-group">
+          <label>Factory</label>
+          ${selectOptions(FACTORIES, "factory")}
+        </div>
+
+        <div class="form-group">
+          <label>Material</label>
+          ${selectOptions(MATERIALS, "materialCode")}
+        </div>
+
+        <div class="form-group">
+          <label>KG Used</label>
+          <input type="number" name="quantity" placeholder="Example: 500" step="0.01" min="0.01" required>
+        </div>
+
+        <div class="form-group">
+          <label>Remarks</label>
+          <textarea name="remarks" placeholder="Optional notes"></textarea>
+        </div>
+      `;
+    }
   },
+
   dispatch: {
     title: "Dispatch Entry",
-    fields: () => `
-      <div class="form-group"><label>Date</label><input type="date" name="date" value="${today()}" required></div>
-      <div class="form-group"><label>Factory</label>${sel(FACTORIES,"factory")}</div>
-      <div class="form-row">
-        <div class="form-group"><label>Product Type</label>${sel(PRODUCT_TYPES,"productType")}</div>
-        <div class="form-group"><label>Roll Size</label>${sel(ROLL_SIZES,"rollSize")}</div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>GSM</label>${sel(GSM_LIST,"gsm")}</div>
-        <div class="form-group"><label>Color</label>${sel(COLORS,"color")}</div>
-      </div>
-      <div class="form-group"><label>Rolls Out</label><input type="number" name="quantity" placeholder="Number of rolls" min="1" step="1" required></div>
-      <div class="form-group"><label>Delivery Challan No.</label><input type="text" name="challanNo" placeholder="DC/2025/001"></div>
-      <div class="form-group"><label>Remarks</label><textarea name="remarks" placeholder="Optional notes…"></textarea></div>
-    `
+    button: "Save Dispatch",
+    fields: function() {
+      return `
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" name="date" value="${today()}" required>
+        </div>
+
+        <div class="form-group">
+          <label>Factory</label>
+          ${selectOptions(FACTORIES, "factory")}
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Product Type</label>
+            ${selectOptions(PRODUCT_TYPES, "productType")}
+          </div>
+
+          <div class="form-group">
+            <label>Roll Size</label>
+            ${selectOptions(ROLL_SIZES, "rollSize")}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>GSM</label>
+            ${selectOptions(GSM_LIST, "gsm")}
+          </div>
+
+          <div class="form-group">
+            <label>Color</label>
+            ${selectOptions(COLORS, "color")}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Rolls Out</label>
+          <input type="number" name="quantity" placeholder="Number of rolls" min="1" step="1" required>
+        </div>
+
+        <div class="form-group">
+          <label>Delivery Challan No.</label>
+          <input type="text" name="challanNo" placeholder="DC/2026/001">
+        </div>
+
+        <div class="form-group">
+          <label>Remarks</label>
+          <textarea name="remarks" placeholder="Optional notes"></textarea>
+        </div>
+      `;
+    }
   },
+
   transfer: {
     title: "Internal Transfer",
-    fields: () => `
-      <div class="form-group"><label>Date</label><input type="date" name="date" value="${today()}" required></div>
-      <div class="form-row">
-        <div class="form-group"><label>From Factory</label>${sel(FACTORIES,"fromFactory")}</div>
-        <div class="form-group"><label>To Factory</label>${sel(FACTORIES,"toFactory")}</div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>Product Type</label>${sel(PRODUCT_TYPES,"productType")}</div>
-        <div class="form-group"><label>Roll Size</label>${sel(ROLL_SIZES,"rollSize")}</div>
-      </div>
-      <div class="form-row">
-        <div class="form-group"><label>GSM</label>${sel(GSM_LIST,"gsm")}</div>
-        <div class="form-group"><label>Color</label>${sel(COLORS,"color")}</div>
-      </div>
-      <div class="form-group"><label>Quantity (Rolls)</label><input type="number" name="quantity" placeholder="Number of rolls" min="1" step="1" required></div>
-      <div class="form-group"><label>Remarks</label><textarea name="remarks" placeholder="Optional notes…"></textarea></div>
-    `
-  },
-  delete_entry: {
-    title: "Delete Entry",
-    fields: () => `
-      <div class="delete-warning">
-        ⚠️ <strong>Note:</strong> Deletion removes the row from the specific entry sheet. The Finished Goods & Raw Materials totals will update automatically. This cannot be undone.
-      </div>
-      <div class="form-group">
-        <label>Sheet</label>
-        <select name="sheetName" required>
-          <option value="" disabled selected>Select sheet…</option>
-          <option value="Raw Material Inward">Raw Material Inward</option>
-          <option value="Production Entry">Production Entry</option>
-          <option value="Raw Material Consumption">Raw Material Consumption</option>
-          <option value="Dispatch Entry">Dispatch Entry</option>
-          <option value="Internal Transfer">Internal Transfer</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Row Number</label>
-        <input type="number" name="rowNumber" placeholder="e.g. 5" min="2" step="1" required>
-        <div class="field-note">Row 1 is always the header. Data starts at row 2.</div>
-      </div>
-      <div class="form-group">
-        <label>Confirm reason</label>
-        <textarea name="remarks" placeholder="Why are you deleting this entry?"></textarea>
-      </div>
-    `
+    button: "Save Transfer",
+    fields: function() {
+      return `
+        <div class="form-group">
+          <label>Date</label>
+          <input type="date" name="date" value="${today()}" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>From Factory</label>
+            ${selectOptions(FACTORIES, "fromFactory")}
+          </div>
+
+          <div class="form-group">
+            <label>To Factory</label>
+            ${selectOptions(FACTORIES, "toFactory")}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Product Type</label>
+            ${selectOptions(PRODUCT_TYPES, "productType")}
+          </div>
+
+          <div class="form-group">
+            <label>Roll Size</label>
+            ${selectOptions(ROLL_SIZES, "rollSize")}
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>GSM</label>
+            ${selectOptions(GSM_LIST, "gsm")}
+          </div>
+
+          <div class="form-group">
+            <label>Color</label>
+            ${selectOptions(COLORS, "color")}
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Quantity Rolls</label>
+          <input type="number" name="quantity" placeholder="Number of rolls" min="1" step="1" required>
+        </div>
+
+        <div class="form-group">
+          <label>Remarks</label>
+          <textarea name="remarks" placeholder="Optional notes"></textarea>
+        </div>
+      `;
+    }
   }
 };
 
 function openModal(type) {
   currentModal = type;
-  const cfg = FORMS[type];
-  document.getElementById("modalTitle").textContent = cfg.title;
-  document.getElementById("modalBody").innerHTML = cfg.fields() + buildSubmitBtn(type);
+  const form = FORMS[type];
+
+  document.getElementById("modalTitle").textContent = form.title;
+
+  document.getElementById("modalBody").innerHTML =
+    form.fields() +
+    `<button class="btn-submit" id="submitBtn" onclick="submitForm(event)">${form.button}</button>`;
+
   document.getElementById("modalOverlay").classList.add("open");
   document.body.style.overflow = "hidden";
-}
-
-function buildSubmitBtn(type) {
-  const isDel = type === "delete_entry";
-  return `<button class="${isDel ? 'btn-danger' : 'btn-submit'}" onclick="submitForm(event)" id="submitBtn">
-    ${isDel ? "Delete Entry" : "Save Entry"}
-  </button>`;
 }
 
 function closeModal() {
@@ -684,178 +887,302 @@ function closeModal() {
   currentModal = null;
 }
 
-function handleOverlayClick(e) {
-  if (e.target === document.getElementById("modalOverlay")) closeModal();
+function handleOverlayClick(event) {
+  if (event.target.id === "modalOverlay") {
+    closeModal();
+  }
 }
 
-async function submitForm(e) {
-  e.preventDefault();
-  const btn = document.getElementById("submitBtn");
-  const body = document.getElementById("modalBody");
-  const inputs = body.querySelectorAll("input, select, textarea");
-  const data = { entryType: currentModal };
+async function submitForm(event) {
+  event.preventDefault();
 
-  for (const el of inputs) {
-    if (el.name && el.value !== undefined) {
-      data[el.name] = el.value;
+  const body = document.getElementById("modalBody");
+  const btn = document.getElementById("submitBtn");
+  const fields = body.querySelectorAll("input, select, textarea");
+
+  const data = {
+    entryType: currentModal
+  };
+
+  for (const field of fields) {
+    if (field.name) {
+      data[field.name] = field.value;
     }
   }
 
-  // Validate required fields
   const required = body.querySelectorAll("[required]");
-  for (const el of required) {
-    if (!el.value.trim()) {
-      el.focus();
+
+  for (const field of required) {
+    if (!field.value.trim()) {
+      field.focus();
       showToast("Please fill all required fields.", "error");
       return;
     }
   }
 
-  if (currentModal === "delete_entry") {
-    await submitDelete(data, btn);
-    return;
-  }
-
   btn.disabled = true;
-  btn.innerHTML = `<span class="spinner"></span> Saving…`;
+  btn.innerHTML = `<span class="spinner"></span>Saving...`;
 
   try {
-    const res = await fetch(API, {
+    const response = await fetch(API, {
       method: "POST",
       body: JSON.stringify(data),
-      headers: { "Content-Type": "text/plain" }
+      headers: {
+        "Content-Type": "text/plain"
+      }
     });
-    const json = await res.json();
+
+    const json = await response.json();
+
     if (json.success) {
-      showToast("Entry saved successfully!", "success");
+      showToast("Entry saved successfully.", "success");
       closeModal();
-      logCache = [];
     } else {
-      showToast(json.error || "Server error. Try again.", "error");
+      showToast(json.error || "Could not save entry.", "error");
       btn.disabled = false;
-      btn.innerHTML = "Save Entry";
+      btn.textContent = FORMS[currentModal].button;
     }
-  } catch (err) {
-    showToast("Network error. Check connection.", "error");
+
+  } catch (error) {
+    showToast("Network error. Please try again.", "error");
     btn.disabled = false;
-    btn.innerHTML = "Save Entry";
-  }
-}
-
-async function submitDelete(data, btn) {
-  btn.disabled = true;
-  btn.textContent = "Deleting…";
-
-  const payload = {
-    entryType: "delete",
-    sheetName: data.sheetName,
-    rowNumber: parseInt(data.rowNumber),
-    remarks: data.remarks
-  };
-
-  try {
-    const res = await fetch(API, {
-      method: "POST",
-      body: JSON.stringify(payload),
-      headers: { "Content-Type": "text/plain" }
-    });
-    const json = await res.json();
-    if (json.success) {
-      showToast("Entry deleted.", "success");
-      closeModal();
-      logCache = [];
-    } else {
-      showToast(json.error || "Could not delete. Check row number.", "error");
-      btn.disabled = false;
-      btn.textContent = "Delete Entry";
-    }
-  } catch {
-    showToast("Network error. Try again.", "error");
-    btn.disabled = false;
-    btn.textContent = "Delete Entry";
+    btn.textContent = FORMS[currentModal].button;
   }
 }
 
 function openLog() {
-  document.getElementById("modalTitle").textContent = "Entry Log";
-  document.getElementById("modalBody").innerHTML = `<div class="empty-state"><span class="spinner" style="border-color:rgba(0,0,0,0.15);border-top-color:var(--blue-500)"></span><br><br>Loading entries…</div>`;
+  currentModal = "log";
+  document.getElementById("modalTitle").textContent = "Recent Entries";
+
+  document.getElementById("modalBody").innerHTML = `
+    <button class="btn-secondary refresh-btn" onclick="fetchLog()">Refresh Entries</button>
+    <div class="empty-state">
+      <span class="spinner" style="border-color:rgba(0,0,0,0.15);border-top-color:#185FA5;"></span>
+      <br><br>
+      Loading recent entries...
+    </div>
+  `;
+
   document.getElementById("modalOverlay").classList.add("open");
   document.body.style.overflow = "hidden";
-  currentModal = "log";
+
   fetchLog();
 }
 
 async function fetchLog() {
-  try {
-    const res = await fetch(API + "?action=log&limit=30&t=" + Date.now());
-    const json = await res.json();
+  const modalBody = document.getElementById("modalBody");
 
-    if (json.entries && json.entries.length) {
-      logCache = json.entries;
-      renderLog(json.entries);
-    } else {
-      document.getElementById("modalBody").innerHTML = `<div class="empty-state">No entries found in the log.<br><br><small>The API may not return log data — check WebAPI.gs for a getLog handler.</small></div>`;
+  modalBody.innerHTML = `
+    <button class="btn-secondary refresh-btn" onclick="fetchLog()">Refresh Entries</button>
+    <div class="empty-state">
+      <span class="spinner" style="border-color:rgba(0,0,0,0.15);border-top-color:#185FA5;"></span>
+      <br><br>
+      Loading recent entries...
+    </div>
+  `;
+
+  try {
+    const response = await fetch(API + "?action=log&limit=30&t=" + Date.now());
+    const json = await response.json();
+
+    if (!json.success) {
+      modalBody.innerHTML = `
+        <button class="btn-secondary refresh-btn" onclick="fetchLog()">Refresh Entries</button>
+        <div class="empty-state">${json.error || "Could not load entries."}</div>
+      `;
+      return;
     }
-  } catch {
-    document.getElementById("modalBody").innerHTML = renderLogFallback();
+
+    const entries = json.entries || [];
+
+    if (!entries.length) {
+      modalBody.innerHTML = `
+        <button class="btn-secondary refresh-btn" onclick="fetchLog()">Refresh Entries</button>
+        <div class="empty-state">No recent entries found.</div>
+      `;
+      return;
+    }
+
+    renderLog(entries);
+
+  } catch (error) {
+    modalBody.innerHTML = `
+      <button class="btn-secondary refresh-btn" onclick="fetchLog()">Refresh Entries</button>
+      <div class="empty-state">Network error. Could not load entries.</div>
+    `;
   }
 }
 
 function renderLog(entries) {
-  const badges = {
-    raw_inward:"#E1F5EE|#0F6E56",production:"#E6F1FB|#185FA5",
-    consumption:"#FAEEDA|#854F0B",dispatch:"#FAECE7|#712B13",transfer:"#EEEDFE|#3C3489"
-  };
-  const labels = {
-    raw_inward:"RM Inward",production:"Production",
-    consumption:"Consumption",dispatch:"Dispatch",transfer:"Transfer"
-  };
+  const modalBody = document.getElementById("modalBody");
 
-  const html = entries.map((e, i) => {
-    const [bg, color] = (badges[e.entryType] || "#f0f4f8|#3d5166").split("|");
-    const lbl = labels[e.entryType] || e.entryType;
-    const det = [e.factory||e.fromFactory, e.productType||e.materialCode, e.color, e.rollSize].filter(Boolean).join(" · ");
+  const html = entries.map(function(entry, index) {
+    const label = entry.label || entry.entryType || "Entry";
+
+    const factoryLine = getFactoryLine(entry);
+    const itemLine = getItemLine(entry);
+    const qty = entry.quantity ? entry.quantity : "-";
+
     return `
-      <div class="log-item">
-        <div class="log-item-header">
-          <span class="log-type-badge" style="background:${bg};color:${color}">${lbl}</span>
-          <span class="log-date">${e.date || ""}</span>
+      <div class="log-item" id="logItem${index}">
+        <div class="log-top">
+          <span class="badge">${escapeHtml(label)}</span>
+          <span class="log-date">${escapeHtml(entry.date || "")}</span>
         </div>
-        <div class="log-details">${det || "—"}</div>
-        <div class="log-qty">${e.quantity ? "Qty: " + e.quantity : ""}</div>
-      </div>`;
+
+        <div class="log-main">
+          ${factoryLine ? `<div>${factoryLine}</div>` : ""}
+          ${itemLine ? `<div>${itemLine}</div>` : ""}
+          <div class="log-qty">Qty: ${escapeHtml(String(qty))}</div>
+        </div>
+
+        <div class="log-sub">
+          Sheet: ${escapeHtml(entry.sheetName || "-")}<br>
+          Row: ${escapeHtml(String(entry.rowNumber || "-"))}
+          ${entry.remarks ? `<br>Remarks: ${escapeHtml(entry.remarks)}` : ""}
+        </div>
+
+        <button class="delete-small"
+          onclick="deleteRecentEntry('${escapeAttr(entry.sheetName || "")}', '${escapeAttr(String(entry.rowNumber || ""))}', ${index})">
+          Delete this entry
+        </button>
+      </div>
+    `;
   }).join("");
 
-  document.getElementById("modalBody").innerHTML = `
+  modalBody.innerHTML = `
+    <button class="btn-secondary refresh-btn" onclick="fetchLog()">Refresh Entries</button>
+    <div class="warning-box">
+      Delete clears the row in the source sheet. Stock formulas update automatically.
+    </div>
     <div class="log-list">${html}</div>
-    <div class="field-note" style="text-align:center;margin-top:14px">Showing last ${entries.length} entries</div>`;
+  `;
 }
 
-function renderLogFallback() {
-  return `<div class="empty-state">
-    Could not load log data from the API.<br><br>
-    <small>To enable the log view, add a <code>doGet</code> handler in <strong>WebAPI.gs</strong> that returns EntriesDB rows when <code>action=log</code> is passed as a query parameter.</small>
-  </div>`;
+function getFactoryLine(entry) {
+  if (entry.entryType === "transfer") {
+    return `From: ${escapeHtml(entry.fromFactory || "-")} → To: ${escapeHtml(entry.toFactory || "-")}`;
+  }
+
+  return `Factory: ${escapeHtml(entry.factory || "-")}`;
 }
 
-function showToast(msg, type) {
-  const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.className = "toast show " + (type || "");
-  setTimeout(() => { t.className = "toast"; }, 3200);
+function getItemLine(entry) {
+  if (entry.materialCode) {
+    return `Material: ${escapeHtml(entry.materialCode)}`;
+  }
+
+  const parts = [
+    entry.productType,
+    entry.gsm ? entry.gsm + " GSM" : "",
+    entry.color,
+    entry.rollSize
+  ].filter(Boolean);
+
+  if (!parts.length) return "";
+
+  return `Item: ${escapeHtml(parts.join(" · "))}`;
 }
 
-// Ping API on load
-(async () => {
+async function deleteRecentEntry(sheetName, rowNumber, index) {
+  if (!sheetName || !rowNumber) {
+    showToast("Missing sheet or row number.", "error");
+    return;
+  }
+
+  const ok = confirm(
+    "Delete this entry?\n\n" +
+    "Sheet: " + sheetName + "\n" +
+    "Row: " + rowNumber
+  );
+
+  if (!ok) return;
+
+  const item = document.getElementById("logItem" + index);
+  const btn = item ? item.querySelector("button") : null;
+
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = "Deleting...";
+  }
+
   try {
-    const r = await fetch(API);
-    const j = await r.json();
-    if (j.success) document.getElementById("apiStatus").style.background = "#5DCAA5";
-    else document.getElementById("apiStatus").style.background = "#EF9F27";
-  } catch {
+    const response = await fetch(API, {
+      method: "POST",
+      body: JSON.stringify({
+        entryType: "delete",
+        sheetName: sheetName,
+        rowNumber: Number(rowNumber),
+        remarks: "Deleted from mobile app recent entries"
+      }),
+      headers: {
+        "Content-Type": "text/plain"
+      }
+    });
+
+    const json = await response.json();
+
+    if (json.success) {
+      showToast("Entry deleted.", "success");
+      fetchLog();
+    } else {
+      showToast(json.error || "Could not delete entry.", "error");
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = "Delete this entry";
+      }
+    }
+
+  } catch (error) {
+    showToast("Network error. Could not delete.", "error");
+    if (btn) {
+      btn.disabled = false;
+      btn.textContent = "Delete this entry";
+    }
+  }
+}
+
+function showToast(message, type) {
+  const toast = document.getElementById("toast");
+  toast.textContent = message;
+  toast.className = "toast show " + (type || "");
+
+  setTimeout(function() {
+    toast.className = "toast";
+  }, 3000);
+}
+
+function escapeHtml(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function escapeAttr(value) {
+  return String(value)
+    .replaceAll("\\", "\\\\")
+    .replaceAll("'", "\\'")
+    .replaceAll('"', "&quot;");
+}
+
+(async function checkApi() {
+  try {
+    const response = await fetch(API + "?t=" + Date.now());
+    const json = await response.json();
+
+    if (json.success) {
+      document.getElementById("apiStatus").style.background = "#5DCAA5";
+    } else {
+      document.getElementById("apiStatus").style.background = "#EF9F27";
+    }
+  } catch (error) {
     document.getElementById("apiStatus").style.background = "#e24b4a";
   }
 })();
 </script>
+
 </body>
 </html>
