@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -463,16 +464,16 @@ function saveEntry(payload, btnId, successMsg, resetFn) {
     return;
   }
 
+  // Google Apps Script often blocks normal CORS JSON requests from GitHub Pages.
+  // no-cors allows the entry to be sent to Apps Script. The browser cannot read
+  // the response, so we show success after the request is sent.
   fetch(API_URL, {
     method: 'POST',
-    mode: 'cors',
-    body: JSON.stringify(payload),
-    headers: { 'Content-Type': 'application/json' }
+    mode: 'no-cors',
+    body: JSON.stringify(payload)
   })
-  .then(function(r){ return r.json(); })
-  .then(function(data){
-    if (data && data.success) done(true);
-    else done(false, '❌ ' + ((data && data.message) || 'Google Sheet rejected the entry'));
+  .then(function(){
+    done(true);
   })
   .catch(function(err){
     console.error(err);
@@ -484,14 +485,14 @@ function submitProduction() {
   if (!validateRequired(['prod-date','prod-factory','prod-type','prod-rollsize','prod-gsm','prod-color','prod-rolls'])) return;
   var payload = {
     action:'production',
-    date: fmtDate(g('prod-date')),
+    date: g('prod-date'),
     factory: g('prod-factory'),
     productType: g('prod-type'),
     rollSize: g('prod-rollsize'),
     gsm: g('prod-gsm'),
     color: g('prod-color'),
     rolls: g('prod-rolls'),
-    batchId: g('prod-batch'),
+    batch: g('prod-batch'),
     remarks: g('prod-remarks')
   };
   saveEntry(payload, 'btn-prod-submit', 'Production entry saved', resetProduction);
@@ -501,7 +502,7 @@ function submitInward() {
   if (!validateRequired(['in-date','in-factory','in-material','in-qty'])) return;
   var payload = {
     action:'inward',
-    date: fmtDate(g('in-date')),
+    date: g('in-date'),
     factory: g('in-factory'),
     materialCode: g('in-material'),
     qty: g('in-qty'),
@@ -516,7 +517,7 @@ function submitDispatch() {
   if (!validateRequired(['dis-date','dis-factory','dis-type','dis-rollsize','dis-gsm','dis-color','dis-rolls'])) return;
   var payload = {
     action:'dispatch',
-    date: fmtDate(g('dis-date')),
+    date: g('dis-date'),
     factory: g('dis-factory'),
     customer: g('dis-customer'),
     productType: g('dis-type'),
@@ -534,11 +535,11 @@ function submitConsumption() {
   if (!validateRequired(['con-date','con-factory','con-material','con-qty'])) return;
   var payload = {
     action:'consumption',
-    date: fmtDate(g('con-date')),
+    date: g('con-date'),
     factory: g('con-factory'),
     materialCode: g('con-material'),
     qty: g('con-qty'),
-    batchId: g('con-batch'),
+    batch: g('con-batch'),
     remarks: g('con-remarks')
   };
   saveEntry(payload, 'btn-con-submit', 'Consumption entry saved', resetConsumption);
@@ -552,7 +553,7 @@ function submitTransfer() {
   }
   var payload = {
     action:'transfer',
-    date: fmtDate(g('tr-date')),
+    date: g('tr-date'),
     fromFactory: g('tr-from'),
     toFactory: g('tr-to'),
     productType: g('tr-type'),
