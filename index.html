@@ -1,602 +1,129 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Nehal Industries IMS</title>
-
-  <style>
-    :root {
-      --navy: #102f57;
-      --blue: #1f4e79;
-      --light: #f5f7fb;
-      --border: #d8e0ea;
-      --text: #1f2937;
-      --muted: #6b7280;
-      --success: #047857;
-      --danger: #b91c1c;
-      --white: #ffffff;
-      --yellow: #fff7d6;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: var(--light);
-      color: var(--text);
-    }
-
-    header {
-      background: linear-gradient(135deg, var(--navy), var(--blue));
-      color: var(--white);
-      padding: 30px 20px;
-      text-align: center;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.18);
-    }
-
-    .logoText {
-      color: #ffffff;
-      font-size: 32px;
-      font-weight: 900;
-      letter-spacing: 1.5px;
-      margin: 0;
-      text-transform: uppercase;
-      line-height: 1.2;
-    }
-
-    .subtitle {
-      color: #e8f1ff;
-      font-size: 14px;
-      margin-top: 8px;
-      letter-spacing: 0.4px;
-    }
-
-    .container {
-      max-width: 1150px;
-      margin: 24px auto;
-      padding: 0 16px;
-    }
-
-    .cards {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 14px;
-      margin-bottom: 18px;
-    }
-
-    .card {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 16px;
-      box-shadow: 0 8px 22px rgba(16, 47, 87, 0.08);
-      cursor: pointer;
-      transition: 0.2s;
-      min-height: 105px;
-    }
-
-    .card:hover {
-      transform: translateY(-2px);
-      border-color: var(--blue);
-    }
-
-    .card.active {
-      background: #e9f2ff;
-      border-color: var(--blue);
-      box-shadow: 0 8px 24px rgba(31, 78, 121, 0.18);
-    }
-
-    .card h3 {
-      margin: 0;
-      color: var(--navy);
-      font-size: 15px;
-    }
-
-    .card p {
-      margin: 8px 0 0;
-      color: var(--muted);
-      font-size: 12px;
-      line-height: 1.4;
-    }
-
-    .panel {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 22px;
-      box-shadow: 0 8px 24px rgba(16, 47, 87, 0.08);
-    }
-
-    .panelTitle {
-      margin: 0 0 16px;
-      color: var(--navy);
-      font-size: 20px;
-    }
-
-    .noteBox {
-      background: var(--yellow);
-      border: 1px solid #f2d06b;
-      color: #5c4300;
-      border-radius: 12px;
-      padding: 12px 14px;
-      font-size: 13px;
-      margin-bottom: 16px;
-      line-height: 1.5;
-    }
-
-    .formGrid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    label {
-      font-size: 13px;
-      font-weight: 700;
-      color: #374151;
-    }
-
-    input,
-    select,
-    textarea {
-      width: 100%;
-      padding: 12px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      font-size: 14px;
-      background: #ffffff;
-      outline: none;
-    }
-
-    input:focus,
-    select:focus,
-    textarea:focus {
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(31, 78, 121, 0.12);
-    }
-
-    textarea {
-      min-height: 92px;
-      resize: vertical;
-    }
-
-    .wide {
-      grid-column: span 3;
-    }
-
-    .actions {
-      margin-top: 18px;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    button {
-      border: none;
-      background: var(--blue);
-      color: white;
-      padding: 13px 20px;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    button:hover {
-      background: var(--navy);
-    }
-
-    button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-    }
-
-    .resetBtn {
-      background: #64748b;
-    }
-
-    .message {
-      font-size: 14px;
-      font-weight: 700;
-    }
-
-    .success {
-      color: var(--success);
-    }
-
-    .error {
-      color: var(--danger);
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    footer {
-      text-align: center;
-      font-size: 12px;
-      color: var(--muted);
-      margin: 28px 0;
-    }
-
-    @media (max-width: 900px) {
-      .cards {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .formGrid {
-        grid-template-columns: 1fr;
-      }
-
-      .wide {
-        grid-column: span 1;
-      }
-    }
-
-    @media (max-width: 560px) {
-      .cards {
-        grid-template-columns: 1fr;
-      }
-
-      .logoText {
-        font-size: 24px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Nehal Industries — Inventory</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0f2744;--navy2:#17365d;--blue:#1e6abf;--accent:#f0a500;--green:#2ecc71;--red:#e74c3c;--bg:#f0f4f9;--card:#fff;--text:#1a2a3a;--muted:#7a8fa6;--border:#dce6f0;--input:#f7fafd;--shadow:0 4px 20px rgba(15,39,68,.10);--radius:16px;--radius-sm:10px}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.header{background:linear-gradient(135deg,var(--navy),var(--navy2));position:sticky;top:0;z-index:100;box-shadow:0 2px 20px rgba(15,39,68,.3)}
+.logo-header{min-height:112px;padding:16px 58px 14px;display:flex;align-items:center;justify-content:center}
+.center-logo-wrap{display:flex;flex-direction:column;align-items:center;gap:7px}
+.center-logo{height:72px;width:auto;max-width:390px;object-fit:contain;display:block}
+.header-sub{font-size:11px;color:rgba(255,255,255,.72);letter-spacing:1px;text-transform:uppercase}
+.status{display:flex;align-items:center;gap:8px;color:rgba(255,255,255,.78);font-size:11px}
+.status-floating{position:absolute;right:16px;top:16px}
+.status-dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
+.status-dot.off{background:var(--red);box-shadow:0 0 8px var(--red)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.main{padding:18px;max-width:520px;margin:0 auto}
+.screen{display:none;animation:fadeUp .25s ease}.screen.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:var(--shadow);margin-bottom:16px;border:1px solid var(--border)}
+.card-title{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--navy);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.home-greeting{font-family:'Rajdhani',sans-serif;font-size:27px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.home-date{font-size:13px;color:var(--muted);margin-bottom:14px}
+.notice{background:#fff8e1;border:1px solid #f0c040;border-radius:10px;padding:11px 13px;font-size:12px;color:#7a5c00;margin-bottom:16px;line-height:1.4}
+.sync-bar{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:15px}
+.sync-pill{background:#fff;border:1px solid var(--border);border-radius:12px;padding:10px;text-align:center;box-shadow:var(--shadow)}
+.sync-pill b{display:block;color:var(--navy);font-family:'Rajdhani';font-size:20px}.sync-pill span{font-size:11px;color:var(--muted)}
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px}
+.action-card{background:#fff;border-radius:var(--radius);padding:18px 12px;box-shadow:var(--shadow);border:1.5px solid var(--border);cursor:pointer;text-align:center}
+.action-icon{font-size:28px;margin-bottom:8px;display:block}.action-label{font-family:'Rajdhani';font-size:16px;font-weight:700;color:var(--navy)}.action-desc{font-size:11px;color:var(--muted);margin-top:2px}
+.field{margin-bottom:14px}.field label{display:block;font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px}
+.field input,.field select{width:100%;padding:13px 15px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--input);font-family:'DM Sans';font-size:15px;color:var(--text);outline:none}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.req{color:var(--red)}
+.btn{width:100%;padding:15px;border-radius:var(--radius-sm);border:none;background:linear-gradient(135deg,var(--blue),#3b8fe8);color:#fff;font-family:'Rajdhani';font-size:17px;font-weight:700;cursor:pointer}
+.btn:disabled{background:#aeb9c5;cursor:not-allowed}.btn-back{display:flex;gap:6px;font-size:14px;color:var(--muted);background:none;border:none;cursor:pointer;margin-bottom:14px;font-family:'DM Sans'}
+.entry-row{padding:12px 0;border-bottom:1px solid var(--border)}.entry-row:last-child{border-bottom:none}
+.entry-title{font-size:14px;font-weight:700}.entry-detail{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.45}.entry-meta{font-size:11px;color:var(--muted);margin-top:6px}
+.entry-actions{display:flex;gap:7px;margin-top:9px}.small-btn{padding:6px 12px;border-radius:100px;border:1.5px solid var(--blue);background:#fff;color:var(--blue);font-size:12px;font-weight:700;cursor:pointer}.small-btn.delete{border-color:#f2b8b8;color:var(--red)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--navy);color:#fff;padding:14px 22px;border-radius:100px;font-size:14px;font-weight:600;box-shadow:0 8px 32px rgba(0,0,0,.25);z-index:999;transition:transform .25s;white-space:nowrap;max-width:92vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}.toast.success{background:#1a6640}.toast.error{background:#8b1a1a}
+.loader{display:inline-block;width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .7s linear infinite;vertical-align:middle;margin-right:8px}@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:520px){.logo-header{min-height:94px;padding:14px 48px 12px}.center-logo{height:55px;max-width:280px}.status-floating{right:10px;top:10px;font-size:10px}}
+</style>
 </head>
-
 <body>
-  <header>
-    <h1 class="logoText">NEHAL INDUSTRIES LTD.</h1>
-    <div class="subtitle">Inventory Management System</div>
-  </header>
+<div class="header logo-header">
+  <div class="center-logo-wrap">
+    <img src="logo.png" alt="Nehal Industries Ltd" class="center-logo">
+    <div class="header-sub">Synced Inventory Control</div>
+  </div>
+  <div class="status status-floating"><div class="status-dot off" id="statusDot"></div><span id="statusText">Checking</span></div>
+</div>
 
-  <main class="container">
-    <section class="cards">
-      <div class="card active" data-type="raw_inward">
-        <h3>Raw Material Inward</h3>
-        <p>Enter raw material purchase or received quantity.</p>
-      </div>
+<div class="main">
+  <div class="screen active" id="screen-home">
+    <div class="home-greeting">Good day! 👋</div>
+    <div class="home-date" id="homeDate"></div>
+    <div class="notice">Live sync mode: entries save to Google Sheets and reload onto every device.</div>
+    <div class="sync-bar"><div class="sync-pill"><b id="entryCount">0</b><span>Active Entries</span></div><div class="sync-pill"><b id="lastSync">—</b><span>Last Sync</span></div></div>
+    <div class="action-grid">
+      <div class="action-card" onclick="startNew('production')"><span class="action-icon">⚙️</span><div class="action-label">Production</div><div class="action-desc">Finished rolls</div></div>
+      <div class="action-card" onclick="startNew('inward')"><span class="action-icon">📦</span><div class="action-label">Raw Inward</div><div class="action-desc">Stock received</div></div>
+      <div class="action-card" onclick="startNew('dispatch')"><span class="action-icon">🚚</span><div class="action-label">Dispatch</div><div class="action-desc">Rolls out</div></div>
+      <div class="action-card" onclick="startNew('consumption')"><span class="action-icon">🧪</span><div class="action-label">Consumption</div><div class="action-desc">Material used</div></div>
+      <div class="action-card" onclick="startNew('transfer')" style="grid-column:span 2"><span class="action-icon">🔄</span><div class="action-label">Internal Transfer</div><div class="action-desc">Move stock between factories</div></div>
+    </div>
+    <div class="card"><div class="card-title"><div class="icon" style="background:#e8f4fd">📋</div> Recent Synced Entries</div><div id="recentList"><span style="font-size:13px;color:var(--muted)">Loading...</span></div></div>
+  </div>
 
-      <div class="card" data-type="production">
-        <h3>Production Entry</h3>
-        <p>Enter finished goods produced in rolls.</p>
-      </div>
+  <div class="screen" id="screen-production"><button class="btn-back" onclick="showScreen('home')">← Back</button><div class="card"><div class="card-title"><div class="icon" style="background:#e8f4fd">⚙️</div> Production Entry</div><div class="field"><label>Date <span class="req">*</span></label><input type="date" id="prod-date"></div><div class="field"><label>Factory <span class="req">*</span></label><select id="prod-factory"><option value="">Select Factory</option><option>Tecknogopara</option><option>Mirergao</option></select></div><div class="field-row"><div class="field"><label>Product Type <span class="req">*</span></label><select id="prod-type"><option value="">Select</option><option>Single Dot</option><option>Double Dot</option></select></div><div class="field"><label>Roll Size <span class="req">*</span></label><select id="prod-rollsize"><option value="">Select</option><option>100 YDS</option><option>200 YDS</option></select></div></div><div class="field-row"><div class="field"><label>GSM <span class="req">*</span></label><select id="prod-gsm"></select></div><div class="field"><label>Color <span class="req">*</span></label><select id="prod-color"><option value="">Select</option><option>White</option><option>Black</option><option>Charcoal</option></select></div></div><div class="field"><label>Output Rolls <span class="req">*</span></label><input type="number" id="prod-rolls" min="1"></div><div class="field"><label>Batch ID</label><input type="text" id="prod-batch"></div><div class="field"><label>Remarks</label><input type="text" id="prod-remarks"></div><button class="btn" id="btn-prod" onclick="submitProduction()">✅ Submit Production</button></div></div>
 
-      <div class="card" data-type="consumption">
-        <h3>Material Consumption</h3>
-        <p>Enter raw materials used in production.</p>
-      </div>
+  <div class="screen" id="screen-inward"><button class="btn-back" onclick="showScreen('home')">← Back</button><div class="card"><div class="card-title"><div class="icon" style="background:#e8fdf0">📦</div> Raw Material Inward</div><div class="field"><label>Date <span class="req">*</span></label><input type="date" id="in-date"></div><div class="field"><label>Factory <span class="req">*</span></label><select id="in-factory"><option value="">Select Factory</option><option>Tecknogopara</option><option>Mirergao</option></select></div><div class="field"><label>Material <span class="req">*</span></label><select id="in-material"></select></div><div class="field"><label>Quantity KG <span class="req">*</span></label><input type="number" id="in-qty" min="0.01" step="0.01"></div><div class="field"><label>Purchase / Source Note</label><input type="text" id="in-supplier"></div><div class="field"><label>Invoice / Challan No.</label><input type="text" id="in-challan"></div><div class="field"><label>Remarks</label><input type="text" id="in-remarks"></div><button class="btn" id="btn-in" onclick="submitInward()">✅ Submit Inward</button></div></div>
 
-      <div class="card" data-type="dispatch">
-        <h3>Dispatch Entry</h3>
-        <p>Enter finished rolls dispatched out.</p>
-      </div>
+  <div class="screen" id="screen-dispatch"><button class="btn-back" onclick="showScreen('home')">← Back</button><div class="card"><div class="card-title"><div class="icon" style="background:#fdf5e8">🚚</div> Dispatch Entry</div><div class="field"><label>Date <span class="req">*</span></label><input type="date" id="dis-date"></div><div class="field"><label>Factory <span class="req">*</span></label><select id="dis-factory"><option value="">Select Factory</option><option>Tecknogopara</option><option>Mirergao</option></select></div><div class="field"><label>Customer Name</label><input type="text" id="dis-customer"></div><div class="field-row"><div class="field"><label>Product Type <span class="req">*</span></label><select id="dis-type"><option value="">Select</option><option>Single Dot</option><option>Double Dot</option></select></div><div class="field"><label>Roll Size <span class="req">*</span></label><select id="dis-rollsize"><option value="">Select</option><option>100 YDS</option><option>200 YDS</option></select></div></div><div class="field-row"><div class="field"><label>GSM <span class="req">*</span></label><select id="dis-gsm"></select></div><div class="field"><label>Color <span class="req">*</span></label><select id="dis-color"><option value="">Select</option><option>White</option><option>Black</option><option>Charcoal</option></select></div></div><div class="field"><label>Rolls Out <span class="req">*</span></label><input type="number" id="dis-rolls" min="1"></div><div class="field"><label>Delivery Challan No.</label><input type="text" id="dis-challan"></div><div class="field"><label>Remarks</label><input type="text" id="dis-remarks"></div><button class="btn" id="btn-dis" onclick="submitDispatch()">✅ Submit Dispatch</button></div></div>
 
-      <div class="card" data-type="transfer">
-        <h3>Internal Transfer</h3>
-        <p>Move finished goods between factories.</p>
-      </div>
-    </section>
+  <div class="screen" id="screen-consumption"><button class="btn-back" onclick="showScreen('home')">← Back</button><div class="card"><div class="card-title"><div class="icon" style="background:#fde8e8">🧪</div> Raw Material Consumption</div><div class="field"><label>Date <span class="req">*</span></label><input type="date" id="con-date"></div><div class="field"><label>Factory <span class="req">*</span></label><select id="con-factory"><option value="">Select Factory</option><option>Tecknogopara</option><option>Mirergao</option></select></div><div class="field"><label>Material <span class="req">*</span></label><select id="con-material"></select></div><div class="field"><label>KG Used <span class="req">*</span></label><input type="number" id="con-qty" min="0.01" step="0.01"></div><div class="field"><label>Linked Batch ID</label><input type="text" id="con-batch"></div><div class="field"><label>Remarks</label><input type="text" id="con-remarks"></div><button class="btn" id="btn-con" onclick="submitConsumption()">✅ Submit Consumption</button></div></div>
 
-    <section class="panel">
-      <h2 class="panelTitle" id="formTitle">Raw Material Inward</h2>
+  <div class="screen" id="screen-transfer"><button class="btn-back" onclick="showScreen('home')">← Back</button><div class="card"><div class="card-title"><div class="icon" style="background:#f0e8fd">🔄</div> Internal Transfer</div><div class="field"><label>Date <span class="req">*</span></label><input type="date" id="tr-date"></div><div class="field-row"><div class="field"><label>From Factory <span class="req">*</span></label><select id="tr-from"><option value="">Select</option><option>Tecknogopara</option><option>Mirergao</option></select></div><div class="field"><label>To Factory <span class="req">*</span></label><select id="tr-to"><option value="">Select</option><option>Tecknogopara</option><option>Mirergao</option></select></div></div><div class="field-row"><div class="field"><label>Product Type <span class="req">*</span></label><select id="tr-type"><option value="">Select</option><option>Single Dot</option><option>Double Dot</option></select></div><div class="field"><label>Roll Size <span class="req">*</span></label><select id="tr-rollsize"><option value="">Select</option><option>100 YDS</option><option>200 YDS</option></select></div></div><div class="field-row"><div class="field"><label>GSM <span class="req">*</span></label><select id="tr-gsm"></select></div><div class="field"><label>Color <span class="req">*</span></label><select id="tr-color"><option value="">Select</option><option>White</option><option>Black</option><option>Charcoal</option></select></div></div><div class="field"><label>Qty Rolls <span class="req">*</span></label><input type="number" id="tr-qty" min="1"></div><div class="field"><label>Remarks</label><input type="text" id="tr-remarks"></div><button class="btn" id="btn-tr" onclick="submitTransfer()">✅ Submit Transfer</button></div></div>
+</div>
 
-      <div class="noteBox">
-        Fill only the required fields for the selected entry type. After saving, check the Google Sheet to confirm the data has updated.
-      </div>
+<div class="toast" id="toast"></div>
+<script>
+var API_URL = 'https://script.google.com/macros/s/AKfycbyYzFBgzt05xvjedaDkIpH2y7dy5vxecuTHBQCU6Qv7VzvSjV0ZWXChHbg5PRnlIjh1Vg/exec';
+var entries = [];
+var GSM_LIST = [22,25,28,30,32,35,38,40,45,50,55,60];
+var MATERIALS = [['PSF-WHITE','White PSF'],['PSF-BLACK','Black PSF'],['PES-080','PES 0-80'],['PES-80170','PES 80-170'],['THICKENER','Thickener'],['PAM','Polyacrylamide'],['PACKAGING','Packaging Material']];
+var META = {production:{icon:'⚙️',label:'Production'},inward:{icon:'📦',label:'Inward'},dispatch:{icon:'🚚',label:'Dispatch'},consumption:{icon:'🧪',label:'Consumption'},transfer:{icon:'🔄',label:'Transfer'}};
 
-      <form id="imsForm">
-        <div class="formGrid">
-          <div class="field">
-            <label>Date</label>
-            <input type="date" id="date" required />
-          </div>
+document.addEventListener('DOMContentLoaded', function(){ fillSelects(); setTodayDates(); setHomeDate(); pingApi(); loadEntries(); setInterval(loadEntries, 30000); });
 
-          <div class="field normalFactory">
-            <label>Factory</label>
-            <select id="factory">
-              <option value="">Select Factory</option>
-              <option value="Tecknogopara">Tecknogopara</option>
-              <option value="Mirergao">Mirergao</option>
-            </select>
-          </div>
+function fillSelects(){ ['prod-gsm','dis-gsm','tr-gsm'].forEach(function(id){ document.getElementById(id).innerHTML='<option value="">Select</option>'+GSM_LIST.map(function(g){return '<option>'+g+'</option>';}).join(''); }); ['in-material','con-material'].forEach(function(id){ document.getElementById(id).innerHTML='<option value="">Select Material</option>'+MATERIALS.map(function(m){return '<option value="'+m[0]+'">'+m[1]+'</option>';}).join(''); }); }
+function setTodayDates(){ var today=new Date().toISOString().split('T')[0]; ['prod-date','in-date','dis-date','con-date','tr-date'].forEach(function(id){document.getElementById(id).value=today;}); }
+function setHomeDate(){ var d=new Date(); var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']; var months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']; document.getElementById('homeDate').textContent=days[d.getDay()]+', '+d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear(); }
 
-          <div class="field transferOnly hidden">
-            <label>From Factory</label>
-            <select id="fromFactory">
-              <option value="">Select From Factory</option>
-              <option value="Tecknogopara">Tecknogopara</option>
-              <option value="Mirergao">Mirergao</option>
-            </select>
-          </div>
+function apiCall(action, payload){ return new Promise(function(resolve,reject){ var cb='cb_'+Date.now()+'_'+Math.random().toString(36).slice(2); var script=document.createElement('script'); var done=false; window[cb]=function(res){ if(done)return; done=true; cleanup(); resolve(res); }; function cleanup(){ try{delete window[cb];}catch(e){window[cb]=undefined;} if(script.parentNode)script.parentNode.removeChild(script); } script.onerror=function(){ if(done)return; done=true; cleanup(); reject(new Error('API network error')); }; var url=API_URL+'?action='+encodeURIComponent(action)+'&callback='+encodeURIComponent(cb)+'&_='+Date.now(); if(payload)url+='&data='+encodeURIComponent(JSON.stringify(payload)); script.src=url; script.async=true; document.body.appendChild(script); setTimeout(function(){ if(!done){ done=true; cleanup(); reject(new Error('API timeout / not deployed')); } },25000); }); }
+function addSource(p){ p.sourceDevice=/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)?'Mobile':'Desktop'; p.sourceUrl=location.href; p.sourceBrowser=navigator.userAgent; return p; }
+function showScreen(name){ document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');}); document.getElementById('screen-'+name).classList.add('active'); scrollTo(0,0); }
+function startNew(a){ resetForm(a); showScreen(a); }
+function setStatus(ok,text){ document.getElementById('statusDot').classList.toggle('off',!ok); document.getElementById('statusText').textContent=text; }
+function pingApi(){ apiCall('ping',{}).then(function(r){ setStatus(!!(r&&r.success), r&&r.success?'Connected':'Offline'); }).catch(function(){setStatus(false,'Offline');}); }
+function showToast(msg,type){ var t=document.getElementById('toast'); t.textContent=msg; t.className='toast '+(type||''); t.classList.add('show'); setTimeout(function(){t.classList.remove('show');},3500); }
+function setLoading(id,on){ var b=document.getElementById(id); if(!b)return; if(on){b.dataset.old=b.innerHTML;b.disabled=true;b.innerHTML='<span class="loader"></span>Saving...';}else{b.disabled=false;b.innerHTML=b.dataset.old||b.innerHTML;} }
+function g(id){return document.getElementById(id).value.trim();}
+function requireIds(ids){ for(var i=0;i<ids.length;i++){ if(!g(ids[i])){showToast('Please fill required fields ⚠️','error');document.getElementById(ids[i]).focus();return false;} } return true; }
+function savePayload(p,btn,form){ setLoading(btn,true); apiCall('create', addSource(p)).then(function(r){ setLoading(btn,false); if(!r||!r.success){showToast('❌ '+(r&&r.message?r.message:'Save failed'),'error'); console.error(r); return;} showToast('✅ Entry saved to Google Sheets','success'); resetForm(form); showScreen('home'); loadEntries(); setTimeout(loadEntries,1500); }).catch(function(e){ setLoading(btn,false); showToast('❌ '+e.message,'error'); console.error(e); }); }
+function resetForm(a){ setTodayDates(); var ids={production:['prod-factory','prod-type','prod-rollsize','prod-gsm','prod-color','prod-rolls','prod-batch','prod-remarks'],inward:['in-factory','in-material','in-qty','in-supplier','in-challan','in-remarks'],dispatch:['dis-factory','dis-customer','dis-type','dis-rollsize','dis-gsm','dis-color','dis-rolls','dis-challan','dis-remarks'],consumption:['con-factory','con-material','con-qty','con-batch','con-remarks'],transfer:['tr-from','tr-to','tr-type','tr-rollsize','tr-gsm','tr-color','tr-qty','tr-remarks']}[a]||[]; ids.forEach(function(id){document.getElementById(id).value='';}); }
 
-          <div class="field transferOnly hidden">
-            <label>To Factory</label>
-            <select id="toFactory">
-              <option value="">Select To Factory</option>
-              <option value="Tecknogopara">Tecknogopara</option>
-              <option value="Mirergao">Mirergao</option>
-            </select>
-          </div>
+function submitProduction(){ if(!requireIds(['prod-date','prod-factory','prod-type','prod-rollsize','prod-gsm','prod-color','prod-rolls']))return; savePayload({action:'production',date:g('prod-date'),factory:g('prod-factory'),productType:g('prod-type'),rollSize:g('prod-rollsize'),gsm:g('prod-gsm'),color:g('prod-color'),rolls:g('prod-rolls'),batch:g('prod-batch'),remarks:g('prod-remarks')},'btn-prod','production'); }
+function submitInward(){ if(!requireIds(['in-date','in-factory','in-material','in-qty']))return; savePayload({action:'inward',date:g('in-date'),factory:g('in-factory'),materialCode:g('in-material'),qty:g('in-qty'),supplier:g('in-supplier'),challan:g('in-challan'),remarks:g('in-remarks')},'btn-in','inward'); }
+function submitDispatch(){ if(!requireIds(['dis-date','dis-factory','dis-type','dis-rollsize','dis-gsm','dis-color','dis-rolls']))return; savePayload({action:'dispatch',date:g('dis-date'),factory:g('dis-factory'),customer:g('dis-customer'),productType:g('dis-type'),rollSize:g('dis-rollsize'),gsm:g('dis-gsm'),color:g('dis-color'),rolls:g('dis-rolls'),challan:g('dis-challan'),remarks:g('dis-remarks')},'btn-dis','dispatch'); }
+function submitConsumption(){ if(!requireIds(['con-date','con-factory','con-material','con-qty']))return; savePayload({action:'consumption',date:g('con-date'),factory:g('con-factory'),materialCode:g('con-material'),qty:g('con-qty'),batch:g('con-batch'),remarks:g('con-remarks')},'btn-con','consumption'); }
+function submitTransfer(){ if(!requireIds(['tr-date','tr-from','tr-to','tr-type','tr-rollsize','tr-gsm','tr-color','tr-qty']))return; if(g('tr-from')===g('tr-to')){showToast('From and To factory cannot be same','error');return;} savePayload({action:'transfer',date:g('tr-date'),fromFactory:g('tr-from'),toFactory:g('tr-to'),productType:g('tr-type'),rollSize:g('tr-rollsize'),gsm:g('tr-gsm'),color:g('tr-color'),qty:g('tr-qty'),remarks:g('tr-remarks')},'btn-tr','transfer'); }
 
-          <div class="field productField hidden">
-            <label>Product Type</label>
-            <select id="productType">
-              <option value="">Select Product</option>
-              <option value="Single Dot">Single Dot</option>
-              <option value="Double Dot">Double Dot</option>
-            </select>
-          </div>
-
-          <div class="field productField hidden">
-            <label>GSM</label>
-            <select id="gsm">
-              <option value="">Select GSM</option>
-              <option value="22">22</option>
-              <option value="25">25</option>
-              <option value="28">28</option>
-              <option value="30">30</option>
-              <option value="32">32</option>
-              <option value="35">35</option>
-              <option value="38">38</option>
-              <option value="40">40</option>
-              <option value="45">45</option>
-              <option value="50">50</option>
-              <option value="55">55</option>
-              <option value="60">60</option>
-            </select>
-          </div>
-
-          <div class="field productField hidden">
-            <label>Color</label>
-            <select id="color">
-              <option value="">Select Color</option>
-              <option value="White">White</option>
-              <option value="Black">Black</option>
-              <option value="Charcoal">Charcoal</option>
-            </select>
-          </div>
-
-          <div class="field productField hidden">
-            <label>Roll Size</label>
-            <select id="rollSize">
-              <option value="">Select Roll Size</option>
-              <option value="100 YDS">100 YDS</option>
-              <option value="200 YDS">200 YDS</option>
-            </select>
-          </div>
-
-          <div class="field materialField">
-            <label>Material Code</label>
-            <select id="materialCode">
-              <option value="">Select Material</option>
-              <option value="PSF-WHITE">PSF-WHITE</option>
-              <option value="PSF-BLACK">PSF-BLACK</option>
-              <option value="PES-080">PES-080</option>
-              <option value="PES-80170">PES-80170</option>
-              <option value="THICKENER">THICKENER</option>
-              <option value="PAM">PAM</option>
-              <option value="PACKAGING">PACKAGING</option>
-            </select>
-          </div>
-
-          <div class="field dispatchOnly hidden">
-            <label>Delivery Challan No.</label>
-            <input type="text" id="challanNo" placeholder="Optional" />
-          </div>
-
-          <div class="field">
-            <label id="quantityLabel">Quantity KG</label>
-            <input type="number" id="quantity" min="0" step="0.01" required />
-          </div>
-
-          <div class="field wide">
-            <label>Remarks</label>
-            <textarea id="remarks" placeholder="Optional remarks"></textarea>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button type="submit" id="submitBtn">Save Entry</button>
-          <button type="button" class="resetBtn" id="resetBtn">Clear</button>
-          <span class="message" id="message"></span>
-        </div>
-      </form>
-    </section>
-  </main>
-
-  <footer>
-    Powered by Google Sheets + GitHub Pages
-  </footer>
-
-  <script>
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwdugr9IH0DZ9aCh-dOsA4p8miC3uMttMBJd5k8alEa8VVj_MYWzD9hxaKLtkF2kkdJ2Q/exec";
-
-    let currentType = "raw_inward";
-
-    const titles = {
-      raw_inward: "Raw Material Inward",
-      production: "Production Entry",
-      consumption: "Raw Material Consumption",
-      dispatch: "Dispatch Entry",
-      transfer: "Internal Transfer"
-    };
-
-    const quantityLabels = {
-      raw_inward: "Quantity KG",
-      production: "Output Rolls",
-      consumption: "KG Used",
-      dispatch: "Rolls Out",
-      transfer: "Qty Rolls"
-    };
-
-    const cards = document.querySelectorAll(".card");
-    const formTitle = document.getElementById("formTitle");
-    const quantityLabel = document.getElementById("quantityLabel");
-    const message = document.getElementById("message");
-    const form = document.getElementById("imsForm");
-    const submitBtn = document.getElementById("submitBtn");
-
-    const productFields = document.querySelectorAll(".productField");
-    const materialFields = document.querySelectorAll(".materialField");
-    const transferOnly = document.querySelectorAll(".transferOnly");
-    const normalFactory = document.querySelectorAll(".normalFactory");
-    const dispatchOnly = document.querySelectorAll(".dispatchOnly");
-
-    document.getElementById("date").valueAsDate = new Date();
-
-    cards.forEach(card => {
-      card.addEventListener("click", () => {
-        cards.forEach(c => c.classList.remove("active"));
-        card.classList.add("active");
-
-        currentType = card.dataset.type;
-        updateForm();
-      });
-    });
-
-    function show(elements, shouldShow) {
-      elements.forEach(el => {
-        if (shouldShow) {
-          el.classList.remove("hidden");
-        } else {
-          el.classList.add("hidden");
-        }
-      });
-    }
-
-    function updateForm() {
-      formTitle.textContent = titles[currentType];
-      quantityLabel.textContent = quantityLabels[currentType];
-
-      const needsProduct = ["production", "dispatch", "transfer"].includes(currentType);
-      const needsMaterial = ["raw_inward", "consumption"].includes(currentType);
-      const isTransfer = currentType === "transfer";
-      const isDispatch = currentType === "dispatch";
-
-      show(productFields, needsProduct);
-      show(materialFields, needsMaterial);
-      show(transferOnly, isTransfer);
-      show(normalFactory, !isTransfer);
-      show(dispatchOnly, isDispatch);
-
-      message.textContent = "";
-      message.className = "message";
-    }
-
-    document.getElementById("resetBtn").addEventListener("click", () => {
-      form.reset();
-      document.getElementById("date").valueAsDate = new Date();
-      message.textContent = "";
-      message.className = "message";
-    });
-
-    form.addEventListener("submit", async function(e) {
-      e.preventDefault();
-
-      const payload = {
-        entryType: currentType,
-        date: document.getElementById("date").value,
-        factory: document.getElementById("factory").value,
-        fromFactory: document.getElementById("fromFactory").value,
-        toFactory: document.getElementById("toFactory").value,
-        productType: document.getElementById("productType").value,
-        gsm: document.getElementById("gsm").value,
-        color: document.getElementById("color").value,
-        rollSize: document.getElementById("rollSize").value,
-        materialCode: document.getElementById("materialCode").value,
-        quantity: document.getElementById("quantity").value,
-        challanNo: document.getElementById("challanNo").value,
-        remarks: document.getElementById("remarks").value
-      };
-
-      const error = validatePayload(payload);
-
-      if (error) {
-        showMessage(error, "error");
-        return;
-      }
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = "Saving...";
-      showMessage("Saving entry...", "");
-
-      try {
-        await fetch(SCRIPT_URL, {
-          method: "POST",
-          mode: "no-cors",
-          headers: {
-            "Content-Type": "text/plain;charset=utf-8"
-          },
-          body: JSON.stringify(payload)
-        });
-
-        showMessage("Entry submitted. Please check Google Sheet.", "success");
-        form.reset();
-        document.getElementById("date").valueAsDate = new Date();
-        updateForm();
-
-      } catch (err) {
-        showMessage("Could not submit. Check Web App URL or deployment access.", "error");
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.textContent = "Save Entry";
-      }
-    });
-
-    function validatePayload(p) {
-      if (!p.date) return "Please select a date.";
-      if (!p.quantity || Number(p.quantity) <= 0) return "Please enter a quantity greater than 0.";
-
-      if (currentType === "raw_inward") {
-        if (!p.factory) return "Please select factory.";
-        if (!p.materialCode) return "Please select material code.";
-      }
-
-      if (currentType === "consumption") {
-        if (!p.factory) return "Please select factory.";
-        if (!p.materialCode) return "Please select material code.";
-      }
-
-      if (currentType === "production" || currentType === "dispatch") {
-        if (!p.factory) return "Please select factory.";
-        if (!p.productType) return "Please select product type.";
-        if (!p.gsm) return "Please select GSM.";
-        if (!p.color) return "Please select color.";
-        if (!p.rollSize) return "Please select roll size.";
-      }
-
-      if (currentType === "transfer") {
-        if (!p.fromFactory) return "Please select from factory.";
-        if (!p.toFactory) return "Please select to factory.";
-        if (p.fromFactory === p.toFactory) return "From factory and to factory cannot be same.";
-        if (!p.productType) return "Please select product type.";
-        if (!p.gsm) return "Please select GSM.";
-        if (!p.color) return "Please select color.";
-        if (!p.rollSize) return "Please select roll size.";
-      }
-
-      return "";
-    }
-
-    function showMessage(text, type) {
-      message.textContent = text;
-      message.className = "message " + type;
-    }
-
-    updateForm();
-  </script>
+function loadEntries(){ apiCall('list',{}).then(function(r){ if(!r||!r.success){setStatus(false,'Offline');console.error(r);return;} entries=r.entries||[]; setStatus(true,'Connected'); document.getElementById('entryCount').textContent=entries.length; document.getElementById('lastSync').textContent=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); renderEntries(); }).catch(function(e){ setStatus(false,'Offline'); console.error(e); }); }
+function renderEntries(){ var el=document.getElementById('recentList'); if(!entries.length){el.innerHTML='<span style="font-size:13px;color:var(--muted)">No synced entries yet</span>';return;} el.innerHTML=entries.slice(0,25).map(function(e){ var m=META[e.action]||{icon:'📋',label:e.action}; return '<div class="entry-row"><div class="entry-title">'+m.icon+' '+esc(m.label)+'</div><div class="entry-detail">'+detail(e)+'</div><div class="entry-meta">'+esc(e.date||'')+' · Source: '+esc(e.sourceDevice||'')+' · ID: '+esc(e.id||'')+'</div><div class="entry-actions"><button class="small-btn delete" onclick="deleteEntry(\''+attr(e.id)+'\')">🗑 Delete</button></div></div>'; }).join(''); }
+function detail(e){ if(e.action==='production')return esc(e.factory+' · '+e.productType+' '+e.gsm+'GSM '+e.color+' · '+(e.rolls||e.qty)+' rolls'); if(e.action==='inward')return esc(e.factory+' · '+(e.materialName||e.materialCode)+' · '+e.qty+' KG'); if(e.action==='dispatch')return esc(e.factory+' · '+e.productType+' '+e.gsm+'GSM · '+(e.rolls||e.qty)+' rolls'+(e.customer?' → '+e.customer:'')); if(e.action==='consumption')return esc(e.factory+' · '+(e.materialName||e.materialCode)+' · '+e.qty+' KG'); if(e.action==='transfer')return esc(e.fromFactory+' → '+e.toFactory+' · '+e.productType+' '+e.gsm+'GSM · '+e.qty+' rolls'); return ''; }
+function deleteEntry(id){ if(!confirm('Delete this entry from website and Google Sheet?'))return; apiCall('delete', addSource({id:id})).then(function(r){ if(!r||!r.success){showToast('❌ '+(r&&r.message?r.message:'Delete failed'),'error');return;} showToast('✅ Deleted','success'); loadEntries(); }).catch(function(e){showToast('❌ '+e.message,'error');}); }
+function esc(v){return String(v==null?'':v).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');}
+function attr(v){return String(v==null?'':v).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+</script>
 </body>
 </html>
